@@ -6,25 +6,10 @@
   <title>Terminators Esports - Free Fire Portal</title>
 
   <!-- SEO Meta Tags -->
-  <meta name="description" content="Official Terminators Esports platform for Free Fire tournaments, live standings, and admin controls.">
+  <meta name="description" content="Official Terminators Esports platform for Free Fire tournaments, live standings, and squad registrations.">
   <meta name="keywords" content="Terminators Esports, M I C O, Free Fire Tournament, Leaderboard, Esports Registration">
   <meta name="author" content="M I C O">
   <meta name="robots" content="index, follow">
-
-  <!-- Google Structured Data (JSON-LD) -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SportsOrganization",
-    "name": "Terminators Esports",
-    "description": "Official Terminators Esports platform for Free Fire tournaments and standings.",
-    "founder": {
-      "@type": "Person",
-      "name": "M I C O",
-      "jobTitle": "Founder & Director"
-    }
-  }
-  </script>
 
   <style>
     * {
@@ -61,17 +46,17 @@
 
     .nav-links {
       display: flex;
-      gap: 10px;
+      gap: 8px;
     }
 
     .nav-btn {
       background: #0d0f12;
       border: 1px solid #2a313d;
       color: #8b949e;
-      padding: 8px 14px;
+      padding: 8px 12px;
       border-radius: 6px;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: 600;
       transition: 0.2s;
     }
@@ -103,18 +88,22 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
 
-    /* Admin section hidden by default until password 2060 is entered */
-    #admin-section {
+    /* Sections toggling */
+    .page-section {
       display: none;
+    }
+    .page-section.active {
+      display: block;
+    }
+
+    #admin-section {
       border: 1px solid #ff3e3e;
     }
 
-    h2 {
-      margin-top: 0;
+    h2, h3 {
       color: #ff3e3e;
-      text-align: center;
-      font-size: 1.3rem;
       margin-bottom: 15px;
+      text-align: center;
     }
 
     .form-group {
@@ -177,16 +166,42 @@
   <div class="navbar">
     <div class="brand">TERMINATORS</div>
     <div class="nav-links">
-      <button class="nav-btn">Standings</button>
-      <button class="nav-btn">Register</button>
+      <button class="nav-btn active" id="btn-standings" onclick="switchTab('standings')">Standings</button>
+      <button class="nav-btn" id="btn-register" onclick="switchTab('register')">Register</button>
       <button class="nav-btn admin-btn" onclick="openAdmin()">Admin</button>
     </div>
   </div>
 
   <div class="container">
     
-    <!-- ADMIN PANEL (Locked) -->
-    <div id="admin-section" class="card">
+    <!-- 1. STANDINGS SECTION -->
+    <div id="section-standings" class="page-section active card">
+      <h3>Tournament Leaderboard</h3>
+      <p style="color: #8b949e; text-align: center;">Squad standings and live results will display here.</p>
+    </div>
+
+    <!-- 2. REGISTER SECTION -->
+    <div id="section-register" class="page-section card">
+      <h2>SQUAD REGISTRATION</h2>
+      <form onsubmit="event.preventDefault(); alert('Squad Registered Successfully!');">
+        <div class="form-group">
+          <label>Squad / Team Name</label>
+          <input type="text" placeholder="e.g. Terminators Elite" required>
+        </div>
+        <div class="form-group">
+          <label>Team Leader IGN (In-Game Name)</label>
+          <input type="text" placeholder="e.g. M I C O" required>
+        </div>
+        <div class="form-group">
+          <label>WhatsApp Number (for Room ID & Pass)</label>
+          <input type="text" placeholder="e.g. +234..." required>
+        </div>
+        <button type="submit" class="action-btn">Submit Registration</button>
+      </form>
+    </div>
+
+    <!-- 3. ADMIN PANEL (Locked) -->
+    <div id="section-admin" class="page-section card" style="border: 1px solid #ff3e3e;">
       <h2>ADMIN CONTROL PANEL</h2>
       
       <div class="form-group">
@@ -215,12 +230,6 @@
       <button class="action-btn">Update Leaderboard & Email Leader</button>
     </div>
 
-    <!-- PUBLIC LEADERBOARD -->
-    <div class="card">
-      <h3 style="margin-top:0; color:#fff; font-size:1.1rem; margin-bottom:10px;">Tournament Leaderboard</h3>
-      <p style="color: #8b949e; font-size: 0.95rem;">Squad standings and live results will display here.</p>
-    </div>
-
   </div>
 
   <footer>
@@ -228,10 +237,33 @@
   </footer>
 
   <script>
+    function switchTab(tab) {
+      // Hide all sections
+      document.getElementById('section-standings').classList.remove('active');
+      document.getElementById('section-register').classList.remove('active');
+      document.getElementById('section-admin').classList.remove('active');
+
+      // Remove active class from nav buttons
+      document.getElementById('btn-standings').classList.remove('active');
+      document.getElementById('btn-register').classList.remove('active');
+
+      // Show selected tab
+      if (tab === 'standings') {
+        document.getElementById('section-standings').classList.add('active');
+        document.getElementById('btn-standings').classList.add('active');
+      } else if (tab === 'register') {
+        document.getElementById('section-register').classList.add('active');
+        document.getElementById('btn-register').classList.add('active');
+      }
+    }
+
     function openAdmin() {
       const password = prompt("Enter Admin Password:");
       if (password === "2060") {
-        document.getElementById("admin-section").style.display = "block";
+        // Hide regular tabs and show admin
+        document.getElementById('section-standings').classList.remove('active');
+        document.getElementById('section-register').classList.remove('active');
+        document.getElementById('section-admin').classList.add('active');
         alert("Access Granted!");
       } else if (password !== null) {
         alert("Incorrect Password! Access Denied.");
