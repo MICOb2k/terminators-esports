@@ -11,6 +11,21 @@
   <meta name="author" content="M I C O">
   <meta name="robots" content="index, follow">
 
+  <!-- Google Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SportsOrganization",
+    "name": "Terminators Esports",
+    "description": "Official Terminators Esports platform for Free Fire tournaments and standings.",
+    "founder": {
+      "@type": "Person",
+      "name": "M I C O",
+      "jobTitle": "Founder & Director"
+    }
+  }
+  </script>
+
   <style>
     * {
       margin: 0;
@@ -126,15 +141,18 @@
       color: white;
     }
 
-    .checkbox-group {
+    .player-row {
       display: flex;
-      align-items: center;
       gap: 10px;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
     }
 
-    .checkbox-group input {
-      width: auto;
+    .section-title {
+      color: #ff3e3e;
+      font-size: 0.95rem;
+      margin: 15px 0 8px 0;
+      border-bottom: 1px solid #2a313d;
+      padding-bottom: 4px;
     }
 
     .action-btn {
@@ -147,6 +165,7 @@
       font-weight: bold;
       cursor: pointer;
       transition: 0.2s;
+      margin-top: 10px;
     }
 
     .action-btn:hover {
@@ -183,19 +202,51 @@
     <!-- 2. REGISTER SECTION -->
     <div id="section-register" class="page-section card">
       <h2>SQUAD REGISTRATION</h2>
-      <form onsubmit="event.preventDefault(); alert('Squad Registered Successfully!');">
+      <form onsubmit="event.preventDefault(); alert('Squad Registered Successfully! We will keep you updated via Gmail.');">
+        
         <div class="form-group">
           <label>Squad / Team Name</label>
           <input type="text" placeholder="e.g. Terminators Elite" required>
         </div>
         <div class="form-group">
-          <label>Team Leader IGN (In-Game Name)</label>
-          <input type="text" placeholder="e.g. M I C O" required>
+          <label>Team Leader Gmail (For Updates & Room Info)</label>
+          <input type="email" placeholder="e.g. leader@gmail.com" required>
         </div>
         <div class="form-group">
-          <label>WhatsApp Number (for Room ID & Pass)</label>
+          <label>WhatsApp Number</label>
           <input type="text" placeholder="e.g. +234..." required>
         </div>
+
+        <div class="section-title">Main Players (4 Squad Members)</div>
+        
+        <div class="player-row">
+          <input type="text" placeholder="Player 1 IGN" required style="flex:1;">
+          <input type="text" placeholder="UID" required style="flex:1;">
+        </div>
+        <div class="player-row">
+          <input type="text" placeholder="Player 2 IGN" required style="flex:1;">
+          <input type="text" placeholder="UID" required style="flex:1;">
+        </div>
+        <div class="player-row">
+          <input type="text" placeholder="Player 3 IGN" required style="flex:1;">
+          <input type="text" placeholder="UID" required style="flex:1;">
+        </div>
+        <div class="player-row">
+          <input type="text" placeholder="Player 4 IGN" required style="flex:1;">
+          <input type="text" placeholder="UID" required style="flex:1;">
+        </div>
+
+        <div class="section-title">Substitute Players (Optional - Max 2)</div>
+        
+        <div class="player-row">
+          <input type="text" placeholder="Sub 1 IGN" style="flex:1;">
+          <input type="text" placeholder="UID" style="flex:1;">
+        </div>
+        <div class="player-row">
+          <input type="text" placeholder="Sub 2 IGN" style="flex:1;">
+          <input type="text" placeholder="UID" style="flex:1;">
+        </div>
+
         <button type="submit" class="action-btn">Submit Registration</button>
       </form>
     </div>
@@ -222,8 +273,8 @@
         </div>
       </div>
 
-      <div class="checkbox-group">
-        <input type="checkbox" id="booyah">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+        <input type="checkbox" id="booyah" style="width: auto;">
         <label for="booyah" style="margin:0; color:white;">Got Booyah! 🏆</label>
       </div>
 
@@ -238,16 +289,13 @@
 
   <script>
     function switchTab(tab) {
-      // Hide all sections
       document.getElementById('section-standings').classList.remove('active');
       document.getElementById('section-register').classList.remove('active');
       document.getElementById('section-admin').classList.remove('active');
 
-      // Remove active class from nav buttons
       document.getElementById('btn-standings').classList.remove('active');
       document.getElementById('btn-register').classList.remove('active');
 
-      // Show selected tab
       if (tab === 'standings') {
         document.getElementById('section-standings').classList.add('active');
         document.getElementById('btn-standings').classList.add('active');
@@ -260,7 +308,6 @@
     function openAdmin() {
       const password = prompt("Enter Admin Password:");
       if (password === "2060") {
-        // Hide regular tabs and show admin
         document.getElementById('section-standings').classList.remove('active');
         document.getElementById('section-register').classList.remove('active');
         document.getElementById('section-admin').classList.add('active');
@@ -272,4 +319,5 @@
   </script>
 
 </body>
-</html>
+            </html>
+            
