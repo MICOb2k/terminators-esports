@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminators Esports - Free Fire Portal</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Official Terminators Esports platform for Free Fire tournaments, live standings, and squad registration. Founded by M I C O.">
+    <meta name="keywords" content="Terminators Esports, M I C O, Free Fire Tournament, Leaderboard, Esports Registration">
+    <meta name="author" content="M I C O">
+    <meta name="robots" content="index, follow">
+
+    <!-- Google Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SportsOrganization",
+      "name": "Terminators Esports",
+      "description": "Official Terminators Esports platform for Free Fire tournaments and standings.",
+      "founder": {
+        "@type": "Person",
+        "name": "M I C O",
+        "jobTitle": "Founder & Director"
+      }
+    }
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0d0f12;
+            color: #ffffff;
+            padding-bottom: 40px;
+        }
+
+        .navbar {
+            background: #161a22;
+            border-bottom: 1px solid #2a313d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar .brand {
+            color: #ff3e3e;
+            font-weight: bold;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: #0d0f12;
+            border: 1px solid #2a313d;
+            color: #8a94a6;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .nav-btn.active, .nav-btn:hover {
+            background: #ff3e3e;
+            color: #fff;
+            border-color: #ff3e3e;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: #161a22;
+            border: 1px solid #2a313d;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #ff3e3e;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .section-title {
+            color: #8a94a6;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin: 15px 0 8px;
+            text-transform: uppercase;
+            border-bottom: 1px solid #2a313d;
+            padding-bottom: 4px;
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.8rem;
+            color: #8a94a6;
+            margin-bottom: 4px;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 10px;
+            background: #0d0f12;
+            border: 1px solid #2a313d;
+            border-radius: 6px;
+            color: #fff;
+            outline: none;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            background: #ff3e3e;
+            margin-top: 15px;
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        .leaderboard-table th {
+            background: #0d0f12;
+            color: #8a94a6;
+            font-size: 0.75rem;
+            padding: 10px;
+            border-bottom: 2px solid #2a313d;
+        }
+
+        .leaderboard-table td {
+            padding: 10px;
+            border-bottom: 1px solid #2a313d;
+            font-size: 0.85rem;
+        }
+
+        .squad-cell {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-align: left;
+        }
+
+        .squad-logo {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #2a313d;
+        }
+
+        .total-pts {
+            font-weight: bold;
+            color: #ff3e3e;
+        }
+
+        .wa-btn {
+            background: #25D366;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            color: #8a94a6;
+            font-size: 0.85rem;
+            border-top: 1px solid #2a313d;
+            margin-top: 30px;
+        }
+
+        footer span {
+            color: #ff3e3e;
+            font-weight: bold;
+        }
+    </style>
+
+    <script>
+        var STORAGE_KEY = "terminators_leaderboard_data";
+
+        var defaultData = [
+            { name: "Terminators Alpha", logo: "https://via.placeholder.com/32", matches: 5, booyahs: 2, kills: 34, placePts: 36, roster: { leader: { ign: "ALPHA_1", email: "leader1@gmail.com", phone: "2348000000001" } } },
+            { name: "Viper Esports", logo: "https://via.placeholder.com/32", matches: 5, booyahs: 1, kills: 28, placePts: 31, roster: { leader: { ign: "VIPER_VIP", email: "leader2@gmail.com", phone: "2348000000002" } } }
+        ];
+
+        var tournamentData = [];
+
+        function loadData() {
+            try {
+                var stored = localStorage.getItem(STORAGE_KEY);
+                if (stored) {
+                    tournamentData = JSON.parse(stored);
+                } else {
+                    tournamentData = defaultData;
+                }
+            } catch (e) {
+                tournamentData = defaultData;
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(tournamentData));
+        }
+
+        function switchTab(tabId, btnElement) {
+            var tabs = document.querySelectorAll('.tab-content');
+            var btns = document.querySelectorAll('.nav-btn');
+            
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            for (var j = 0; j < btns.length; j++) {
+                btns[j].classList.remove('active');
+            }
+            
+            var targetTab = document.getElementById(tabId);
+            if (targetTab) targetTab.classList.add('active');
+            if (btnElement) btnElement.classList.add('active');
+        }
+
+        function render() {
+            var tableBody = document.getElementById("leaderboardBody");
+            var squadSelect = document.getElementById("selectSquad");
+
+            if (!tableBody || !squadSelect) return;
+
+            tableBody.innerHTML = "";
+            squadSelect.innerHTML = "";
+
+            tournamentData.forEach(function(squad) {
+                squad.totalPts = (squad.kills || 0) + (squad.placePts || 0);
+            });
+
+            tournamentData.sort(function(a, b) {
+                if (b.totalPts !== a.totalPts) return b.totalPts - a.totalPts;
+                if (b.booyahs !== a.booyahs) return b.booyahs - a.booyahs;
+                return b.kills - a.kills;
+            });
+
+            tournamentData.forEach(function(squad, index) {
+                var rank = index + 1;
+                var cleanPhone = squad.roster && squad.roster.leader && squad.roster.leader.phone ? squad.roster.leader.phone.replace(/[^0-9]/g, '') : '';
+                var waLink = cleanPhone ? '<a href="https://wa.me/' + cleanPhone + '" target="_blank" class="wa-btn">💬 WA</a>' : '';
+
+                var rowHTML = '<tr>' +
+                    '<td><strong>' + rank + '</strong></td>' +
+                    '<td class="squad-cell">' +
+                        '<img src="' + (squad.logo || 'https://via.placeholder.com/32') + '" class="squad-logo">' +
+                        '<span>' + squad.name + '</span> ' + waLink +
+                    '</td>' +
+                    '<td>' + squad.matches + '</td>' +
+                    '<td>' + squad.booyahs + '</td>' +
+                    '<td>' + squad.kills + '</td>' +
+                    '<td>' + squad.placePts + '</td>' +
+                    '<td class="total-pts">' + squad.totalPts + '</td>' +
+                '</tr>';
+                tableBody.insertAdjacentHTML("beforeend", rowHTML);
+
+                var option = document.createElement("option");
+                option.value = squad.name;
+                option.textContent = squad.name;
+                squadSelect.appendChild(option);
+            });
+        }
+
+        function sendEmailToLeader(email, subject, bodyText) {
+            if (!email) return;
+            var mailtoUrl = "mailto:" + encodeURIComponent(email) + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(bodyText);
+            window.open(mailtoUrl, '_blank');
+        }
+
+        function broadcastEmailToAll(subject, bodyText) {
+            var emails = [];
+            tournamentData.forEach(function(squad) {
+                if (squad.roster && squad.roster.leader && squad.roster.leader.email) {
+                    emails.push(squad.roster.leader.email);
+                }
+            });
+            if (emails.length === 0) {
+                alert("No leader emails registered yet.");
+                return;
+            }
+            var mailtoUrl = "mailto:" + encodeURIComponent(emails.join(",")) + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(bodyText);
+            window.open(mailtoUrl, '_blank');
+        }
+
+        function exportBackup() {
+            var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(tournamentData));
+            var downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "terminators_backup.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function importBackup(event) {
+            var file = event.target.files[0];
+            if (!file) return;
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    var parsed = JSON.parse(e.target.result);
+                    if (Array.isArray(parsed)) {
+                        tournamentData = parsed;
+                        saveData();
+                        render();
+                        alert("Backup restored successfully!");
+                    }
+                } catch (err) {
+                    alert("Invalid JSON Backup File!");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function resetLeaderboard() {
+            if (confirm("Reset all tournament data?")) {
+                localStorage.removeItem(STORAGE_KEY);
+                tournamentData = defaultData;
+                saveData();
+                render();
+            }
+        }
+
+        loadData();
+    </script>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav class="navbar">
+        <div class="brand">TERMINATORS</div>
+        <div class="nav-links">
+            <button class="nav-btn active" onclick="switchTab('standingsTab', this)">Standings</button>
+            <button class="nav-btn" onclick="switchTab('registerTab', this)">Register</button>
+            <button class="nav-btn" onclick="switchTab('adminTab', this)">Admin</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        
+        <!-- TAB 1: STANDINGS -->
+        <div id="standingsTab" class="tab-content active">
+            <div class="card">
+                <h2>LEADERBOARD STANDINGS</h2>
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Squad</th>
+                            <th>Matches</th>
+                            <th>Booyah 🏆</th>
+                            <th>Kills 🎯</th>
+                            <th>Place Pts</th>
+                            <th>Total Pts</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 2: SQUAD REGISTRATION -->
+        <div id="registerTab" class="tab-content">
+            <div class="card">
+                <h2>SQUAD REGISTRATION</h2>
+                <form id="squadForm">
+                    <div class="input-group">
+                        <label>Squad Name</label>
+                        <input type="text" id="regSquadName" required placeholder="e.g. Terminators Alpha">
+                    </div>
+                    <div class="input-group">
+                        <label>Squad Logo (Upload from Gallery)</label>
+                        <input type="file" id="regSquadLogo" accept="image/*">
+                    </div>
+
+                    <div class="section-title">Leader Details & Contact Info</div>
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label>Leader IGN</label>
+                            <input type="text" id="p1IGN" required placeholder="Exact IGN">
+                        </div>
+                        <div class="input-group">
+                            <label>Leader Free Fire UID</label>
+                            <input type="number" id="p1UID" required placeholder="8-10 digit UID">
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label>Leader Email (For Updates)</label>
+                            <input type="email" id="leaderEmail" required placeholder="leader@gmail.com">
+                        </div>
+                        <div class="input-group">
+                            <label>WhatsApp Number (With Country Code)</label>
+                            <input type="tel" id="leaderPhone" required placeholder="e.g. 2348123456789">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Discord Tag (Optional)</label>
+                        <input type="text" id="leaderDiscord" placeholder="username#0000">
+                    </div>
+
+                    <div class="section-title">Player 2</div>
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label>Player 2 IGN</label>
+                            <input type="text" id="p2IGN" required placeholder="Exact IGN">
+                        </div>
+                        <div class="input-group">
+                            <label>Player 2 UID</label>
+                            <input type="number" id="p2UID" required placeholder="8-10 digit UID">
+                        </div>
+                    </div>
+
+                    <div class="section-title">Player 3</div>
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label>Player 3 IGN</label>
+                            <input type="text" id="p3IGN" required placeholder="Exact IGN">
+                        </div>
+                        <div class="input-group">
+                            <label>Player 3 UID</label>
+                            <input type="number" id="p3UID" required placeholder="8-10 digit UID">
+                        </div>
+                    </div>
+
+                    <div class="section-title">Player 4</div>
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label>Player 4 IGN</label>
+                            <input type="text" id="p4IGN" required placeholder="Exact IGN">
+                        </div>
+                        <div class="input-group">
+                            <label>Player 4 UID</label>
+                            <input type="number" id="p4UID" required placeholder="8-10 digit UID">
+                        </div>
+                    </div>
+
+                    <div class="section-title">Substitute Player (Optional)</div>
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label>Sub IGN</label>
+                            <input type="text" id="subIGN" placeholder="Optional">
+                        </div>
+                        <div class="input-group">
+                            <label>Sub UID</label>
+                            <input type="number" id="subUID" placeholder="Optional">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn">Submit Squad</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- TAB 3: ADMIN PANEL -->
+        <div id="adminTab" class="tab-content">
+            <div class="card">
+                <h2>ADMIN CONTROL PANEL</h2>
+                
+                <div id="adminControls">
+                    
+                    <div class="section-title">Update Match Leaderboard</div>
+                    <form id="updateScoreForm">
+                        <div class="input-group">
+                            <label>Select Squad</label>
+                            <select id="selectSquad" required></select>
+                        </div>
+                        <div class="grid-2">
+                            <div class="input-group">
+                                <label>Kills 🎯</label>
+                                <input type="number" id="matchKills" min="0" value="0" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Place Pts 📊</label>
+                                <input type="number" id="matchPlacePts" min="0" value="0" required>
+                            </div>
+                        </div>
+                        <div style="margin: 10px 0;">
+                            <input type="checkbox" id="matchBooyah">
+                            <label for="matchBooyah">Got Booyah! 🏆</label>
+                        </div>
+                        <button type="submit" class="btn" style="background: #2e7d32;">Update Leaderboard & Email Leader</button>
+                    </form>
+
+                    <div class="section-title" style="margin-top: 25px;">Broadcast Room Details (ID & Pass)</div>
+                    <form id="roomDetailsForm">
+                        <div class="grid-2">
+                            <div class="input-group">
+                                <label>Custom Room ID</label>
+                                <input type="text" id="roomIdInput" required placeholder="e.g. 98765432">
+                            </div>
+                            <div class="input-group">
+                                <label>Room
