@@ -272,8 +272,7 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-
-        // 1. SAVE SOCIAL LINKS
+            // 1. SAVE SOCIAL LINKS
         document.getElementById('btn-save-socials').addEventListener('click', async () => {
             const whatsapp = document.getElementById('admin_whatsapp').value || "https://whatsapp.com";
             const discord = document.getElementById('admin_discord').value || "https://discord.com";
@@ -352,4 +351,93 @@
             }
         }, (err) => { console.error("Firestore Error:", err); });
 
-    
+        // SQUAD REGISTRATION
+        document.getElementById('reg-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const file = document.getElementById('teamLogo').files[0];
+            if (!file) return alert("Please upload a team logo image.");
+
+            const reader = new FileReader();
+            reader.onload = async function(evt) {
+                const teamData = {
+                    tournament: document.getElementById('regTourneyName').value,
+                    server: document.getElementById('ffServer').value,
+                    country: document.getElementById('teamCountry').value,
+                    name: document.getElementById('teamName').value,
+                    logo: evt.target.result,
+                    gmail: document.getElementById('leaderGmail').value,
+                    whatsapp: document.getElementById('whatsappNum').value,
+                    discord: document.getElementById('discordId').value,
+                    p1: { ign: document.getElementById('p1_ign').value, uid: document.getElementById('p1_uid').value },
+                    p2: { ign: document.getElementById('p2_ign').value, uid: document.getElementById('p2_uid').value },
+                    p3: { ign: document.getElementById('p3_ign').value, uid: document.getElementById('p3_uid').value },
+                    p4: { ign: document.getElementById('p4_ign').value, uid: document.getElementById('p4_uid').value },
+                    sub1: { ign: document.getElementById('sub1_ign').value, uid: document.getElementById('sub1_uid').value },
+                    sub2: { ign: document.getElementById('sub2_ign').value, uid: document.getElementById('sub2_uid').value },
+                    createdAt: new Date().toISOString()
+                };
+
+                try {
+                    await addDoc(collection(db, "registeredTeams"), teamData);
+                    alert("SUCCESS: Squad Registered Live!");
+                    document.getElementById('reg-form').reset();
+                    openTab('teams');
+                } catch (err) { alert("ERROR Registering Squad: " + err.message); }
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // REALTIME TEAMS LIST
+        onSnapshot(collection(db, "registeredTeams"), (snapshot) => {
+            const pub = document.getElementById('public-teams-container');
+            const adm = document.getElementById('admin-teams-container');
+
+            pub.innerHTML = snapshot.empty ? `<p style="text-align: center; color: #8b949e;">No squads registered yet.</p>` : "";
+            adm.innerHTML = snapshot.empty ? `<p style="text-align: center; color: #8b949e;">No registered squads in database.</p>` : "";
+
+            snapshot.forEach((docSnap) => {
+                const t = docSnap.data();
+                const docId = docSnap.id;
+
+                let subs = "";
+                if (t.sub1 && t.sub1.ign) subs += `, Sub1: ${t.sub1.ign}`;
+                if (t.sub2 && t.sub2.ign) subs += `, Sub2: ${t.sub2.ign}`;
+
+                pub.innerHTML += `
+                    <div class="card" style="display: flex; align-items: center; gap: 12px; text-align: left;">
+                        <img src="${t.logo}" style="width:50px; height:50px; border-radius:50%; object-fit:cover; border:2px solid #ff3e3e;">
+                        <div style="flex: 1;">
+                            <h4 style="color: #ff3e3e; margin-bottom: 2px;">${t.name} <span style="font-size: 0.75rem; color: #8b949e;">[${t.server} / ${t.country}]</span></h4>
+                            <p style="color: #fff; font-size: 0.8rem;"><b>Roster:</b> ${t.p1.ign}, ${t.p2.ign}, ${t.p3.ign}, ${t.p4.ign}${subs}</p>
+                        </div>
+                    </div>
+                `;
+
+                adm.innerHTML += `
+                    <div style="background: #0d0f12; border: 1px solid #ff3e3e; border-radius: 8px; padding: 12px; margin-bottom: 10px; text-align: left;">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                            <img src="${t.logo}" style="width:40px; height:40px; border-radius:50%; object-fit:cover;">
+                            <div>
+                                <h4 style="color: #ff3e3e; font-size: 0.95rem;">${t.name}</h4>
+                                <p style="color: #8b949e; font-size: 0.75rem;">Server: ${t.server} | Country: ${t.country}</p>
+                                <p style="color: #8b949e; font-size: 0.75rem;">📧 Gmail: ${t.gmail} | 📞 WhatsApp: ${t.whatsapp}</p>
+                            </div>
+                        </div>
+                        <button class="btn-delete" data-id="${docId}" style="background: #da3633; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Delete Squad</button>
+                    </div>
+                `;
+            });
+
+            document.querySelectorAll('.btn-delete').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    const id = e.target.getAttribute('data-id');
+                    if (confirm("Delete this squad from the database?")) {
+                        try { await deleteDoc(doc(db, "registeredTeams", id)); alert("Squad deleted."); }
+                        catch (err) { alert("Failed to delete: " + err.message); }
+                    }
+                });
+            });
+        }, (err) => { console.error("Firestore Teams Error:", err); });
+    </script>
+</body>
+</html>
