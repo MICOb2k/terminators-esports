@@ -468,8 +468,7 @@
             const tabContents = document.querySelectorAll('.tab-content');
 
             tabButtons.forEach(button => {
-                button.addEventListener('pointerdown', (e) => {
-                    e.preventDefault();
+                button.addEventListener('click', (e) => {
                     const targetTab = e.currentTarget.getAttribute('data-tab');
 
                     tabButtons.forEach(btn => btn.classList.remove('active'));
@@ -524,4 +523,5 @@
             }
 
             registrationForm.addEventListener('submit', (e) => {
-                e.preventDefaul
+                e.preventDefault();
+                if (squads.length >= MAX_
