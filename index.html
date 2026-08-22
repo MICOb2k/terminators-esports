@@ -30,24 +30,20 @@
             background-color: var(--bg-deep);
             color: var(--text-main);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             padding: 15px;
+            padding-bottom: 50px;
         }
 
         .container {
             width: 100%;
             max-width: 650px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            margin: 0 auto;
         }
 
         header {
             width: 100%;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .brand-logo {
@@ -86,7 +82,7 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .pulse-dot {
@@ -97,32 +93,34 @@
             box-shadow: 0 0 8px var(--accent-green);
         }
 
+        /* BULLETPROOF NAVIGATION BAR */
         .nav-tabs {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
             background: #12121e;
             border: 1px solid var(--border-glass);
             border-radius: 12px;
             padding: 6px;
-            gap: 6px;
+            gap: 4px;
             margin-bottom: 20px;
             width: 100%;
             position: relative;
-            z-index: 100;
+            z-index: 9999; /* Forces it to sit above every single layer */
         }
 
         .tab-btn {
-            flex: 1;
             background: #1a1a29;
             border: 1px solid transparent;
             color: var(--text-muted);
-            padding: 12px 6px;
-            font-size: 11px;
+            padding: 12px 2px;
+            font-size: 10px;
             font-weight: 800;
             text-transform: uppercase;
             border-radius: 8px;
             cursor: pointer;
             text-align: center;
             user-select: none;
+            touch-action: manipulation;
         }
 
         .tab-btn.active {
@@ -321,12 +319,12 @@
             <div class="founder-tag">Founder: <span>M I C O</span></div>
         </header>
 
-        <!-- NAVIGATION TABS -->
+        <!-- NAVIGATION TABS WITH DIRECT INLINE TOUCH CALLS -->
         <div class="nav-tabs">
-            <button type="button" class="tab-btn active" data-target="tab-hub">Hub</button>
-            <button type="button" class="tab-btn" data-target="tab-register">Register</button>
-            <button type="button" class="tab-btn" data-target="tab-teams">Teams (<span id="tabCount">0</span>)</button>
-            <button type="button" class="tab-btn" data-target="tab-admin">Admin</button>
+            <button type="button" class="tab-btn active" id="btn-hub" onclick="switchTab('tab-hub', this)">Hub</button>
+            <button type="button" class="tab-btn" id="btn-register" onclick="switchTab('tab-register', this)">Register</button>
+            <button type="button" class="tab-btn" id="btn-teams" onclick="switchTab('tab-teams', this)">Teams (<span id="tabCount">0</span>)</button>
+            <button type="button" class="tab-btn" id="btn-admin" onclick="switchTab('tab-admin', this)">Admin</button>
         </div>
 
         <!-- HUB TAB -->
@@ -341,7 +339,6 @@
                 </div>
             </div>
 
-            <!-- Active Tournaments Viewable for Players -->
             <div class="panel">
                 <div class="panel-title">Active Tournaments & Info</div>
                 <div id="activeTournamentsContainer"></div>
@@ -501,9 +498,4 @@
 
         <footer>
             &copy; 2026 Terminators Esports. Founded by M I C O.
-        </footer>
-    </div>
-
-    <script>
-        const buttons = document.querySelectorAll('.tab-btn');
-        const conten
+     
