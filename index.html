@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terminators Esports | Founder: MICO</title>
+    <!-- Font Awesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * {
             box-sizing: border-box;
@@ -175,32 +177,74 @@
 
         .admin-trigger {
             text-align: center;
-            margin-top: 25px;
+            margin-top: 20px;
         }
 
         .admin-link {
-            color: #484f58;
-            font-size: 0.75rem;
+            color: #ff3e3e;
+            font-size: 0.85rem;
+            font-weight: bold;
             cursor: pointer;
             text-decoration: underline;
         }
 
         /* Social Links Footer */
+        .social-section {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #30363d;
+        }
+
+        .social-title {
+            font-weight: bold;
+            font-size: 1rem;
+            color: #ff3e3e;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
         .socials {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
         .socials a {
-            color: #8b949e;
+            color: #ffffff;
             text-decoration: none;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #161b22;
+            padding: 8px 14px;
+            border-radius: 20px;
+            border: 1px solid #30363d;
+            transition: 0.2s;
         }
 
         .socials a:hover {
+            border-color: #ff3e3e;
             color: #ff3e3e;
+        }
+
+        .socials i {
+            font-size: 1.1rem;
+            color: #ff3e3e;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 25px;
+            padding-bottom: 15px;
+            color: #8b949e;
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 1px;
         }
     </style>
 </head>
@@ -212,9 +256,9 @@
     </header>
 
     <div class="navbar">
-        <button id="btn-standings" class="nav-btn active" onclick="window.switchTab('standings')">Standings & Updates</button>
-        <button id="btn-teams" class="nav-btn" onclick="window.switchTab('teams')">Teams</button>
-        <button id="btn-register" class="nav-btn" onclick="window.switchTab('register')">Register Squad</button>
+        <button id="btn-standings" class="nav-btn active">Standings & Updates</button>
+        <button id="btn-teams" class="nav-btn">Teams</button>
+        <button id="btn-register" class="nav-btn">Register Squad</button>
     </div>
 
     <!-- STANDINGS & UPDATES TAB -->
@@ -352,7 +396,7 @@
                 <label>Status & Description Details</label>
                 <input type="text" id="admin_tourney_details" placeholder="e.g., Registration Open | 48 Slots Available">
             </div>
-            <button onclick="window.saveTournamentInfo()" class="submit-btn" style="background: #238636;">Publish Tournament Info</button>
+            <button id="btn-save-tourney" class="submit-btn" style="background: #238636;">Publish Tournament Info</button>
         </div>
 
         <!-- Standings / Leaderboard Control -->
@@ -361,7 +405,7 @@
             <div class="form-group">
                 <textarea id="admin_standings_text" rows="4" placeholder="Enter score table or standings text here..."></textarea>
             </div>
-            <button onclick="window.saveStandings()" class="submit-btn" style="background: #238636;">Update Standings</button>
+            <button id="btn-save-standings" class="submit-btn" style="background: #238636;">Update Standings</button>
         </div>
 
         <!-- Dynamic Socials -->
@@ -379,7 +423,7 @@
             <div class="form-group">
                 <input type="text" id="admin_youtube" placeholder="YouTube Channel Link">
             </div>
-            <button onclick="window.saveSocials()" class="submit-btn" style="background: #238636;">Save Social Links</button>
+            <button id="btn-save-socials" class="submit-btn" style="background: #238636;">Save Social Links</button>
         </div>
 
         <!-- Registered Squads database management -->
@@ -389,17 +433,24 @@
         </div>
     </div>
 
-    <!-- Social Links Footer -->
-    <div class="socials">
-        <a id="link_whatsapp" href="#" target="_blank">WhatsApp</a>
-        <a id="link_discord" href="#" target="_blank">Discord</a>
-        <a id="link_tiktok" href="#" target="_blank">TikTok</a>
-        <a id="link_youtube" href="#" target="_blank">YouTube</a>
+    <!-- Social Media Platforms -->
+    <div class="social-section">
+        <div class="social-title">CONNECT & FOLLOW US</div>
+        <div class="socials">
+            <a id="link_whatsapp" href="#" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+            <a id="link_discord" href="#" target="_blank"><i class="fa-brands fa-discord"></i> Discord</a>
+            <a id="link_tiktok" href="#" target="_blank"><i class="fa-brands fa-tiktok"></i> TikTok</a>
+            <a id="link_youtube" href="#" target="_blank"><i class="fa-brands fa-youtube"></i> YouTube</a>
+        </div>
     </div>
 
     <div class="admin-trigger">
-        <span class="admin-link" onclick="window.openAdmin()">Admin Login</span>
+        <span class="admin-link" id="btn-admin-login">Admin Login</span>
     </div>
+
+    <footer>
+        2026 FOUNDED BY M I C O
+    </footer>
 
     <!-- FIREBASE MODULE SCRIPT -->
     <script type="module">
@@ -418,8 +469,8 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Global Navigation Window Functions
-        window.switchTab = function(tab) {
+        // Tab Navigation Logic
+        function switchTab(tab) {
             document.getElementById('section-standings').classList.remove('active');
             document.getElementById('section-teams').classList.remove('active');
             document.getElementById('section-register').classList.remove('active');
@@ -439,9 +490,15 @@
                 document.getElementById('section-register').classList.add('active');
                 document.getElementById('btn-register').classList.add('active');
             }
-        };
+        }
 
-        window.openAdmin = function() {
+        // Attach Navigation Listeners
+        document.getElementById('btn-standings').addEventListener('click', () => switchTab('standings'));
+        document.getElementById('btn-teams').addEventListener('click', () => switchTab('teams'));
+        document.getElementById('btn-register').addEventListener('click', () => switchTab('register'));
+
+        // Admin Login Listener
+        document.getElementById('btn-admin-login').addEventListener('click', () => {
             const password = prompt("Enter Admin Password:");
             if (password === "2060") {
                 document.getElementById('section-standings').classList.remove('active');
@@ -452,7 +509,7 @@
             } else if (password !== null) {
                 alert("Incorrect Password!");
             }
-        };
+        });
 
         // Realtime Tournament Info Sync
         onSnapshot(doc(db, "settings", "tournament"), (docSnap) => {
@@ -470,7 +527,7 @@
             }
         });
 
-        window.saveTournamentInfo = async function() {
+        document.getElementById('btn-save-tourney').addEventListener('click', async () => {
             const title = document.getElementById('admin_tourney_title').value;
             const details = document.getElementById('admin_tourney_details').value;
             try {
@@ -479,44 +536,7 @@
             } catch (err) {
                 alert("Error updating tournament: " + err.message);
             }
-        };
-
-        // Realtime Standings Sync
-        onSnapshot(doc(db, "settings", "standings"), (docSnap) => {
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                document.getElementById('public-standings-content').innerHTML = `<pre style="white-space: pre-wrap; font-family: inherit; color: #fff;">${data.text}</pre>`;
-                document.getElementById('admin_standings_text').value = data.text || "";
-            }
         });
 
-        window.saveStandings = async function() {
-            const text = document.getElementById('admin_standings_text').value;
-            try {
-                await setDoc(doc(db, "settings", "standings"), { text });
-                alert("Standings updated successfully!");
-            } catch (err) {
-                alert("Error updating standings: " + err.message);
-            }
-        };
-
-        // Social Links Logic
-        window.saveSocials = function() {
-            const socials = {
-                whatsapp: document.getElementById('admin_whatsapp').value,
-                discord: document.getElementById('admin_discord').value,
-                tiktok: document.getElementById('admin_tiktok').value,
-                youtube: document.getElementById('admin_youtube').value
-            };
-            localStorage.setItem('terminators_socials', JSON.stringify(socials));
-            loadDynamicSocials();
-            alert("Social links updated!");
-        };
-
-        function loadDynamicSocials() {
-            const saved = JSON.parse(localStorage.getItem('terminators_socials')) || {
-                whatsapp: "#", discord: "#", tiktok: "#", youtube: "#"
-            };
-            if(document.getElementById('link_whatsapp')) document.getElementById('link_whatsapp').href = saved.whatsapp || "#";
-            if(document.getElementById('link_discord')) document.getElementById('link_discord').href = saved.discord || "#";
- 
+        // Realtime Standings Sync
+        onSnapshot(doc(db, "settings
