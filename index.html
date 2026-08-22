@@ -360,9 +360,9 @@ document.getElementById('reg-form').addEventListener('submit', function(e) {
     const reader = new FileReader();
     reader.onload = function(evt) {
         const img = new Image();
-        img.src = evt.target.result;
+
+        // 1. Define onload BEFORE setting img.src so mobile browsers don't miss the event
         img.onload = async function() {
-            // Compress logo to max 250px width (~30KB)
             const canvas = document.createElement('canvas');
             const MAX_WIDTH = 250;
             const scale = MAX_WIDTH / img.width;
@@ -397,9 +397,13 @@ document.getElementById('reg-form').addEventListener('submit', function(e) {
                 openTab('teams');
             } catch (err) { alert("ERROR Registering Squad: " + err.message); }
         };
+
+        // 2. Assign image source AFTER listener is attached
+        img.src = evt.target.result;
     };
     reader.readAsDataURL(file);
 });
+        
         
 
         // REALTIME TEAMS LIST
