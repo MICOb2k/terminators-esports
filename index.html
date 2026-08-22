@@ -105,14 +105,14 @@
             margin-bottom: 20px;
             width: 100%;
             position: relative;
-            z-index: 99999;
+            z-index: 2147483647; /* Maximum possible stacking layer */
         }
 
         .tab-btn {
             background: #1a1a29;
             border: 1px solid transparent;
             color: var(--text-muted);
-            padding: 12px 2px;
+            padding: 14px 2px;
             font-size: 10px;
             font-weight: 800;
             text-transform: uppercase;
@@ -120,7 +120,8 @@
             cursor: pointer;
             text-align: center;
             user-select: none;
-            pointer-events: auto;
+            -webkit-user-select: none;
+            pointer-events: auto !important;
             touch-action: manipulation;
         }
 
@@ -241,6 +242,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-top: 10px;
+            pointer-events: auto !important;
         }
 
         .squad-list {
@@ -321,11 +323,11 @@
         </header>
 
         <!-- NAVIGATION TABS -->
-        <div class="nav-tabs">
-            <button type="button" class="tab-btn active" id="btn-hub" onclick="switchTab('tab-hub', this)">Hub</button>
-            <button type="button" class="tab-btn" id="btn-register" onclick="switchTab('tab-register', this)">Register</button>
-            <button type="button" class="tab-btn" id="btn-teams" onclick="switchTab('tab-teams', this)">Teams (<span id="tabCount">0</span>)</button>
-            <button type="button" class="tab-btn" id="btn-admin" onclick="switchTab('tab-admin', this)">Admin</button>
+        <div class="nav-tabs" id="navTabsContainer">
+            <button type="button" class="tab-btn active" data-target="tab-hub" id="btn-hub">Hub</button>
+            <button type="button" class="tab-btn" data-target="tab-register" id="btn-register">Register</button>
+            <button type="button" class="tab-btn" data-target="tab-teams" id="btn-teams">Teams (<span id="tabCount">0</span>)</button>
+            <button type="button" class="tab-btn" data-target="tab-admin" id="btn-admin">Admin</button>
         </div>
 
         <!-- HUB TAB -->
@@ -498,9 +500,4 @@
         </div>
 
         <footer>
-            &copy; 2026 Terminators Esports. Founded by M I C O.
-        </footer>
-    </div>
-
-    <script>
-        function 
+            &copy; 2026 T
