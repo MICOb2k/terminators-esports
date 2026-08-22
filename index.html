@@ -39,7 +39,6 @@
             padding: 15px;
         }
 
-        /* Header & Navigation Tabs */
         header {
             width: 100%;
             max-width: 650px;
@@ -55,6 +54,19 @@
             letter-spacing: 3px;
             text-shadow: 0 0 20px var(--accent-gold-glow);
             margin-bottom: 4px;
+        }
+
+        .founder-tag {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .founder-tag span {
+            color: var(--accent-neon);
         }
 
         .status-bar {
@@ -82,7 +94,6 @@
             animation: pulse 1.5s infinite;
         }
 
-        /* Tab Navigation Bar */
         .nav-tabs {
             display: flex;
             background: rgba(18, 18, 30, 0.8);
@@ -99,8 +110,8 @@
             background: transparent;
             border: none;
             color: var(--text-muted);
-            padding: 10px;
-            font-size: 12px;
+            padding: 10px 4px;
+            font-size: 11px;
             font-weight: 700;
             text-transform: uppercase;
             border-radius: 8px;
@@ -114,7 +125,6 @@
             box-shadow: 0 4px 15px var(--accent-gold-glow);
         }
 
-        /* Container System */
         .wrapper {
             width: 100%;
             max-width: 650px;
@@ -153,7 +163,6 @@
             align-items: center;
         }
 
-        /* Countdown Widget */
         .countdown-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -182,7 +191,6 @@
             margin-top: 2px;
         }
 
-        /* Slot Bar */
         .slot-container {
             background: rgba(10, 10, 15, 0.6);
             padding: 12px;
@@ -214,7 +222,6 @@
             transition: width 0.5s ease;
         }
 
-        /* Form Controls */
         .form-group {
             margin-bottom: 14px;
         }
@@ -273,7 +280,6 @@
             transform: scale(0.97);
         }
 
-        /* Leaderboard Items */
         .squad-list {
             list-style: none;
             max-height: 280px;
@@ -302,7 +308,6 @@
             font-size: 13px;
         }
 
-        /* Admin Section */
         .admin-panel {
             border-color: rgba(255, 51, 102, 0.3);
         }
@@ -325,7 +330,6 @@
             margin-top: 8px;
         }
 
-        /* Social Hub Grid */
         .social-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -354,6 +358,10 @@
             border-color: var(--accent-gold);
         }
 
+        .social-card.full-width {
+            grid-column: span 2;
+        }
+
         footer {
             margin-top: 25px;
             font-size: 11px;
@@ -379,16 +387,16 @@
     <header>
         <div class="status-bar"><div class="pulse-dot"></div> Tournament Engine Online</div>
         <div class="brand-logo">Terminators Esports</div>
+        <div class="founder-tag">Founder: <span>M I C O</span></div>
         <p style="font-size: 12px; color: var(--text-muted);">Official Free Fire Professional Custom Room Portal</p>
     </header>
 
-    <!-- Tab Navigation Selector -->
     <div class="wrapper">
         <div class="nav-tabs">
-            <button class="tab-btn active" onclick="switchTab('hub')">Hub & Info</button>
-            <button class="tab-btn" onclick="switchTab('register')">Register</button>
-            <button class="tab-btn" onclick="switchTab('teams')">Teams (<span id="tabCount">0</span>)</button>
-            <button class="tab-btn" onclick="switchTab('admin')">Admin</button>
+            <button class="tab-btn active" data-target="hub" onclick="switchTab('hub')">Hub</button>
+            <button class="tab-btn" data-target="register" onclick="switchTab('register')">Register</button>
+            <button class="tab-btn" data-target="teams" onclick="switchTab('teams')">Teams (<span id="tabCount">0</span>)</button>
+            <button class="tab-btn" data-target="admin" onclick="switchTab('admin')">Admin</button>
         </div>
     </div>
 
@@ -410,10 +418,11 @@
             <div class="panel">
                 <div class="panel-title">Community Hub</div>
                 <div class="social-grid">
-                    <a href="https://t.me/your_telegram" target="_blank" class="social-card" style="border-left: 3px solid #229ed9;">✈️ Telegram Hub</a>
-                    <a href="https://discord.gg/your_invite" target="_blank" class="social-card" style="border-left: 3px solid #5865F2;">🎮 Discord Server</a>
-                    <a href="https://whatsapp.com/your_link" target="_blank" class="social-card" style="border-left: 3px solid #25D366;">💬 WhatsApp Group</a>
-                    <a href="https://youtube.com/@your_channel" target="_blank" class="social-card" style="border-left: 3px solid #FF0000;">📺 YouTube Streams</a>
+                    <a href="https://t.me/your_telegram" target="_blank" class="social-card" style="border-left: 3px solid #229ed9;">✈️ Telegram</a>
+                    <a href="https://discord.gg/your_invite" target="_blank" class="social-card" style="border-left: 3px solid #5865F2;">🎮 Discord</a>
+                    <a href="https://whatsapp.com/your_link" target="_blank" class="social-card" style="border-left: 3px solid #25D366;">💬 WhatsApp</a>
+                    <a href="https://tiktok.com/@your_tiktok" target="_blank" class="social-card" style="border-left: 3px solid #ff0050;">🔥 TikTok</a>
+                    <a href="https://youtube.com/@your_channel" target="_blank" class="social-card full-width" style="border-left: 3px solid #FF0000;">📺 YouTube Streams</a>
                 </div>
             </div>
         </div>
@@ -512,22 +521,26 @@
     </div>
 
     <footer>
-        &copy; 2026 Terminators Esports. Built for Competitive Excellence.
+        &copy; 2026 Terminators Esports. Founded by M I C O.
     </footer>
 
-    <!-- Advanced Application Logic & Web Audio API -->
     <script>
-        // Tab Switching Engine
+        // Bulletproof Tab Switching Engine with State Memory
         function switchTab(tabId) {
             playAudioBeep(400, 0.05);
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             
-            document.getElementById('tab-' + tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
+            const targetContent = document.getElementById('tab-' + tabId);
+            const targetBtn = document.querySelector(`.tab-btn[data-target="${tabId}"]`);
+            
+            if (targetContent) targetContent.classList.add('active');
+            if (targetBtn) targetBtn.classList.add('active');
+
+            sessionStorage.setItem('terminators_active_tab', tabId);
         }
 
-        // Web Audio Sound Effect Generator (No external assets required)
+        // Web Audio Sound Effect Generator
         function playAudioBeep(freq, duration) {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -537,15 +550,4 @@
                 osc.frequency.value = freq;
                 gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + duration);
-            } catch (e) {}
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const registrationForm = document.getElementById('registrationForm');
-            const squadListContainer = document.getElementById('squadListContainer');
-            const searchSquadInput = document.getElementById('searchSquadInput');
-            const slotCounterTe
+        
