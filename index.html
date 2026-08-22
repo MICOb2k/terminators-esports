@@ -361,11 +361,13 @@ document.getElementById('reg-form').addEventListener('submit', async function(e)
 
     if (!file) return alert("Please upload a team logo image.");
 
+    // Helper to safely read form inputs without crashing on missing IDs
+    const val = (id) => document.getElementById(id)?.value?.trim() || "";
+
     try {
         submitBtn.innerText = "Compressing Logo...";
         submitBtn.disabled = true;
 
-        // Mobile-optimized image compression using ObjectURL
         const compressedLogo = await new Promise((resolve, reject) => {
             const img = new Image();
             const objectUrl = URL.createObjectURL(file);
@@ -382,14 +384,12 @@ document.getElementById('reg-form').addEventListener('submit', async function(e)
                     const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
                     URL.revokeObjectURL(objectUrl);
                     resolve(dataUrl);
-                } catch (err) {
-                    reject(err);
-                }
+                } catch (err) { reject(err); }
             };
 
             img.onerror = function() {
                 URL.revokeObjectURL(objectUrl);
-                reject(new Error("Failed to process selected image. Try a different photo."));
+                reject(new Error("Failed to process image. Try another photo."));
             };
 
             img.src = objectUrl;
@@ -398,20 +398,20 @@ document.getElementById('reg-form').addEventListener('submit', async function(e)
         submitBtn.innerText = "Uploading Team Data...";
 
         const teamData = {
-            tournament: document.getElementById('regTournayName').value || "Terminators Championship",
-            server: document.getElementById('ffServer').value,
-            country: document.getElementById('teamCountry').value,
-            name: document.getElementById('teamName').value,
+            tournament: val('regTourneyName') || val('regTournayName') || "Terminators Championship",
+            server: val('ffServer'),
+            country: val('teamCountry'),
+            name: val('teamName'),
             logo: compressedLogo,
-            gmail: document.getElementById('leaderGmail').value,
-            whatsapp: document.getElementById('whatsappNum').value,
-            discord: document.getElementById('discordId').value || "",
-            p1: { ign: document.getElementById('p1_ign').value, uid: document.getElementById('p1_uid').value },
-            p2: { ign: document.getElementById('p2_ign').value, uid: document.getElementById('p2_uid').value },
-            p3: { ign: document.getElementById('p3_ign').value, uid: document.getElementById('p3_uid').value },
-            p4: { ign: document.getElementById('p4_ign').value, uid: document.getElementById('p4_uid').value },
-            sub1: { ign: document.getElementById('sub1_ign').value || "", uid: document.getElementById('sub1_uid').value || "" },
-            sub2: { ign: document.getElementById('sub2_ign').value || "", uid: document.getElementById('sub2_uid').value || "" },
+            gmail: val('leaderGmail'),
+            whatsapp: val('whatsappNum'),
+            discord: val('discordId') || val('discord'),
+            p1: { ign: val('p1_ign'), uid: val('p1_uid') },
+            p2: { ign: val('p2_ign'), uid: val('p2_uid') },
+            p3: { ign: val('p3_ign'), uid: val('p3_uid') },
+            p4: { ign: val('p4_ign'), uid: val('p4_uid') },
+            sub1: { ign: val('sub1_ign'), uid: val('sub1_uid') },
+            sub2: { ign: val('sub2_ign'), uid: val('sub2_uid') },
             createdAt: new Date().toISOString()
         };
 
@@ -425,6 +425,9 @@ document.getElementById('reg-form').addEventListener('submit', async function(e)
     } finally {
         submitBtn.innerText = originalBtnText;
         submitBtn.disabled = false;
+    }
+});
+        
     }
 });
         
