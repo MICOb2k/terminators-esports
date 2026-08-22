@@ -207,7 +207,7 @@
         2026 FOUNDED BY M I C O
     </footer>
 
-    <!-- STANDARD JAVASCRIPT FOR NAVIGATION -->
+    <!-- NAVIGATION LOGIC -->
     <script>
         function openTab(tabName) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -242,7 +242,7 @@
         });
     </script>
 
-    <!-- FIREBASE MODULE -->
+    <!-- FIREBASE REALTIME MODULE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, deleteDoc, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -259,7 +259,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Realtime Tournament Info Sync
+        // 1. REALTIME TOURNAMENT SYNC
         onSnapshot(doc(db, "settings", "tournament"), (docSnap) => {
             if (docSnap.exists()) {
                 const data = docSnap.data();
@@ -270,7 +270,7 @@
                 document.getElementById('admin_tourney_details').value = data.details || "";
             } else {
                 document.getElementById('tourney-title').innerText = "Terminators Championship";
-                document.getElementById('tourney-details').innerText = "Registration is currently open!";
+                document.getElementById('tourney-details').innerText = "Registration is open!";
                 document.getElementById('regTourneyName').value = "Terminators Championship";
             }
         });
@@ -279,12 +279,12 @@
             const title = document.getElementById('admin_tourney_title').value;
             const details = document.getElementById('admin_tourney_details').value;
             try {
-                await setDoc(doc(db, "settings", "tournament"), { title, details });
-                alert("Tournament Info updated successfully!");
-            } catch (err) { alert("Error: " + err.message); }
+                await setDoc(doc(db, "settings", "tournament"), { title: title, details: details }, { merge: true });
+                alert("Tournament Info published successfully!");
+            } catch (err) { alert("Error saving tournament: " + err.message); }
         });
 
-        // Realtime Standings Sync
+        // 2. REALTIME STANDINGS SYNC
         onSnapshot(doc(db, "settings", "standings"), (docSnap) => {
             if (docSnap.exists()) {
                 const data = docSnap.data();
@@ -296,38 +296,45 @@
         document.getElementById('btn-save-standings').addEventListener('click', async () => {
             const text = document.getElementById('admin_standings_text').value;
             try {
-                await setDoc(doc(db, "settings", "standings"), { text });
+                await setDoc(doc(db, "settings", "standings"), { text: text }, { merge: true });
                 alert("Standings updated successfully!");
-            } catch (err) { alert("Error: " + err.message); }
+            } catch (err) { alert("Error saving standings: " + err.message); }
         });
 
-        // Dynamic Social Links
-        document.getElementById('btn-save-socials').addEventListener('click', () => {
-            const socials = {
-                whatsapp: document.getElementById('admin_whatsapp').value,
-                discord: document.getElementById('admin_discord').value,
-                tiktok: document.getElementById('admin_tiktok').value,
-                youtube: document.getElementById('admin_youtube').value
-            };
-            localStorage.setItem('terminators_socials', JSON.stringify(socials));
-            loadSocials();
-            alert("Social links updated!");
+        // 3. REALTIME FIREBASE SOCIAL LINKS SYNC
+        onSnapshot(doc(db, "settings", "socials"), (docSnap) => {
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                if(data.whatsapp) document.getElementById('link_whatsapp').href = data.whatsapp;
+                if(data.discord) document.getElementById('link_discord').href = data.discord;
+                if(data.tiktok) document.getElementById('link_tiktok').href = data.tiktok;
+                if(data.youtube) document.getElementById('link_youtube').href = data.youtube;
+
+                document.getElementById('admin_whatsapp').value = data.whatsapp || "";
+                document.getElementById('admin_discord').value = data.discord || "";
+                document.getElementById('admin_tiktok').value = data.tiktok || "";
+                document.getElementById('admin_youtube').value = data.youtube || "";
+            }
         });
 
-        function loadSocials() {
-            const saved = JSON.parse(localStorage.getItem('terminators_socials')) || { whatsapp: "#", discord: "#", tiktok: "#", youtube: "#" };
-            document.getElementById('link_whatsapp').href = saved.whatsapp || "#";
-            document.getElementById('link_discord').href = saved.discord || "#";
-            document.getElementById('link_tiktok').href = saved.tiktok || "#";
-            document.getElementById('link_youtube').href = saved.youtube || "#";
-            document.getElementById('admin_whatsapp').value = saved.whatsapp || "";
-            document.getElementById('admin_discord').value = saved.discord || "";
-            document.getElementById('admin_tiktok').value = saved.tiktok || "";
-            document.getElementById('admin_youtube').value = saved.youtube || "";
-        }
-        loadSocials();
+        document.getElementById('btn-save-socials').addEventListener('click', async () => {
+            const whatsapp = document.getElementById('admin_whatsapp').value;
+            const discord = document.getElementById('admin_discord').value;
+            const tiktok = document.getElementById('admin_tiktok').value;
+            const youtube = document.getElementById('admin_youtube').value;
 
-        // Registration Submission
+            try {
+                await setDoc(doc(db, "settings", "socials"), {
+                    whatsapp: whatsapp,
+                    discord: discord,
+                    tiktok: tiktok,
+                    youtube: youtube
+                }, { merge: true });
+                alert("Social Links saved directly to Firebase database!");
+            } catch (err) { alert("Error saving socials: " + err.message); }
+        });
+
+        // 4. SQUAD REGISTRATION
         document.getElementById('reg-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const file = document.getElementById('teamLogo').files[0];
@@ -344,7 +351,4 @@
                     gmail: document.getElementById('leaderGmail').value,
                     whatsapp: document.getElementById('whatsappNum').value,
                     discord: document.getElementById('discordId').value,
-                    p1: { ign: document.getElementById('p1_ign').value, uid: document.getElementById('p1_uid').value },
-                    p2: { ign: document.getElementById('p2_ign').value, uid: document.getElementById('p2_uid').value },
-                    p3: { ign: document.getElementById('p3_ign').value, uid: document.getElementById('p3_uid').value },
-                    p4: { ign: document.getEle
+                    p1: { ign: document.getE
