@@ -36,6 +36,8 @@
             width: 100%;
             max-width: 600px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
 
         header {
@@ -62,6 +64,8 @@
             padding: 4px;
             gap: 4px;
             margin-bottom: 15px;
+            position: relative;
+            z-index: 10;
         }
 
         .tab-btn {
@@ -76,6 +80,8 @@
             cursor: pointer;
             text-align: center;
             transition: 0.2s;
+            position: relative;
+            z-index: 11;
         }
 
         .tab-btn.active {
@@ -114,6 +120,8 @@
 
         .form-group {
             margin-bottom: 10px;
+            position: relative;
+            z-index: 5;
         }
 
         label {
@@ -134,6 +142,8 @@
             border-radius: 6px;
             font-size: 12px;
             outline: none;
+            position: relative;
+            z-index: 6;
         }
 
         .gaming-input:focus {
@@ -163,6 +173,8 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-top: 12px;
+            position: relative;
+            z-index: 6;
         }
 
         /* REGISTERED SQUAD CARD DESIGN */
@@ -241,6 +253,8 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
+            position: relative;
+            z-index: 5;
         }
 
         .social-card.whatsapp { border-color: #00e676; color: #00e676; }
@@ -415,8 +429,8 @@
             if (btnElement) btnElement.classList.add('active');
         }
 
-        let squads = JSON.parse(localStorage.getItem('terminators_squads_v3')) || [];
-        let socialLinks = JSON.parse(localStorage.getItem('terminators_socials_v3')) || {
+        let squads = JSON.parse(localStorage.getItem('terminators_squads_v4')) || [];
+        let socialLinks = JSON.parse(localStorage.getItem('terminators_socials_v4')) || {
             whatsapp: "https://chat.whatsapp.com/FOJ0srnmrAAbdwkT2mcpLF",
             discord: "https://discord.gg/",
             tiktok: "https://tiktok.com/@terminators.esport",
@@ -476,20 +490,11 @@
                         <div class="squad-detail-line">🎮 <span>Discord:</span> ${s.discord || 'N/A'}</div>
                         <div class="squad-detail-line" style="margin-top: 4px;">🎯 <b>Main:</b> 1. ${s.p1} | 2. ${s.p2} | 3. ${s.p3} | 4. ${s.p4}</div>
                         ${s.sub1 ? `<div class="squad-detail-line">🛡️ <b>Subs:</b> ${s.sub1} ${s.sub2 ? '| ' + s.sub2 : ''}</div>` : ''}
-                        <button type="button" onclick="deleteSquad(${index})" style="background:var(--accent-red); color:#fff; border:none; padding:4px 8px; border-radius:4px; font-size:10px; font-weight:700; margin-top:6px; cursor:pointer;">Delete Squad</button>
+                        <button type="button" onclick="deleteSquad(${index})" style="background:var(--accent-red); color:#fff; border:none; padding:4px 8px; border-radius:4px; font-size:10px; font-weight:700; margin-top:6px; cursor:pointer; position:relative; z-index:10;">Delete Squad</button>
                     </div>
                 `;
                 adminTeamsContainer.appendChild(adminCard);
             });
         }
 
-        document.getElementById('registrationForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            const fileInput = document.getElementById('squadLogoFile');
-            
-            function saveAndReset(logoData) {
-                const newSquad = {
-                    name: document.getElementById('squadName').value.trim(),
-                    logo: logoData,
-                    email: document.getElementById('leaderEmail').value.trim()
+        document.getElementById('registrationForm').a
