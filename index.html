@@ -320,10 +320,10 @@
 
         <!-- NAVIGATION TABS -->
         <div class="nav-tabs">
-            <button type="button" class="tab-btn active" data-target="tab-hub">Hub</button>
-            <button type="button" class="tab-btn" data-target="tab-register">Register</button>
-            <button type="button" class="tab-btn" data-target="tab-teams">Teams (<span id="tabCount">0</span>)</button>
-            <button type="button" class="tab-btn" data-target="tab-admin">Admin</button>
+            <button type="button" class="tab-btn active" id="btn-hub" onclick="switchTab('tab-hub', this)">Hub</button>
+            <button type="button" class="tab-btn" id="btn-register" onclick="switchTab('tab-register', this)">Register</button>
+            <button type="button" class="tab-btn" id="btn-teams" onclick="switchTab('tab-teams', this)">Teams (<span id="tabCount">0</span>)</button>
+            <button type="button" class="tab-btn" id="btn-admin" onclick="switchTab('tab-admin', this)">Admin</button>
         </div>
 
         <!-- HUB TAB -->
@@ -501,6 +501,5 @@
     </div>
 
     <script>
-        // Direct event attachment mapping to avoid inline onclick blocks
-        document.addEventListener('DOMContentLoaded', () => {
-            const tabButtons = document.querySelectorAll(
+        // Global direct function so it can never fail execution
+       
