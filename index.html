@@ -96,7 +96,7 @@
         <form id="reg-form">
             <div class="form-group">
                 <label>Tournament</label>
-                <input type="text" id="regTourneyName" value="Loading active tournament..." readonly style="color: #8b949e;">
+                <input type="text" id="regTourneyName" value="Terminators Championship" readonly style="color: #8b949e;">
             </div>
 
             <div class="grid-2">
@@ -166,22 +166,22 @@
             <h3 style="color: #ff3e3e; font-size: 1rem; margin-bottom: 10px;">Active Tournament Settings</h3>
             <div class="form-group"><label>Tournament Title</label><input type="text" id="admin_tourney_title" placeholder="e.g., Free Fire League Season 1"></div>
             <div class="form-group"><label>Status & Details</label><input type="text" id="admin_tourney_details" placeholder="e.g., Registration Open | 48 Slots"></div>
-            <button id="btn-save-tourney" class="submit-btn" style="background: #238636;">Publish Tournament Info</button>
+            <button id="btn-save-tourney" type="button" class="submit-btn" style="background: #238636;">Publish Tournament Info</button>
         </div>
 
         <div class="card">
             <h3 style="color: #ff3e3e; font-size: 1rem; margin-bottom: 10px;">Update Tournament Standings</h3>
             <div class="form-group"><textarea id="admin_standings_text" rows="4" placeholder="Enter score table or standings text here..."></textarea></div>
-            <button id="btn-save-standings" class="submit-btn" style="background: #238636;">Update Standings</button>
+            <button id="btn-save-standings" type="button" class="submit-btn" style="background: #238636;">Update Standings</button>
         </div>
 
         <div class="card">
             <h3 style="color: #ff3e3e; font-size: 1rem; margin-bottom: 10px;">Update Community Links</h3>
             <div class="form-group"><input type="text" id="admin_whatsapp" placeholder="WhatsApp Group Link"></div>
             <div class="form-group"><input type="text" id="admin_discord" placeholder="Discord Server Link"></div>
-            <div class="form-group"><input type="text" id="admin_tiktok" placeholder="TikTok Profile Link"></div>
+            <div class="form-group"><input type="text" id="admin_tiktok" placeholder="https://www.tiktok.com/@terminators.esport" value="https://www.tiktok.com/@terminators.esport"></div>
             <div class="form-group"><input type="text" id="admin_youtube" placeholder="YouTube Channel Link"></div>
-            <button id="btn-save-socials" class="submit-btn" style="background: #238636;">Save Social Links</button>
+            <button id="btn-save-socials" type="button" class="submit-btn" style="background: #238636;">Save Social Links</button>
         </div>
 
         <h3 style="color: #fff; font-size: 1rem; margin: 15px 0 10px;">Registered Teams Database</h3>
@@ -192,10 +192,10 @@
     <div class="social-section">
         <div class="social-title">CONNECT & FOLLOW US</div>
         <div class="socials">
-            <a id="link_whatsapp" href="#" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
-            <a id="link_discord" href="#" target="_blank"><i class="fa-brands fa-discord"></i> Discord</a>
-            <a id="link_tiktok" href="#" target="_blank"><i class="fa-brands fa-tiktok"></i> TikTok</a>
-            <a id="link_youtube" href="#" target="_blank"><i class="fa-brands fa-youtube"></i> YouTube</a>
+            <a id="link_whatsapp" href="https://whatsapp.com" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+            <a id="link_discord" href="https://discord.com" target="_blank"><i class="fa-brands fa-discord"></i> Discord</a>
+            <a id="link_tiktok" href="https://www.tiktok.com/@terminators.esport" target="_blank"><i class="fa-brands fa-tiktok"></i> TikTok</a>
+            <a id="link_youtube" href="https://youtube.com" target="_blank"><i class="fa-brands fa-youtube"></i> YouTube</a>
         </div>
     </div>
 
@@ -240,9 +240,23 @@
                 alert("Incorrect Password!");
             }
         });
+
+        // Instant Local Social Link Fallback
+        function applyLocalSocials() {
+            try {
+                const saved = JSON.parse(localStorage.getItem('term_socials'));
+                if (saved) {
+                    if (saved.whatsapp) document.getElementById('link_whatsapp').href = saved.whatsapp;
+                    if (saved.discord) document.getElementById('link_discord').href = saved.discord;
+                    if (saved.tiktok) document.getElementById('link_tiktok').href = saved.tiktok;
+                    if (saved.youtube) document.getElementById('link_youtube').href = saved.youtube;
+                }
+            } catch(e) {}
+        }
+        applyLocalSocials();
     </script>
 
-    <!-- FIREBASE REALTIME MODULE -->
+    <!-- FIREBASE MODULE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, deleteDoc, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -259,49 +273,75 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // 1. REALTIME TOURNAMENT SYNC
-        onSnapshot(doc(db, "settings", "tournament"), (docSnap) => {
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                document.getElementById('tourney-title').innerText = data.title || "No Active Tournament";
-                document.getElementById('tourney-details').innerText = data.details || "Check back soon for upcoming events.";
-                document.getElementById('regTourneyName').value = data.title || "No Active Tournament";
-                document.getElementById('admin_tourney_title').value = data.title || "";
-                document.getElementById('admin_tourney_details').value = data.details || "";
-            } else {
-                document.getElementById('tourney-title').innerText = "Terminators Championship";
-                document.getElementById('tourney-details').innerText = "Registration is open!";
-                document.getElementById('regTourneyName').value = "Terminators Championship";
+        // 1. SAVE SOCIAL LINKS
+        document.getElementById('btn-save-socials').addEventListener('click', async () => {
+            const whatsapp = document.getElementById('admin_whatsapp').value || "https://whatsapp.com";
+            const discord = document.getElementById('admin_discord').value || "https://discord.com";
+            const tiktok = document.getElementById('admin_tiktok').value || "https://www.tiktok.com/@terminators.esport";
+            const youtube = document.getElementById('admin_youtube').value || "https://youtube.com";
+
+            const socData = { whatsapp, discord, tiktok, youtube };
+            
+            // Save locally
+            localStorage.setItem('term_socials', JSON.stringify(socData));
+            document.getElementById('link_whatsapp').href = whatsapp;
+            document.getElementById('link_discord').href = discord;
+            document.getElementById('link_tiktok').href = tiktok;
+            document.getElementById('link_youtube').href = youtube;
+
+            try {
+                await setDoc(doc(db, "settings", "socials"), socData, { merge: true });
+                alert("SUCCESS: Social Links Updated!");
+            } catch (err) {
+                alert("SAVED LOCALLY! (Firebase Warning: " + err.message + "). Unlocking Firebase Rules in Console fixes live sync!");
             }
         });
 
+        // 2. SAVE TOURNAMENT INFO
         document.getElementById('btn-save-tourney').addEventListener('click', async () => {
             const title = document.getElementById('admin_tourney_title').value;
             const details = document.getElementById('admin_tourney_details').value;
+            if (!title) return alert("Please enter a Tournament Title!");
+
             try {
                 await setDoc(doc(db, "settings", "tournament"), { title: title, details: details }, { merge: true });
-                alert("Tournament Info published successfully!");
-            } catch (err) { alert("Error saving tournament: " + err.message); }
-        });
-
-        // 2. REALTIME STANDINGS SYNC
-        onSnapshot(doc(db, "settings", "standings"), (docSnap) => {
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                document.getElementById('standings-content').innerHTML = `<pre style="white-space: pre-wrap; font-family: inherit; color: #fff;">${data.text}</pre>`;
-                document.getElementById('admin_standings_text').value = data.text || "";
+                alert("SUCCESS: Tournament Info Published Live!");
+            } catch (err) {
+                alert("ERROR Saving Tournament: " + err.message + "\n\nMake sure Firebase Rules are published!");
             }
         });
 
+        // 3. SAVE STANDINGS
         document.getElementById('btn-save-standings').addEventListener('click', async () => {
             const text = document.getElementById('admin_standings_text').value;
             try {
                 await setDoc(doc(db, "settings", "standings"), { text: text }, { merge: true });
-                alert("Standings updated successfully!");
-            } catch (err) { alert("Error saving standings: " + err.message); }
+                alert("SUCCESS: Standings Updated Live!");
+            } catch (err) {
+                alert("ERROR Saving Standings: " + err.message);
+            }
         });
 
-        // 3. REALTIME FIREBASE SOCIAL LINKS SYNC
+        // REALTIME SYNC LISTENERS
+        onSnapshot(doc(db, "settings", "tournament"), (docSnap) => {
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                document.getElementById('tourney-title').innerText = data.title || "Terminators Championship";
+                document.getElementById('tourney-details').innerText = data.details || "Registration is open!";
+                document.getElementById('regTourneyName').value = data.title || "Terminators Championship";
+            } else {
+                document.getElementById('tourney-title').innerText = "Terminators Championship";
+                document.getElementById('tourney-details').innerText = "Registration is open!";
+            }
+        }, (err) => { console.error("Firestore Error:", err); });
+
+        onSnapshot(doc(db, "settings", "standings"), (docSnap) => {
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                document.getElementById('standings-content').innerHTML = `<pre style="white-space: pre-wrap; font-family: inherit; color: #fff;">${data.text}</pre>`;
+            }
+        }, (err) => { console.error("Firestore Error:", err); });
+
         onSnapshot(doc(db, "settings", "socials"), (docSnap) => {
             if (docSnap.exists()) {
                 const data = docSnap.data();
@@ -309,46 +349,7 @@
                 if(data.discord) document.getElementById('link_discord').href = data.discord;
                 if(data.tiktok) document.getElementById('link_tiktok').href = data.tiktok;
                 if(data.youtube) document.getElementById('link_youtube').href = data.youtube;
-
-                document.getElementById('admin_whatsapp').value = data.whatsapp || "";
-                document.getElementById('admin_discord').value = data.discord || "";
-                document.getElementById('admin_tiktok').value = data.tiktok || "";
-                document.getElementById('admin_youtube').value = data.youtube || "";
             }
-        });
+        }, (err) => { console.error("Firestore Error:", err); });
 
-        document.getElementById('btn-save-socials').addEventListener('click', async () => {
-            const whatsapp = document.getElementById('admin_whatsapp').value;
-            const discord = document.getElementById('admin_discord').value;
-            const tiktok = document.getElementById('admin_tiktok').value;
-            const youtube = document.getElementById('admin_youtube').value;
-
-            try {
-                await setDoc(doc(db, "settings", "socials"), {
-                    whatsapp: whatsapp,
-                    discord: discord,
-                    tiktok: tiktok,
-                    youtube: youtube
-                }, { merge: true });
-                alert("Social Links saved directly to Firebase database!");
-            } catch (err) { alert("Error saving socials: " + err.message); }
-        });
-
-        // 4. SQUAD REGISTRATION
-        document.getElementById('reg-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const file = document.getElementById('teamLogo').files[0];
-            if (!file) return alert("Please upload a team logo image.");
-
-            const reader = new FileReader();
-            reader.onload = async function(evt) {
-                const teamData = {
-                    tournament: document.getElementById('regTourneyName').value,
-                    server: document.getElementById('ffServer').value,
-                    country: document.getElementById('teamCountry').value,
-                    name: document.getElementById('teamName').value,
-                    logo: evt.target.result,
-                    gmail: document.getElementById('leaderGmail').value,
-                    whatsapp: document.getElementById('whatsappNum').value,
-                    discord: document.getElementById('discordId').value,
-                    p1: { ign: document.getE
+    
