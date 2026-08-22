@@ -36,8 +36,6 @@
             width: 100%;
             max-width: 600px;
             margin: 0 auto;
-            position: relative;
-            z-index: 1;
         }
 
         header {
@@ -64,8 +62,6 @@
             padding: 4px;
             gap: 4px;
             margin-bottom: 15px;
-            position: relative;
-            z-index: 10;
         }
 
         .tab-btn {
@@ -80,8 +76,6 @@
             cursor: pointer;
             text-align: center;
             transition: 0.2s;
-            position: relative;
-            z-index: 11;
         }
 
         .tab-btn.active {
@@ -120,8 +114,6 @@
 
         .form-group {
             margin-bottom: 10px;
-            position: relative;
-            z-index: 5;
         }
 
         label {
@@ -142,12 +134,39 @@
             border-radius: 6px;
             font-size: 12px;
             outline: none;
-            position: relative;
-            z-index: 6;
         }
 
         .gaming-input:focus {
             border-color: var(--accent-red);
+        }
+
+        /* CUSTOM FILE UPLOAD BUTTON FIX */
+        .file-upload-wrapper {
+            position: relative;
+            width: 100%;
+            background: #0b0c10;
+            border: 1px dashed var(--accent-red);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .file-upload-wrapper input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-upload-text {
+            font-size: 11px;
+            color: var(--text-bright);
+            font-weight: 600;
+            pointer-events: none;
         }
 
         .section-subtitle {
@@ -173,8 +192,6 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-top: 12px;
-            position: relative;
-            z-index: 6;
         }
 
         /* REGISTERED SQUAD CARD DESIGN */
@@ -253,13 +270,12 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
-            position: relative;
-            z-index: 5;
         }
 
         .social-card.whatsapp { border-color: #00e676; color: #00e676; }
         .social-card.discord { border-color: #5865F2; color: #5865F2; }
         .social-card.tiktok { border-color: #ff3366; color: #ff3366; }
+        .social-card.telegram { border-color: #229ED9; color: #229ED9; }
         .social-card.youtube { border-color: #ff0000; color: #ff0000; grid-column: span 2; }
 
         footer {
@@ -311,10 +327,15 @@
                         <label for="squadName">Squad Name</label>
                         <input type="text" id="squadName" placeholder="e.g., TERMINATORS E-SPORTS" required class="gaming-input">
                     </div>
+                    
                     <div class="form-group">
-                        <label for="squadLogoFile">Upload Team Logo Image</label>
-                        <input type="file" id="squadLogoFile" accept="image/*" class="gaming-input" style="padding: 6px;">
+                        <label>Upload Team Logo Image</label>
+                        <div class="file-upload-wrapper">
+                            <input type="file" id="squadLogoFile" accept="image/*">
+                            <div class="file-upload-text" id="fileChosenText">📂 Tap to choose logo from gallery</div>
+                        </div>
                     </div>
+
                     <div class="form-group">
                         <label for="leaderEmail">Email Address</label>
                         <input type="email" id="leaderEmail" placeholder="leader@gmail.com" required class="gaming-input">
@@ -392,6 +413,10 @@
                         <input type="url" id="adminTiktokLink" class="gaming-input">
                     </div>
                     <div class="form-group">
+                        <label>Telegram Link</label>
+                        <input type="url" id="adminTelegramLink" class="gaming-input">
+                    </div>
+                    <div class="form-group">
                         <label>YouTube Link</label>
                         <input type="url" id="adminYoutubeLink" class="gaming-input">
                     </div>
@@ -410,6 +435,7 @@
                 <a id="linkWhatsapp" href="#" target="_blank" class="social-card whatsapp">💬 WhatsApp GC</a>
                 <a id="linkDiscord" href="#" target="_blank" class="social-card discord">🎮 Discord</a>
                 <a id="linkTiktok" href="#" target="_blank" class="social-card tiktok">🔥 TikTok</a>
+                <a id="linkTelegram" href="#" target="_blank" class="social-card telegram">✈️ Telegram</a>
                 <a id="linkYoutube" href="#" target="_blank" class="social-card youtube">📺 YouTube</a>
             </div>
         </div>
@@ -429,11 +455,12 @@
             if (btnElement) btnElement.classList.add('active');
         }
 
-        let squads = JSON.parse(localStorage.getItem('terminators_squads_v4')) || [];
-        let socialLinks = JSON.parse(localStorage.getItem('terminators_socials_v4')) || {
+        let squads = JSON.parse(localStorage.getItem('terminators_squads_v6')) || [];
+        let socialLinks = JSON.parse(localStorage.getItem('terminators_socials_v6')) || {
             whatsapp: "https://chat.whatsapp.com/FOJ0srnmrAAbdwkT2mcpLF",
             discord: "https://discord.gg/",
             tiktok: "https://tiktok.com/@terminators.esport",
+            telegram: "https://t.me/",
             youtube: "https://www.youtube.com/@MICOB2K"
         };
 
@@ -441,13 +468,27 @@
             document.getElementById('linkWhatsapp').href = socialLinks.whatsapp;
             document.getElementById('linkDiscord').href = socialLinks.discord;
             document.getElementById('linkTiktok').href = socialLinks.tiktok;
+            document.getElementById('linkTelegram').href = socialLinks.telegram;
             document.getElementById('linkYoutube').href = socialLinks.youtube;
 
             document.getElementById('adminWhatsappLink').value = socialLinks.whatsapp;
             document.getElementById('adminDiscordLink').value = socialLinks.discord;
             document.getElementById('adminTiktokLink').value = socialLinks.tiktok;
+            document.getElementById('adminTelegramLink').value = socialLinks.telegram;
             document.getElementById('adminYoutubeLink').value = socialLinks.youtube;
         }
+
+        // Show image file name when selected
+        document.getElementById('squadLogoFile').addEventListener('change', function(e) {
+            const fileNameText = document.getElementById('fileChosenText');
+            if (e.target.files && e.target.files[0]) {
+                fileNameText.textContent = "✅ Selected: " + e.target.files[0].name;
+                fileNameText.style.color = "#00e676";
+            } else {
+                fileNameText.textContent = "📂 Tap to choose logo from gallery";
+                fileNameText.style.color = "var(--text-bright)";
+            }
+        });
 
         function renderSquads() {
             const teamsContainer = document.getElementById('teamsContainer');
@@ -473,28 +514,4 @@
                     <div class="squad-info">
                         <div class="squad-name-title">${s.name}</div>
                         <div class="squad-detail-line">🎯 <b>Main:</b> 1. ${s.p1} | 2. ${s.p2} | 3. ${s.p3} | 4. ${s.p4}</div>
-                        ${s.sub1 ? `<div class="squad-detail-line">🛡️ <b>Subs:</b> ${s.sub1} ${s.sub2 ? '| ' + s.sub2 : ''}</div>` : ''}
-                    </div>
-                `;
-                teamsContainer.appendChild(card);
-
-                // Admin View Card with Delete Option
-                const adminCard = document.createElement('div');
-                adminCard.className = 'squad-card';
-                adminCard.innerHTML = `
-                    <div class="squad-logo-box"><img src="${s.logo || defaultLogo}" alt="Logo"></div>
-                    <div class="squad-info">
-                        <div class="squad-name-title">${s.name}</div>
-                        <div class="squad-detail-line">📧 <span>Gmail:</span> ${s.email}</div>
-                        <div class="squad-detail-line">💬 <span>WhatsApp:</span> ${s.whatsapp}</div>
-                        <div class="squad-detail-line">🎮 <span>Discord:</span> ${s.discord || 'N/A'}</div>
-                        <div class="squad-detail-line" style="margin-top: 4px;">🎯 <b>Main:</b> 1. ${s.p1} | 2. ${s.p2} | 3. ${s.p3} | 4. ${s.p4}</div>
-                        ${s.sub1 ? `<div class="squad-detail-line">🛡️ <b>Subs:</b> ${s.sub1} ${s.sub2 ? '| ' + s.sub2 : ''}</div>` : ''}
-                        <button type="button" onclick="deleteSquad(${index})" style="background:var(--accent-red); color:#fff; border:none; padding:4px 8px; border-radius:4px; font-size:10px; font-weight:700; margin-top:6px; cursor:pointer; position:relative; z-index:10;">Delete Squad</button>
-                    </div>
-                `;
-                adminTeamsContainer.appendChild(adminCard);
-            });
-        }
-
-        document.getElementById('registrationForm').a
+        
