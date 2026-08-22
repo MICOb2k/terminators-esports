@@ -1,224 +1,498 @@
-// Import Firebase SDKs
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-// Your Firebase Configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyB4nLlRgIbYL6vxmyw5V8D1F3_Fixtfc5w",
-  authDomain: "terminators-esports.firebaseapp.com",
-  projectId: "terminators-esports",
-  storageBucket: "terminators-esports.firebasestorage.app",
-  messagingSenderId: "737418872311",
-  appId: "1:737418872311:web:bf1be1b7932b271fb91af2"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-// Tab switching logic (Keeps your original layout working)
-window.switchTab = function(tab) {
-    document.getElementById('section-standings').classList.remove('active');
-    document.getElementById('section-teams').classList.remove('active');
-    document.getElementById('section-register').classList.remove('active');
-    document.getElementById('section-admin').classList.remove('active');
-
-    document.getElementById('btn-standings').classList.remove('active');
-    document.getElementById('btn-teams').classList.remove('active');
-    document.getElementById('btn-register').classList.remove('active');
-
-    if (tab === 'standings') {
-        document.getElementById('section-standings').classList.add('active');
-        document.getElementById('btn-standings').classList.add('active');
-    } else if (tab === 'teams') {
-        document.getElementById('section-teams').classList.add('active');
-        document.getElementById('btn-teams').classList.add('active');
-        renderPublicTeams();
-    } else if (tab === 'register') {
-        document.getElementById('section-register').classList.add('active');
-        document.getElementById('btn-register').classList.add('active');
-    }
-}
-
-// Admin Panel Login
-window.openAdmin = function() {
-    const password = prompt("Enter Admin Password:");
-    if (password === "2060") {
-        document.getElementById('section-standings').classList.remove('active');
-        document.getElementById('section-teams').classList.remove('active');
-        document.getElementById('section-register').classList.remove('active');
-        document.getElementById('section-admin').classList.add('active');
-        renderAdminTeams();
-        loadAdminSocialInputs();
-        alert("Access Granted!");
-    } else if (password !== null) {
-        alert("Incorrect Password! Access Denied.");
-    }
-}
-
-// Dynamic Social Links Logic (Keeps localStorage for admin settings)
-window.saveSocials = function() {
-    const socials = {
-        whatsapp: document.getElementById('admin_whatsapp').value,
-        discord: document.getElementById('admin_discord').value,
-        tiktok: document.getElementById('admin_tiktok').value,
-        youtube: document.getElementById('admin_youtube').value
-    };
-    localStorage.setItem('terminators_socials', JSON.stringify(socials));
-    loadDynamicSocials();
-    alert("Social links updated live across the website!");
-}
-
-function loadDynamicSocials() {
-    const saved = JSON.parse(localStorage.getItem('terminators_socials')) || {
-        whatsapp: "#", discord: "#", tiktok: "#", youtube: "#"
-    };
-    if(document.getElementById('link_whatsapp')) document.getElementById('link_whatsapp').href = saved.whatsapp || "#";
-    if(document.getElementById('link_discord')) document.getElementById('link_discord').href = saved.discord || "#";
-    if(document.getElementById('link_tiktok')) document.getElementById('link_tiktok').href = saved.tiktok || "#";
-    if(document.getElementById('link_youtube')) document.getElementById('link_youtube').href = saved.youtube || "#";
-}
-window.loadDynamicSocials = loadDynamicSocials;
-
-function loadAdminSocialInputs() {
-    const saved = JSON.parse(localStorage.getItem('terminators_socials')) || {};
-    if(document.getElementById('admin_whatsapp')) document.getElementById('admin_whatsapp').value = saved.whatsapp || "";
-    if(document.getElementById('admin_discord')) document.getElementById('admin_discord').value = saved.discord || "";
-    if(document.getElementById('admin_tiktok')) document.getElementById('admin_tiktok').value = saved.tiktok || "";
-    if(document.getElementById('admin_youtube')) document.getElementById('admin_youtube').value = saved.youtube || "";
-}
-
-// ==========================================
-// FIREBASE FIRESTORE: SAVE REGISTRATION DATA
-// ==========================================
-const regForm = document.getElementById('reg-form');
-if (regForm) {
-    regForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-        const fileInput = document.getElementById('teamLogo');
-        const file = fileInput.files[0];
-
-        if (!file) {
-            alert("Please upload a team profile picture.");
-            return;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminators Esports</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        const reader = new FileReader();
-        reader.onload = async function(e) {
-            const teamData = {
-                name: document.getElementById('teamName').value,
-                logo: e.target.result,
-                gmail: document.getElementById('leaderGmail').value,
-                whatsapp: document.getElementById('whatsappNum').value,
-                discord: document.getElementById('discordId').value,
-                p1: { ign: document.getElementById('p1_ign').value, uid: document.getElementById('p1_uid').value },
-                p2: { ign: document.getElementById('p2_ign').value, uid: document.getElementById('p2_uid').value },
-                p3: { ign: document.getElementById('p3_ign').value, uid: document.getElementById('p3_uid').value },
-                p4: { ign: document.getElementById('p4_ign').value, uid: document.getElementById('p4_uid').value },
-                sub1: { ign: document.getElementById('sub1_ign').value, uid: document.getElementById('sub1_uid').value },
-                sub2: { ign: document.getElementById('sub2_ign').value, uid: document.getElementById('sub2_uid').value },
-                createdAt: new Date().toISOString()
-            };
+        body {
+            background-color: #0d0f12;
+            color: #ffffff;
+            padding: 15px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
 
-            try {
-                // Save directly to Firestore database collection "registeredTeams"
-                await addDoc(collection(db, "registeredTeams"), teamData);
-                alert("Squad Registered Successfully to Firebase!");
-                regForm.reset();
-                switchTab('teams');
-            } catch (err) {
-                console.error("Error adding document: ", err);
-                alert("Failed to register team to database. Check connection.");
+        header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #ff3e3e;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            color: #ff3e3e;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Navigation Tabs */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 20px;
+            background: #161b22;
+            padding: 6px;
+            border-radius: 8px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 10px 5px;
+            background: transparent;
+            border: none;
+            color: #8b949e;
+            font-weight: bold;
+            font-size: 0.85rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .nav-btn.active {
+            background: #ff3e3e;
+            color: #ffffff;
+        }
+
+        /* Sections */
+        .section {
+            display: none;
+            background: #161b22;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #30363d;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            color: #ff3e3e;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            color: #8b949e;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"], input[type="email"], input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            background: #0d0f12;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #ff3e3e;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: #ff3e3e;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            background: #e03232;
+        }
+
+        /* Cards & Lists */
+        .card {
+            background: #0d0f12;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .admin-trigger {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .admin-link {
+            color: #484f58;
+            font-size: 0.75rem;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* Social Links Footer */
+        .socials {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .socials a {
+            color: #8b949e;
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+
+        .socials a:hover {
+            color: #ff3e3e;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>TERMINATORS ESPORTS</h1>
+    </header>
+
+    <div class="navbar">
+        <button id="btn-standings" class="nav-btn active" onclick="switchTab('standings')">Standings</button>
+        <button id="btn-teams" class="nav-btn" onclick="switchTab('teams')">Teams</button>
+        <button id="btn-register" class="nav-btn" onclick="switchTab('register')">Register Squad</button>
+    </div>
+
+    <!-- STANDINGS TAB -->
+    <div id="section-standings" class="section active">
+        <h2>Tournament Standings</h2>
+        <div class="card">
+            <p style="text-align: center; color: #8b949e;">Standings will be updated once the tournament begins.</p>
+        </div>
+    </div>
+
+    <!-- PUBLIC TEAMS TAB -->
+    <div id="section-teams" class="section">
+        <h2>Registered Teams</h2>
+        <div id="public-teams-list">
+            <p style="text-align: center; color: #8b949e;">Loading live teams from database...</p>
+        </div>
+    </div>
+
+    <!-- REGISTER TAB -->
+    <div id="section-register" class="section">
+        <h2>Squad Registration</h2>
+        <form id="reg-form">
+            <div class="form-group">
+                <label>Team Name</label>
+                <input type="text" id="teamName" placeholder="e.g., Terminators Alpha" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Team Logo / Profile Picture</label>
+                <input type="file" id="teamLogo" accept="image/*" required>
+            </div>
+
+            <div class="form-group">
+                <label>Leader Gmail</label>
+                <input type="email" id="leaderGmail" placeholder="leader@gmail.com" required>
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>WhatsApp Number</label>
+                    <input type="text" id="whatsappNum" placeholder="+234..." required>
+                </div>
+                <div class="form-group">
+                    <label>Discord Tag (Optional)</label>
+                    <input type="text" id="discordId" placeholder="User#1234">
+                </div>
+            </div>
+
+            <h3 style="color: #ff3e3e; font-size: 1rem; margin: 15px 0 10px;">Main Roster (Required 4 Players)</h3>
+            
+            <div class="grid-2">
+                <input type="text" id="p1_ign" placeholder="Player 1 IGN" required>
+                <input type="text" id="p1_uid" placeholder="Player 1 UID" required>
+            </div>
+            <br>
+            <div class="grid-2">
+                <input type="text" id="p2_ign" placeholder="Player 2 IGN" required>
+                <input type="text" id="p2_uid" placeholder="Player 2 UID" required>
+            </div>
+            <br>
+            <div class="grid-2">
+                <input type="text" id="p3_ign" placeholder="Player 3 IGN" required>
+                <input type="text" id="p3_uid" placeholder="Player 3 UID" required>
+            </div>
+            <br>
+            <div class="grid-2">
+                <input type="text" id="p4_ign" placeholder="Player 4 IGN" required>
+                <input type="text" id="p4_uid" placeholder="Player 4 UID" required>
+            </div>
+
+            <h3 style="color: #ff3e3e; font-size: 1rem; margin: 15px 0 10px;">Substitutes (Optional)</h3>
+            
+            <div class="grid-2">
+                <input type="text" id="sub1_ign" placeholder="Sub 1 IGN">
+                <input type="text" id="sub1_uid" placeholder="Sub 1 UID">
+            </div>
+            <br>
+            <div class="grid-2">
+                <input type="text" id="sub2_ign" placeholder="Sub 2 IGN">
+                <input type="text" id="sub2_uid" placeholder="Sub 2 UID">
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Registration</button>
+        </form>
+    </div>
+
+    <!-- ADMIN PANEL TAB -->
+    <div id="section-admin" class="section">
+        <h2>Admin Management Panel</h2>
+        
+        <div style="margin-bottom: 20px;">
+            <h3 style="color: #fff; font-size: 0.95rem; margin-bottom: 10px;">Update Dynamic Community Links</h3>
+            <div class="form-group">
+                <input type="text" id="admin_whatsapp" placeholder="WhatsApp Group Link">
+            </div>
+            <div class="form-group">
+                <input type="text" id="admin_discord" placeholder="Discord Server Link">
+            </div>
+            <div class="form-group">
+                <input type="text" id="admin_tiktok" placeholder="TikTok Profile Link">
+            </div>
+            <div class="form-group">
+                <input type="text" id="admin_youtube" placeholder="YouTube Channel Link">
+            </div>
+            <button onclick="saveSocials()" class="submit-btn" style="background: #238636; margin-bottom: 20px;">Save Social Links</button>
+        </div>
+
+        <h3 style="color: #fff; font-size: 0.95rem; margin-bottom: 10px;">Database Registered Teams</h3>
+        <div id="admin-teams-list">
+            <p style="text-align: center; color: #8b949e;">Loading full administrative data...</p>
+        </div>
+    </div>
+
+    <div class="socials">
+        <a id="link_whatsapp" href="#" target="_blank">WhatsApp</a>
+        <a id="link_discord" href="#" target="_blank">Discord</a>
+        <a id="link_tiktok" href="#" target="_blank">TikTok</a>
+        <a id="link_youtube" href="#" target="_blank">YouTube</a>
+    </div>
+
+    <div class="admin-trigger">
+        <span class="admin-link" onclick="openAdmin()">Admin Login</span>
+    </div>
+
+    <!-- FIREBASE MODULE SCRIPT -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Firebase Project Credentials
+        const firebaseConfig = {
+            apiKey: "AIzaSyB4nLlRgIbYL6vxmyw5V8D1F3_Fixtfc5w",
+            authDomain: "terminators-esports.firebaseapp.com",
+            projectId: "terminators-esports",
+            storageBucket: "terminators-esports.firebasestorage.app",
+            messagingSenderId: "737418872311",
+            appId: "1:737418872311:web:bf1be1b7932b271fb91af2"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Global Window Expositions for HTML Onclick Binding
+        window.switchTab = function(tab) {
+            document.getElementById('section-standings').classList.remove('active');
+            document.getElementById('section-teams').classList.remove('active');
+            document.getElementById('section-register').classList.remove('active');
+            document.getElementById('section-admin').classList.remove('active');
+
+            document.getElementById('btn-standings').classList.remove('active');
+            document.getElementById('btn-teams').classList.remove('active');
+            document.getElementById('btn-register').classList.remove('active');
+
+            if (tab === 'standings') {
+                document.getElementById('section-standings').classList.add('active');
+                document.getElementById('btn-standings').classList.add('active');
+            } else if (tab === 'teams') {
+                document.getElementById('section-teams').classList.add('active');
+                document.getElementById('btn-teams').classList.add('active');
+                renderPublicTeams();
+            } else if (tab === 'register') {
+                document.getElementById('section-register').classList.add('active');
+                document.getElementById('btn-register').classList.add('active');
             }
         };
-        reader.readAsDataURL(file);
-    });
-}
 
-// ==========================================
-// FIREBASE FIRESTORE: RENDER PUBLIC TEAMS
-// ==========================================
-function renderPublicTeams() {
-    const container = document.getElementById('public-teams-list');
-    if (!container) return;
+        window.openAdmin = function() {
+            const password = prompt("Enter Admin Password:");
+            if (password === "2060") {
+                document.getElementById('section-standings').classList.remove('active');
+                document.getElementById('section-teams').classList.remove('active');
+                document.getElementById('section-register').classList.remove('active');
+                document.getElementById('section-admin').classList.add('active');
+                renderAdminTeams();
+                loadAdminSocialInputs();
+                alert("Access Granted!");
+            } else if (password !== null) {
+                alert("Incorrect Password!");
+            }
+        };
 
-    container.innerHTML = `<p style="text-align: center; color: #8b949e;">Loading live teams from database...</p>`;
+        window.saveSocials = function() {
+            const socials = {
+                whatsapp: document.getElementById('admin_whatsapp').value,
+                discord: document.getElementById('admin_discord').value,
+                tiktok: document.getElementById('admin_tiktok').value,
+                youtube: document.getElementById('admin_youtube').value
+            };
+            localStorage.setItem('terminators_socials', JSON.stringify(socials));
+            loadDynamicSocials();
+            alert("Social links updated!");
+        };
 
-    // Real-time listener from Firestore
-    onSnapshot(collection(db, "registeredTeams"), (snapshot) => {
-        container.innerHTML = "";
-        if (snapshot.empty) {
-            container.innerHTML = `<p style="text-align: center; color: #8b949e;">No squads registered yet.</p>`;
-            return;
+        function loadDynamicSocials() {
+            const saved = JSON.parse(localStorage.getItem('terminators_socials')) || {
+                whatsapp: "#", discord: "#", tiktok: "#", youtube: "#"
+            };
+            if(document.getElementById('link_whatsapp')) document.getElementById('link_whatsapp').href = saved.whatsapp || "#";
+            if(document.getElementById('link_discord')) document.getElementById('link_discord').href = saved.discord || "#";
+            if(document.getElementById('link_tiktok')) document.getElementById('link_tiktok').href = saved.tiktok || "#";
+            if(document.getElementById('link_youtube')) document.getElementById('link_youtube').href = saved.youtube || "#";
         }
 
-        snapshot.forEach((docSnap) => {
-            const t = docSnap.data();
-            let subsHtml = "";
-            if (t.sub1 && t.sub1.ign) {
-                subsHtml += ` | <b>Subs:</b> ${t.sub1.ign} (${t.sub1.uid})`;
-            }
-            if (t.sub2 && t.sub2.ign) {
-                subsHtml += `, ${t.sub2.ign} (${t.sub2.uid})`;
-            }
-
-            container.innerHTML += `
-                <div class="card" style="margin-bottom: 15px; display: flex; align-items: center; gap: 15px; text-align: left;">
-                    <img src="${t.logo}" class="team-logo" alt="Logo" style="width:60px; height:60px; border-radius:50%; object-fit:cover; border:2px solid #ff3e3e;">
-                    <div style="flex: 1;">
-                        <h4 style="color: #ff3e3e; margin-bottom: 4px;">${t.name}</h4>
-                        <p style="color: #fff; font-size: 0.85rem; margin-bottom: 2px;"><b>Main:</b> ${t.p1.ign} (${t.p1.uid}), ${t.p2.ign} (${t.p2.uid}), ${t.p3.ign} (${t.p3.uid}), ${t.p4.ign} (${t.p4.uid})${subsHtml}</p>
-                    </div>
-                </div>
-            `;
-        });
-    });
-}
-
-// ==========================================
-// FIREBASE FIRESTORE: ADMIN PANEL TEAMS MANAGER
-// ==========================================
-function renderAdminTeams() {
-    const container = document.getElementById('admin-teams-list');
-    if (!container) return;
-
-    onSnapshot(collection(db, "registeredTeams"), (snapshot) => {
-        container.innerHTML = "";
-        if (snapshot.empty) {
-            container.innerHTML = `<p style="text-align: center; color: #8b949e;">No registered squads found in database.</p>`;
-            return;
+        function loadAdminSocialInputs() {
+            const saved = JSON.parse(localStorage.getItem('terminators_socials')) || {};
+            if(document.getElementById('admin_whatsapp')) document.getElementById('admin_whatsapp').value = saved.whatsapp || "";
+            if(document.getElementById('admin_discord')) document.getElementById('admin_discord').value = saved.discord || "";
+            if(document.getElementById('admin_tiktok')) document.getElementById('admin_tiktok').value = saved.tiktok || "";
+            if(document.getElementById('admin_youtube')) document.getElementById('admin_youtube').value = saved.youtube || "";
         }
 
-        snapshot.forEach((docSnap) => {
-            const t = docSnap.data();
-            const docId = docSnap.id;
+        // Handle Registration Form Submission
+        const regForm = document.getElementById('reg-form');
+        if (regForm) {
+            regForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const fileInput = document.getElementById('teamLogo');
+                const file = fileInput.files[0];
 
-            container.innerHTML += `
-                <div style="background: #0d0f12; border: 1px solid #ff3e3e; border-radius: 8px; padding: 15px; margin-bottom: 10px; text-align: left;">
-                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
-                        <img src="${t.logo}" style="width:50px; height:50px; border-radius:50%; object-fit:cover;">
-                        <div>
-                            <h4 style="color: #ff3e3e; font-size: 1rem;">${t.name}</h4>
-                            <p style="color: #8b949e; font-size: 0.8rem;">📧 Gmail: ${t.gmail}</p>
-                            <p style="color: #8b949e; font-size: 0.8rem;">📞 WhatsApp: ${t.whatsapp}</p>
-                            <p style="color: #8b949e; font-size: 0.8rem;">💬 Discord: ${t.discord || 'N/A'}</p>
+                if (!file) {
+                    alert("Please upload a team logo.");
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    const teamData = {
+                        name: document.getElementById('teamName').value,
+                        logo: e.target.result,
+                        gmail: document.getElementById('leaderGmail').value,
+                        whatsapp: document.getElementById('whatsappNum').value,
+                        discord: document.getElementById('discordId').value,
+                        p1: { ign: document.getElementById('p1_ign').value, uid: document.getElementById('p1_uid').value },
+                        p2: { ign: document.getElementById('p2_ign').value, uid: document.getElementById('p2_uid').value },
+                        p3: { ign: document.getElementById('p3_ign').value, uid: document.getElementById('p3_uid').value },
+                        p4: { ign: document.getElementById('p4_ign').value, uid: document.getElementById('p4_uid').value },
+                        sub1: { ign: document.getElementById('sub1_ign').value, uid: document.getElementById('sub1_uid').value },
+                        sub2: { ign: document.getElementById('sub2_ign').value, uid: document.getElementById('sub2_uid').value },
+                        createdAt: new Date().toISOString()
+                    };
+
+                    try {
+                        await addDoc(collection(db, "registeredTeams"), teamData);
+                        alert("Squad Registered Successfully to Database!");
+                        regForm.reset();
+                        window.switchTab('teams');
+                    } catch (err) {
+                        console.error("Firestore Error: ", err);
+                        alert("Failed to register squad. Please check network connection.");
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Render Public Teams List
+        function renderPublicTeams() {
+            const container = document.getElementById('public-teams-list');
+            if (!container) return;
+
+            onSnapshot(collection(db, "registeredTeams"), (snapshot) => {
+                container.innerHTML = "";
+                if (snapshot.empty) {
+                    container.innerHTML = `<p style="text-align: center; color: #8b949e;">No squads registered yet. Be the first!</p>`;
+                    return;
+                }
+
+                snapshot.forEach((docSnap) => {
+                    const t = docSnap.data();
+                    let subsHtml = "";
+                    if (t.sub1 && t.sub1.ign) {
+                        subsHtml += ` | <b>Subs:</b> ${t.sub1.ign} (${t.sub1.uid})`;
+                    }
+                    if (t.sub2 && t.sub2.ign) {
+                        subsHtml += `, ${t.sub2.ign} (${t.sub2.uid})`;
+                    }
+
+                    container.innerHTML += `
+                        <div class="card" style="display: flex; align-items: center; gap: 15px; text-align: left;">
+                            <img src="${t.logo}" style="width:55px; height:55px; border-radius:50%; object-fit:cover; border:2px solid #ff3e3e;">
+                            <div style="flex: 1;">
+                                <h4 style="color: #ff3e3e; margin-bottom: 4px;">${t.name}</h4>
+                                <p style="color: #fff; font-size: 0.82rem; margin-bottom: 2px;"><b>Main:</b> ${t.p1.ign} (${t.p1.uid}), ${t.p2.ign} (${t.p2.uid}), ${t.p3.ign} (${t.p3.uid}), ${t.p4.ign} (${t.p4.uid})${subsHtml}</p>
+                            </div>
                         </div>
-                    </div>
-                    <button onclick="deleteTeam('${docId}')" style="background: #da3633; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Delete Squad</button>
-                </div>
-            `;
-        });
-    });
-}
-
-// Delete team from Firestore
-window.deleteTeam = async function(docId) {
-    if (confirm("Are you sure you want to delete this squad from the database?")) {
-        try {
-            await deleteDoc(doc(db, "registeredTeams", docId));
-            alert("Squad deleted successfully.");
-        } catch (err) {
-            console.error("Error deleting document: ", err);
-            alert("Failed to delete squad.");
+                    `;
+                });
+            });
         }
-    }
-}
+
+        // Render Admin Teams List
+        function renderAdminTeams() {
+            const container = document.getElementById('admin-teams-list');
+            if (!container) return;
+
+            onSnapshot(collection(db, "registeredTeams"), (snapshot) => {
+                container.innerHTML = "";
+                if (snapshot.empty) {
+                    container.innerHTML = `<p style="text-align: center; color: #8b949e;">No registered squads found.</p>`;
+                    return;
+                }
+
+                snapshot.forEach((docSnap) => {
+                    const t = docSnap.data();
+                    const docId = docSnap.id;
+
+                    container.innerHTML += `
+                        <div style="background: #0d0f12; border: 1px solid #ff3e3e; border-radius: 8px; padding: 12px; margin-bottom: 10px; text-align: left;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+                                <img src="${t.logo}" style="width:45px; height:45px; border-radius:50%; object-fit:cover;">
+                                <div>
+                                    <h4 style="color: #ff3e3e; font-size: 0.95rem;">${t.name}</h4>
+                                    <p style="color: #8b949e; font-size: 0.78rem;">📧 Gmail: ${t.gmail}</p>
+                                    <p style="color: #8b949e; font-s
