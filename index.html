@@ -93,7 +93,7 @@
             box-shadow: 0 0 8px var(--accent-green);
         }
 
-        /* BULLETPROOF NAVIGATION BAR */
+        /* NAVIGATION TABS */
         .nav-tabs {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -105,7 +105,7 @@
             margin-bottom: 20px;
             width: 100%;
             position: relative;
-            z-index: 9999; /* Forces it to sit above every single layer */
+            z-index: 99999;
         }
 
         .tab-btn {
@@ -120,6 +120,7 @@
             cursor: pointer;
             text-align: center;
             user-select: none;
+            pointer-events: auto;
             touch-action: manipulation;
         }
 
@@ -319,7 +320,7 @@
             <div class="founder-tag">Founder: <span>M I C O</span></div>
         </header>
 
-        <!-- NAVIGATION TABS WITH DIRECT INLINE TOUCH CALLS -->
+        <!-- NAVIGATION TABS -->
         <div class="nav-tabs">
             <button type="button" class="tab-btn active" id="btn-hub" onclick="switchTab('tab-hub', this)">Hub</button>
             <button type="button" class="tab-btn" id="btn-register" onclick="switchTab('tab-register', this)">Register</button>
@@ -498,4 +499,8 @@
 
         <footer>
             &copy; 2026 Terminators Esports. Founded by M I C O.
-     
+        </footer>
+    </div>
+
+    <script>
+        function 
