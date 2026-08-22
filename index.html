@@ -3,19 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terminators Esports | Professional Free Fire Hub</title>
+    <title>Terminators Esports | Free Fire Hub</title>
     <style>
         :root {
-            --bg-deep: #050508;
-            --bg-panel: rgba(13, 13, 22, 0.95);
-            --accent-gold: #f39c12;
-            --accent-gold-glow: rgba(243, 156, 18, 0.3);
-            --accent-neon: #00f2fe;
+            --bg-deep: #0b0c10;
+            --bg-panel: #1f2833;
             --accent-red: #ff3366;
-            --accent-green: #00e676;
-            --text-main: #f0f0f5;
-            --text-muted: #8a8aab;
-            --border-glass: rgba(255, 255, 255, 0.08);
+            --accent-gold: #f39c12;
+            --text-main: #c5c6c7;
+            --text-bright: #ffffff;
+            --border-glass: rgba(255, 51, 102, 0.2);
         }
 
         * {
@@ -30,103 +27,60 @@
             background-color: var(--bg-deep);
             color: var(--text-main);
             min-height: 100vh;
-            padding: 15px;
-            padding-bottom: 50px;
+            padding: 12px;
+            padding-bottom: 40px;
         }
 
         .container {
             width: 100%;
-            max-width: 650px;
+            max-width: 600px;
             margin: 0 auto;
         }
 
         header {
-            width: 100%;
             text-align: center;
             margin-bottom: 15px;
         }
 
         .brand-logo {
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 900;
-            color: var(--accent-gold);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 0 0 20px var(--accent-gold-glow);
-            margin-bottom: 4px;
-        }
-
-        .founder-tag {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--text-muted);
+            color: var(--accent-red);
             text-transform: uppercase;
             letter-spacing: 2px;
-            margin-bottom: 8px;
-        }
-
-        .founder-tag span {
-            color: var(--accent-neon);
-        }
-
-        .status-bar {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(0, 230, 118, 0.1);
-            border: 1px solid var(--accent-green);
-            color: var(--accent-green);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
             margin-bottom: 10px;
-        }
-
-        .pulse-dot {
-            width: 6px;
-            height: 6px;
-            background: var(--accent-green);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--accent-green);
         }
 
         /* NAVIGATION TABS */
         .nav-tabs {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            background: #12121e;
+            background: #12161f;
             border: 1px solid var(--border-glass);
-            border-radius: 12px;
-            padding: 6px;
+            border-radius: 8px;
+            padding: 4px;
             gap: 4px;
-            margin-bottom: 20px;
-            width: 100%;
+            margin-bottom: 15px;
         }
 
         .tab-btn {
-            background: #1a1a29;
-            border: 1px solid transparent;
-            color: var(--text-muted);
-            padding: 14px 2px;
-            font-size: 10px;
-            font-weight: 800;
+            background: #1a222d;
+            border: none;
+            color: var(--text-main);
+            padding: 10px 0;
+            font-size: 11px;
+            font-weight: 700;
             text-transform: uppercase;
-            border-radius: 8px;
+            border-radius: 6px;
             cursor: pointer;
             text-align: center;
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: manipulation;
+            transition: 0.2s;
         }
 
         .tab-btn.active {
-            background: var(--accent-gold);
-            color: #050508;
-            border-color: #fff;
-            box-shadow: 0 0 15px var(--accent-gold-glow);
+            background: var(--accent-red);
+            color: var(--text-bright);
+            box-shadow: 0 0 10px rgba(255, 51, 102, 0.4);
         }
 
         .tab-content {
@@ -141,151 +95,132 @@
         .panel {
             background: var(--bg-panel);
             border: 1px solid var(--border-glass);
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
-            margin-bottom: 20px;
-            width: 100%;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            margin-bottom: 15px;
         }
 
         .panel-title {
             font-size: 14px;
             font-weight: 800;
-            color: var(--text-main);
-            border-left: 4px solid var(--accent-gold);
-            padding-left: 10px;
-            margin-bottom: 16px;
+            color: var(--accent-red);
+            margin-bottom: 12px;
             text-transform: uppercase;
             letter-spacing: 1px;
-        }
-
-        .countdown-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
             text-align: center;
-            margin-bottom: 15px;
-        }
-
-        .time-box {
-            background: rgba(10, 10, 15, 0.8);
-            border: 1px solid var(--border-glass);
-            padding: 8px;
-            border-radius: 8px;
-        }
-
-        .time-val {
-            font-size: 18px;
-            font-weight: 900;
-            color: var(--accent-gold);
-        }
-
-        .time-lbl {
-            font-size: 8px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            margin-top: 2px;
         }
 
         .form-group {
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         label {
             display: block;
             font-size: 10px;
             font-weight: 700;
-            margin-bottom: 4px;
-            color: var(--text-muted);
+            margin-bottom: 3px;
+            color: var(--text-main);
             text-transform: uppercase;
         }
 
         .gaming-input {
             width: 100%;
-            padding: 10px 12px;
-            background: rgba(8, 8, 14, 0.9);
-            border: 1px solid var(--border-glass);
-            color: var(--text-main);
-            border-radius: 8px;
-            font-size: 13px;
+            padding: 9px 10px;
+            background: #0b0c10;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-bright);
+            border-radius: 6px;
+            font-size: 12px;
             outline: none;
         }
 
-        select.gaming-input option {
-            background-color: #12121c;
-            color: var(--text-main);
-        }
-
-        .section-subtitle {
-            font-size: 12px;
-            font-weight: 800;
-            color: var(--accent-neon);
-            margin: 14px 0 8px 0;
-            text-transform: uppercase;
-            border-bottom: 1px solid var(--border-glass);
-            padding-bottom: 4px;
+        .gaming-input:focus {
+            border-color: var(--accent-red);
         }
 
         .action-btn {
             width: 100%;
-            padding: 12px;
-            background: var(--accent-gold);
-            color: #050508;
-            font-weight: 900;
+            padding: 11px;
+            background: var(--accent-red);
+            color: var(--text-bright);
+            font-weight: 800;
             border: none;
-            border-radius: 8px;
-            font-size: 13px;
+            border-radius: 6px;
+            font-size: 12px;
             cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-top: 10px;
+            margin-top: 8px;
         }
 
-        .squad-list {
-            list-style: none;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .squad-item {
-            background: rgba(12, 12, 20, 0.7);
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            border-left: 4px solid var(--accent-gold);
-            font-size: 12px;
-        }
-
-        .tournament-badge {
-            display: inline-block;
-            background: rgba(0, 242, 254, 0.15);
-            color: var(--accent-neon);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: 700;
-            font-size: 10px;
-            margin-bottom: 6px;
-        }
-
-        .tourney-card {
-            background: rgba(10, 10, 15, 0.6);
+        /* REGISTERED SQUAD CARD DESIGN */
+        .squad-card {
+            background: #12161f;
             border: 1px solid var(--border-glass);
+            border-radius: 10px;
             padding: 12px;
-            border-radius: 8px;
             margin-bottom: 10px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
         }
 
+        .squad-logo-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 2px solid var(--accent-gold);
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .squad-logo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .squad-info {
+            flex-grow: 1;
+            font-size: 11px;
+        }
+
+        .squad-name-title {
+            font-size: 13px;
+            font-weight: 900;
+            color: var(--accent-red);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .squad-detail-line {
+            margin-bottom: 2px;
+            color: var(--text-main);
+        }
+
+        .squad-detail-line span {
+            color: #00e676;
+            font-weight: 600;
+        }
+
+        /* SOCIAL CONNECT BUTTONS */
         .social-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 8px;
+            margin-top: 15px;
         }
 
         .social-card {
-            background: rgba(12, 12, 20, 0.7);
+            background: #12161f;
             border: 1px solid var(--border-glass);
-            padding: 12px;
-            border-radius: 10px;
+            padding: 10px;
+            border-radius: 8px;
             text-align: center;
             text-decoration: none;
             color: #fff;
@@ -297,14 +232,15 @@
             gap: 6px;
         }
 
-        .social-card.full-width {
-            grid-column: span 2;
-        }
+        .social-card.whatsapp { border-color: #00e676; color: #00e676; }
+        .social-card.discord { border-color: #5865F2; color: #5865F2; }
+        .social-card.tiktok { border-color: #ff3366; color: #ff3366; }
+        .social-card.youtube { border-color: #ff0000; color: #ff0000; grid-column: span 2; }
 
         footer {
             margin-top: 20px;
             font-size: 10px;
-            color: var(--text-muted);
+            color: var(--text-main);
             text-align: center;
         }
     </style>
@@ -313,45 +249,31 @@
 
     <div class="container">
         <header>
-            <div class="status-bar"><div class="pulse-dot"></div> Tournament Engine Online</div>
-            <div class="brand-logo">Terminators Esports</div>
-            <div class="founder-tag">Founder: <span>M I C O</span></div>
+            <div class="brand-logo">Terminators</div>
         </header>
 
         <!-- NAVIGATION TABS -->
         <div class="nav-tabs">
-            <button type="button" class="tab-btn active" id="btn-hub" onclick="switchTab('tab-hub', this)">Hub</button>
-            <button type="button" class="tab-btn" id="btn-register" onclick="switchTab('tab-register', this)">Register</button>
-            <button type="button" class="tab-btn" id="btn-teams" onclick="switchTab('tab-teams', this)">Teams (<span id="tabCount">0</span>)</button>
-            <button type="button" class="tab-btn" id="btn-admin" onclick="switchTab('tab-admin', this)">Admin</button>
+            <button type="button" class="tab-btn active" onclick="switchTab('tab-standings', this)">Standings</button>
+            <button type="button" class="tab-btn" onclick="switchTab('tab-teams', this)">Teams</button>
+            <button type="button" class="tab-btn" onclick="switchTab('tab-register', this)">Register</button>
+            <button type="button" class="tab-btn" onclick="switchTab('tab-admin', this)">Admin</button>
         </div>
 
-        <!-- HUB TAB -->
-        <div id="tab-hub" class="tab-content active">
+        <!-- STANDINGS TAB -->
+        <div id="tab-standings" class="tab-content active">
             <div class="panel">
-                <div class="panel-title">Next Custom Room Drop</div>
-                <div class="countdown-grid">
-                    <div class="time-box"><div id="cd-hours" class="time-val">02</div><div class="time-lbl">Hours</div></div>
-                    <div class="time-box"><div id="cd-mins" class="time-val">45</div><div class="time-lbl">Mins</div></div>
-                    <div class="time-box"><div id="cd-secs" class="time-val">30</div><div class="time-lbl">Secs</div></div>
-                    <div class="time-box"><div class="time-val" style="color:var(--accent-red);">LIVE</div><div class="time-lbl">Status</div></div>
-                </div>
+                <div class="panel-title">Tournament Standings</div>
+                <p style="font-size: 11px; text-align: center; color: var(--text-main);">Standings tables will update live once match results are recorded.</p>
             </div>
+        </div>
 
+        <!-- TEAMS TAB -->
+        <div id="tab-teams" class="tab-content">
             <div class="panel">
-                <div class="panel-title">Active Tournaments & Info</div>
-                <div id="activeTournamentsContainer"></div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-title">Community Hub</div>
-                <div class="social-grid">
-                    <a href="https://t.me/" target="_blank" class="social-card">✈️ Telegram</a>
-                    <a href="https://discord.com/" target="_blank" class="social-card">🎮 Discord</a>
-                    <a href="https://whatsapp.com/" target="_blank" class="social-card">💬 WhatsApp</a>
-                    <a href="https://tiktok.com/" target="_blank" class="social-card">🔥 TikTok</a>
-                    <a href="https://youtube.com/" target="_blank" class="social-card full-width">📺 YouTube Streams</a>
-                </div>
+                <div class="panel-title">Registered Squads</div>
+                <p style="font-size: 11px; margin-bottom: 10px; text-align: center;">Browse all participating teams and their rosters.</p>
+                <div id="teamsContainer"></div>
             </div>
         </div>
 
@@ -359,139 +281,84 @@
         <div id="tab-register" class="tab-content">
             <div class="panel">
                 <div class="panel-title">Squad Registration</div>
-
                 <form id="registrationForm">
                     <div class="form-group">
-                        <label for="select-tournament">Select Tournament</label>
-                        <select id="select-tournament" required class="gaming-input">
-                            <option value="" disabled selected>Choose Tournament</option>
-                        </select>
+                        <label for="squadName">Squad Name</label>
+                        <input type="text" id="squadName" placeholder="e.g., TERMINATORS E-SPORTS" required class="gaming-input">
                     </div>
                     <div class="form-group">
-                        <label for="squad-name">Squad Name</label>
-                        <input type="text" id="squad-name" placeholder="e.g., Terminators Elite" required class="gaming-input">
+                        <label for="squadLogo">Squad Logo URL (Optional)</label>
+                        <input type="url" id="squadLogo" placeholder="https://..." class="gaming-input">
                     </div>
                     <div class="form-group">
-                        <label for="leader-whatsapp">Leader WhatsApp Number</label>
-                        <input type="tel" id="leader-whatsapp" placeholder="e.g., +234..." required class="gaming-input">
+                        <label for="leaderEmail">Email Address</label>
+                        <input type="email" id="leaderEmail" placeholder="leader@gmail.com" required class="gaming-input">
                     </div>
                     <div class="form-group">
-                        <label for="leader-email">Leader Email (Notifications)</label>
-                        <input type="email" id="leader-email" placeholder="e.g., leader@gmail.com" required class="gaming-input">
+                        <label for="leaderWhatsapp">WhatsApp Number</label>
+                        <input type="tel" id="leaderWhatsapp" placeholder="+234..." required class="gaming-input">
                     </div>
                     <div class="form-group">
-                        <label for="squad-country">Country</label>
-                        <select id="squad-country" required class="gaming-input">
-                            <option value="" disabled selected>Select Country</option>
-                            <option value="Nigeria">Nigeria</option>
-                            <option value="Ghana">Ghana</option>
-                            <option value="Kenya">Kenya</option>
-                            <option value="South Africa">South Africa</option>
-                            <option value="Other">Other</option>
-                        </select>
+                        <label for="discordUser">Discord Username</label>
+                        <input type="text" id="discordUser" placeholder="username#0000" class="gaming-input">
                     </div>
                     <div class="form-group">
-                        <label for="ff-server">Free Fire Server</label>
-                        <select id="ff-server" required class="gaming-input">
-                            <option value="" disabled selected>Select Server</option>
-                            <option value="ME">Middle East (ME)</option>
-                            <option value="IND">India (IND)</option>
-                            <option value="SG">Singapore / SEA (SG)</option>
-                            <option value="BR">Brazil (BR)</option>
-                        </select>
+                        <label for="rosterInput">Roster (IGN & UID)</label>
+                        <textarea id="rosterInput" rows="3" placeholder="TMT 💀JASMINE (7210180499), TMT 💀YOUNG..." required class="gaming-input" style="resize: vertical;"></textarea>
                     </div>
-
-                    <!-- Main 4 Players -->
-                    <div class="section-subtitle">Main Roster (4 Players)</div>
-                    <div class="form-group"><label>Player 1 (Leader IGN & UID)</label>
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
-                            <input type="text" id="p1-ign" placeholder="IGN" required class="gaming-input">
-                            <input type="text" id="p1-uid" placeholder="UID" required class="gaming-input">
-                        </div>
-                    </div>
-                    <div class="form-group"><label>Player 2 (IGN & UID)</label>
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
-                            <input type="text" id="p2-ign" placeholder="IGN" required class="gaming-input">
-                            <input type="text" id="p2-uid" placeholder="UID" required class="gaming-input">
-                        </div>
-                    </div>
-                    <div class="form-group"><label>Player 3 (IGN & UID)</label>
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
-                            <input type="text" id="p3-ign" placeholder="IGN" required class="gaming-input">
-                            <input type="text" id="p3-uid" placeholder="UID" required class="gaming-input">
-                        </div>
-                    </div>
-                    <div class="form-group"><label>Player 4 (IGN & UID)</label>
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
-                            <input type="text" id="p4-ign" placeholder="IGN" required class="gaming-input">
-                            <input type="text" id="p4-uid" placeholder="UID" required class="gaming-input">
-                        </div>
-                    </div>
-
-                    <!-- Substitutes -->
-                    <div class="section-subtitle">Substitutes (2 Players)</div>
-                    <div class="form-group"><label>Substitute 1 (IGN & UID)</label>
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
-                            <input type="text" id="sub1-ign" placeholder="IGN (Optional)" class="gaming-input">
-                            <input type="text" id="sub1-uid" placeholder="UID (Optional)" class="gaming-input">
-                        </div>
-                    </div>
-                    <div class="form-group"><label>Substitute 2 (IGN & UID)</label>
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
-                            <input type="text" id="sub2-ign" placeholder="IGN (Optional)" class="gaming-input">
-                            <input type="text" id="sub2-uid" placeholder="UID (Optional)" class="gaming-input">
-                        </div>
-                    </div>
-
-                    <button type="submit" class="action-btn">Confirm Registration</button>
+                    <button type="submit" class="action-btn">Submit Registration</button>
                 </form>
-            </div>
-        </div>
-
-        <!-- TEAMS TAB -->
-        <div id="tab-teams" class="tab-content">
-            <div class="panel">
-                <div class="panel-title">Registered Rosters</div>
-                <div class="form-group" style="margin-bottom: 10px;">
-                    <input type="text" id="searchSquadInput" placeholder="🔍 Search squad or tournament..." class="gaming-input">
-                </div>
-                <ul id="squadListContainer" class="squad-list"></ul>
             </div>
         </div>
 
         <!-- ADMIN TAB -->
         <div id="tab-admin" class="tab-content">
             <div class="panel">
-                <div class="panel-title" style="color:var(--accent-red);">Admin Console</div>
+                <div class="panel-title">Admin Control Panel</div>
                 <div id="adminLoginSection">
                     <div class="form-group">
                         <label for="adminPin">Admin Passcode</label>
                         <input type="password" id="adminPin" placeholder="Enter PIN" class="gaming-input">
                     </div>
-                    <button type="button" id="adminLoginBtn" class="action-btn" style="background:var(--accent-red); color:#fff;">Unlock</button>
+                    <button type="button" id="adminLoginBtn" class="action-btn">Unlock Admin</button>
                 </div>
                 
                 <div id="adminControlsSection" style="display: none;">
-                    <p style="font-size: 11px; color: var(--accent-green); font-weight: 800; margin-bottom: 14px;">🔓 ADMIN ACCESS GRANTED</p>
+                    <p style="font-size: 11px; color: #00e676; font-weight: 700; margin-bottom: 12px; text-align: center;">🔒 Secure Access Unlocked</p>
                     
-                    <div class="section-subtitle" style="margin-top:0;">Create Tournament</div>
-                    <form id="tournamentForm" style="margin-bottom: 16px;">
-                        <div class="form-group">
-                            <label for="tourney-name">Tournament Name & Details</label>
-                            <input type="text" id="tourney-name" placeholder="e.g., Terminators Weekly Cup - Map: Bermuda" required class="gaming-input">
-                        </div>
-                        <div class="form-group">
-                            <label for="tourney-date">Schedule / Time Info</label>
-                            <input type="text" id="tourney-date" placeholder="e.g., Sunday, 8:00 PM WAT" required class="gaming-input">
-                        </div>
-                        <button type="submit" class="action-btn" style="background:var(--accent-neon); color:#050508;">➕ Add Tournament</button>
-                    </form>
+                    <div style="font-size: 12px; font-weight: 800; color: var(--accent-red); margin-bottom: 8px; text-transform: uppercase;">🌐 Manage Social Links</div>
+                    <div class="form-group">
+                        <label>WhatsApp GC Link</label>
+                        <input type="url" id="adminWhatsappLink" class="gaming-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Discord Link</label>
+                        <input type="url" id="adminDiscordLink" class="gaming-input">
+                    </div>
+                    <div class="form-group">
+                        <label>TikTok Link</label>
+                        <input type="url" id="adminTiktokLink" class="gaming-input">
+                    </div>
+                    <div class="form-group">
+                        <label>YouTube Link</label>
+                        <input type="url" id="adminYoutubeLink" class="gaming-input">
+                    </div>
+                    <button type="button" id="saveSocialsBtn" class="action-btn" style="background: #00e676; color: #000;">Save Social Links Live</button>
 
-                    <div class="section-subtitle">Manage Data</div>
-                    <button type="button" id="copySquadsBtn" class="action-btn" style="background:var(--accent-neon); color:#050508; margin-bottom:8px;">📋 Copy All Rosters</button>
-                    <button type="button" id="clearTournamentsBtn" class="action-btn" style="background:var(--accent-red); color:#fff; margin-bottom:8px;">🗑️ Clear Tournaments</button>
-                    <button type="button" id="clearSquadsBtn" class="action-btn" style="background:var(--accent-red); color:#fff;">🗑️ Clear All Registrations</button>
+                    <div style="font-size: 12px; font-weight: 800; color: var(--accent-red); margin: 15px 0 8px 0; text-transform: uppercase;">Registered Squads Manager</div>
+                    <div id="adminTeamsContainer"></div>
                 </div>
+            </div>
+        </div>
+
+        <!-- CONNECT & FOLLOW SECTION (Visible everywhere) -->
+        <div class="panel" style="margin-top: 20px;">
+            <div class="panel-title">Connect & Follow</div>
+            <div class="social-grid">
+                <a id="linkWhatsapp" href="#" target="_blank" class="social-card whatsapp">💬 WhatsApp GC</a>
+                <a id="linkDiscord" href="#" target="_blank" class="social-card discord">🎮 Discord</a>
+                <a id="linkTiktok" href="#" target="_blank" class="social-card tiktok">🔥 TikTok</a>
+                <a id="linkYoutube" href="#" target="_blank" class="social-card youtube">📺 YouTube</a>
             </div>
         </div>
 
@@ -501,5 +368,140 @@
     </div>
 
     <script>
-        // Global direct function so it can never fail execution
-       
+        // Tab switching function
+        function switchTab(targetId, btnElement) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+            const target = document.getElementById(targetId);
+            if (target) target.classList.add('active');
+            if (btnElement) btnElement.classList.add('active');
+        }
+
+        // Database setup
+        let squads = JSON.parse(localStorage.getItem('terminators_squads_v1')) || [];
+        let socialLinks = JSON.parse(localStorage.getItem('terminators_socials_v1')) || {
+            whatsapp: "https://chat.whatsapp.com/FOJ0srnmrAAbdwkT2mcpLF",
+            discord: "https://discord.gg/",
+            tiktok: "https://tiktok.com/@terminators.esport",
+            youtube: "https://www.youtube.com/@MICOB2K"
+        };
+
+        function updateSocialLinksUI() {
+            document.getElementById('linkWhatsapp').href = socialLinks.whatsapp;
+            document.getElementById('linkDiscord').href = socialLinks.discord;
+            document.getElementById('linkTiktok').href = socialLinks.tiktok;
+            document.getElementById('linkYoutube').href = socialLinks.youtube;
+
+            document.getElementById('adminWhatsappLink').value = socialLinks.whatsapp;
+            document.getElementById('adminDiscordLink').value = socialLinks.discord;
+            document.getElementById('adminTiktokLink').value = socialLinks.tiktok;
+            document.getElementById('adminYoutubeLink').value = socialLinks.youtube;
+        }
+
+        function renderSquads() {
+            const teamsContainer = document.getElementById('teamsContainer');
+            const adminTeamsContainer = document.getElementById('adminTeamsContainer');
+            
+            teamsContainer.innerHTML = '';
+            adminTeamsContainer.innerHTML = '';
+
+            if (squads.length === 0) {
+                teamsContainer.innerHTML = '<p style="font-size: 11px; text-align: center; color: var(--text-main);">No registered squads found.</p>';
+                adminTeamsContainer.innerHTML = '<p style="font-size: 11px; text-align: center; color: var(--text-main);">No registered squads found.</p>';
+                return;
+            }
+
+            squads.forEach((s, index) => {
+                const defaultLogo = 'https://images.unsplash.com/photo-1566378246526-d1408d9da45e?w=100&auto=format&fit=crop&q=60';
+                
+                // Public View Card
+                const card = document.createElement('div');
+                card.className = 'squad-card';
+                card.innerHTML = `
+                    <div class="squad-logo-box"><img src="${s.logo || defaultLogo}" alt="Logo"></div>
+                    <div class="squad-info">
+                        <div class="squad-name-title">${s.name}</div>
+                        <div class="squad-detail-line">🎯 <b>Roster:</b> ${s.roster}</div>
+                    </div>
+                `;
+                teamsContainer.appendChild(card);
+
+                // Admin View Card with Delete Option
+                const adminCard = document.createElement('div');
+                adminCard.className = 'squad-card';
+                adminCard.innerHTML = `
+                    <div class="squad-logo-box"><img src="${s.logo || defaultLogo}" alt="Logo"></div>
+                    <div class="squad-info">
+                        <div class="squad-name-title">${s.name}</div>
+                        <div class="squad-detail-line">📧 <span>Gmail:</span> ${s.email}</div>
+                        <div class="squad-detail-line">💬 <span>WhatsApp:</span> ${s.whatsapp}</div>
+                        <div class="squad-detail-line">🎮 <span>Discord:</span> ${s.discord || 'N/A'}</div>
+                        <div class="squad-detail-line" style="margin-top: 4px;"><b>Roster:</b> ${s.roster}</div>
+                        <button type="button" onclick="deleteSquad(${index})" style="background:var(--accent-red); color:#fff; border:none; padding:4px 8px; border-radius:4px; font-size:10px; font-weight:700; margin-top:6px; cursor:pointer;">Delete Squad</button>
+                    </div>
+                `;
+                adminTeamsContainer.appendChild(adminCard);
+            });
+        }
+
+        // Registration Form Event
+        document.getElementById('registrationForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newSquad = {
+                name: document.getElementById('squadName').value.trim(),
+                logo: document.getElementById('squadLogo').value.trim(),
+                email: document.getElementById('leaderEmail').value.trim(),
+                whatsapp: document.getElementById('leaderWhatsapp').value.trim(),
+                discord: document.getElementById('discordUser').value.trim(),
+                roster: document.getElementById('rosterInput').value.trim()
+            };
+
+            squads.push(newSquad);
+            localStorage.setItem('terminators_squads_v1', JSON.stringify(squads));
+            renderSquads();
+            document.getElementById('registrationForm').reset();
+            alert('Squad registered successfully!');
+            switchTab('tab-teams', document.querySelectorAll('.tab-btn')[1]);
+        });
+
+        // Admin Login
+        document.getElementById('adminLoginBtn').onclick = function() {
+            const pin = document.getElementById('adminPin').value;
+            if (pin === '2060') {
+                document.getElementById('adminLoginSection').style.display = 'none';
+                document.getElementById('adminControlsSection').style.display = 'block';
+            } else {
+                alert('Invalid Passcode!');
+            }
+        };
+
+        // Save Social Links
+        document.getElementById('saveSocialsBtn').onclick = function() {
+            socialLinks = {
+                whatsapp: document.getElementById('adminWhatsappLink').value.trim(),
+                discord: document.getElementById('adminDiscordLink').value.trim(),
+                tiktok: document.getElementById('adminTiktokLink').value.trim(),
+                youtube: document.getElementById('adminYoutubeLink').value.trim()
+            };
+            localStorage.setItem('terminators_socials_v1', JSON.stringify(socialLinks));
+            updateSocialLinksUI();
+            alert('Social links updated live!');
+        };
+
+        // Delete Squad Function
+        window.deleteSquad = function(index) {
+            if (confirm('Are you sure you want to delete this squad?')) {
+                squads.splice(index, 1);
+                localStorage.setItem('terminators_squads_v1', JSON.stringify(squads));
+                renderSquads();
+            }
+        };
+
+        // Initialize UI
+        updateSocialLinksUI();
+        renderSquads();
+    </script>
+</body>
+    </html>
+    
