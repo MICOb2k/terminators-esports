@@ -10,6 +10,7 @@
             --bg-panel: #1f2833;
             --accent-red: #ff3366;
             --accent-gold: #f39c12;
+            --accent-neon: #00f2fe;
             --text-main: #c5c6c7;
             --text-bright: #ffffff;
             --border-glass: rgba(255, 51, 102, 0.2);
@@ -139,6 +140,16 @@
             border-color: var(--accent-red);
         }
 
+        .section-subtitle {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--accent-neon);
+            margin: 14px 0 6px 0;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border-glass);
+            padding-bottom: 3px;
+        }
+
         .action-btn {
             width: 100%;
             padding: 11px;
@@ -151,7 +162,7 @@
             cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-top: 8px;
+            margin-top: 12px;
         }
 
         /* REGISTERED SQUAD CARD DESIGN */
@@ -287,8 +298,8 @@
                         <input type="text" id="squadName" placeholder="e.g., TERMINATORS E-SPORTS" required class="gaming-input">
                     </div>
                     <div class="form-group">
-                        <label for="squadLogo">Squad Logo URL (Optional)</label>
-                        <input type="url" id="squadLogo" placeholder="https://..." class="gaming-input">
+                        <label for="squadLogoFile">Upload Team Logo Image</label>
+                        <input type="file" id="squadLogoFile" accept="image/*" class="gaming-input" style="padding: 6px;">
                     </div>
                     <div class="form-group">
                         <label for="leaderEmail">Email Address</label>
@@ -302,10 +313,37 @@
                         <label for="discordUser">Discord Username</label>
                         <input type="text" id="discordUser" placeholder="username#0000" class="gaming-input">
                     </div>
+
+                    <!-- Main 4 Players -->
+                    <div class="section-subtitle">Main Roster (4 Players)</div>
                     <div class="form-group">
-                        <label for="rosterInput">Roster (IGN & UID)</label>
-                        <textarea id="rosterInput" rows="3" placeholder="TMT 💀JASMINE (7210180499), TMT 💀YOUNG..." required class="gaming-input" style="resize: vertical;"></textarea>
+                        <label>Player 1 (Leader IGN & UID)</label>
+                        <input type="text" id="p1" placeholder="e.g., TMT 💀 MICO (2546752842)" required class="gaming-input">
                     </div>
+                    <div class="form-group">
+                        <label>Player 2 (IGN & UID)</label>
+                        <input type="text" id="p2" placeholder="e.g., TMT 💀 JASMINE (7210180499)" required class="gaming-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Player 3 (IGN & UID)</label>
+                        <input type="text" id="p3" placeholder="e.g., TMT 💀 YOUNG (7992579641)" required class="gaming-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Player 4 (IGN & UID)</label>
+                        <input type="text" id="p4" placeholder="e.g., TMT 💀 MARFIA (11764840766)" required class="gaming-input">
+                    </div>
+
+                    <!-- Substitutes -->
+                    <div class="section-subtitle">Substitutes (2 Players)</div>
+                    <div class="form-group">
+                        <label>Substitute 1 (IGN & UID - Optional)</label>
+                        <input type="text" id="sub1" placeholder="e.g., Sub Name (UID)" class="gaming-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Substitute 2 (IGN & UID - Optional)</label>
+                        <input type="text" id="sub2" placeholder="e.g., Sub Name (UID)" class="gaming-input">
+                    </div>
+
                     <button type="submit" class="action-btn">Submit Registration</button>
                 </form>
             </div>
@@ -368,7 +406,6 @@
     </div>
 
     <script>
-        // Tab switching function
         function switchTab(targetId, btnElement) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -378,9 +415,8 @@
             if (btnElement) btnElement.classList.add('active');
         }
 
-        // Database setup
-        let squads = JSON.parse(localStorage.getItem('terminators_squads_v1')) || [];
-        let socialLinks = JSON.parse(localStorage.getItem('terminators_socials_v1')) || {
+        let squads = JSON.parse(localStorage.getItem('terminators_squads_v3')) || [];
+        let socialLinks = JSON.parse(localStorage.getItem('terminators_socials_v3')) || {
             whatsapp: "https://chat.whatsapp.com/FOJ0srnmrAAbdwkT2mcpLF",
             discord: "https://discord.gg/",
             tiktok: "https://tiktok.com/@terminators.esport",
@@ -422,7 +458,8 @@
                     <div class="squad-logo-box"><img src="${s.logo || defaultLogo}" alt="Logo"></div>
                     <div class="squad-info">
                         <div class="squad-name-title">${s.name}</div>
-                        <div class="squad-detail-line">🎯 <b>Roster:</b> ${s.roster}</div>
+                        <div class="squad-detail-line">🎯 <b>Main:</b> 1. ${s.p1} | 2. ${s.p2} | 3. ${s.p3} | 4. ${s.p4}</div>
+                        ${s.sub1 ? `<div class="squad-detail-line">🛡️ <b>Subs:</b> ${s.sub1} ${s.sub2 ? '| ' + s.sub2 : ''}</div>` : ''}
                     </div>
                 `;
                 teamsContainer.appendChild(card);
@@ -437,7 +474,8 @@
                         <div class="squad-detail-line">📧 <span>Gmail:</span> ${s.email}</div>
                         <div class="squad-detail-line">💬 <span>WhatsApp:</span> ${s.whatsapp}</div>
                         <div class="squad-detail-line">🎮 <span>Discord:</span> ${s.discord || 'N/A'}</div>
-                        <div class="squad-detail-line" style="margin-top: 4px;"><b>Roster:</b> ${s.roster}</div>
+                        <div class="squad-detail-line" style="margin-top: 4px;">🎯 <b>Main:</b> 1. ${s.p1} | 2. ${s.p2} | 3. ${s.p3} | 4. ${s.p4}</div>
+                        ${s.sub1 ? `<div class="squad-detail-line">🛡️ <b>Subs:</b> ${s.sub1} ${s.sub2 ? '| ' + s.sub2 : ''}</div>` : ''}
                         <button type="button" onclick="deleteSquad(${index})" style="background:var(--accent-red); color:#fff; border:none; padding:4px 8px; border-radius:4px; font-size:10px; font-weight:700; margin-top:6px; cursor:pointer;">Delete Squad</button>
                     </div>
                 `;
@@ -445,63 +483,13 @@
             });
         }
 
-        // Registration Form Event
         document.getElementById('registrationForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            const newSquad = {
-                name: document.getElementById('squadName').value.trim(),
-                logo: document.getElementById('squadLogo').value.trim(),
-                email: document.getElementById('leaderEmail').value.trim(),
-                whatsapp: document.getElementById('leaderWhatsapp').value.trim(),
-                discord: document.getElementById('discordUser').value.trim(),
-                roster: document.getElementById('rosterInput').value.trim()
-            };
 
-            squads.push(newSquad);
-            localStorage.setItem('terminators_squads_v1', JSON.stringify(squads));
-            renderSquads();
-            document.getElementById('registrationForm').reset();
-            alert('Squad registered successfully!');
-            switchTab('tab-teams', document.querySelectorAll('.tab-btn')[1]);
-        });
-
-        // Admin Login
-        document.getElementById('adminLoginBtn').onclick = function() {
-            const pin = document.getElementById('adminPin').value;
-            if (pin === '2060') {
-                document.getElementById('adminLoginSection').style.display = 'none';
-                document.getElementById('adminControlsSection').style.display = 'block';
-            } else {
-                alert('Invalid Passcode!');
-            }
-        };
-
-        // Save Social Links
-        document.getElementById('saveSocialsBtn').onclick = function() {
-            socialLinks = {
-                whatsapp: document.getElementById('adminWhatsappLink').value.trim(),
-                discord: document.getElementById('adminDiscordLink').value.trim(),
-                tiktok: document.getElementById('adminTiktokLink').value.trim(),
-                youtube: document.getElementById('adminYoutubeLink').value.trim()
-            };
-            localStorage.setItem('terminators_socials_v1', JSON.stringify(socialLinks));
-            updateSocialLinksUI();
-            alert('Social links updated live!');
-        };
-
-        // Delete Squad Function
-        window.deleteSquad = function(index) {
-            if (confirm('Are you sure you want to delete this squad?')) {
-                squads.splice(index, 1);
-                localStorage.setItem('terminators_squads_v1', JSON.stringify(squads));
-                renderSquads();
-            }
-        };
-
-        // Initialize UI
-        updateSocialLinksUI();
-        renderSquads();
-    </script>
-</body>
-    </html>
-    
+            const fileInput = document.getElementById('squadLogoFile');
+            
+            function saveAndReset(logoData) {
+                const newSquad = {
+                    name: document.getElementById('squadName').value.trim(),
+                    logo: logoData,
+                    email: document.getElementById('leaderEmail').value.trim()
