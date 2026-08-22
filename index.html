@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terminators Esports</title>
+    <title>Terminators Esports | Founder: MICO</title>
     <style>
         * {
             box-sizing: border-box;
@@ -16,13 +16,13 @@
             background-color: #0d0f12;
             color: #ffffff;
             padding: 15px;
-            max-width: 800px;
+            max-width: 850px;
             margin: 0 auto;
         }
 
         header {
             text-align: center;
-            padding: 20px 0;
+            padding: 20px 0 15px 0;
             border-bottom: 2px solid #ff3e3e;
             margin-bottom: 20px;
         }
@@ -32,6 +32,18 @@
             font-size: 1.8rem;
             text-transform: uppercase;
             letter-spacing: 2px;
+        }
+
+        .founder-tag {
+            color: #8b949e;
+            font-size: 0.85rem;
+            margin-top: 4px;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .founder-tag span {
+            color: #ff3e3e;
         }
 
         /* Navigation Tabs */
@@ -82,6 +94,21 @@
             font-size: 1.3rem;
         }
 
+        /* Active Tournament Banner */
+        .tournament-banner {
+            background: #0d0f12;
+            border: 1px solid #ff3e3e;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .tournament-banner h3 {
+            color: #ffffff;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
         /* Forms */
         .form-group {
             margin-bottom: 15px;
@@ -94,7 +121,7 @@
             margin-bottom: 5px;
         }
 
-        input[type="text"], input[type="email"], input[type="file"] {
+        input[type="text"], input[type="email"], input[type="file"], select, textarea {
             width: 100%;
             padding: 10px;
             background: #0d0f12;
@@ -104,7 +131,12 @@
             font-size: 0.9rem;
         }
 
-        input:focus {
+        select option {
+            background: #0d0f12;
+            color: #fff;
+        }
+
+        input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: #ff3e3e;
         }
@@ -176,19 +208,32 @@
 
     <header>
         <h1>TERMINATORS ESPORTS</h1>
+        <div class="founder-tag">FOUNDED BY <span>MICO</span></div>
     </header>
 
     <div class="navbar">
-        <button id="btn-standings" class="nav-btn active" onclick="switchTab('standings')">Standings</button>
-        <button id="btn-teams" class="nav-btn" onclick="switchTab('teams')">Teams</button>
-        <button id="btn-register" class="nav-btn" onclick="switchTab('register')">Register Squad</button>
+        <button id="btn-standings" class="nav-btn active" onclick="window.switchTab('standings')">Standings & Updates</button>
+        <button id="btn-teams" class="nav-btn" onclick="window.switchTab('teams')">Teams</button>
+        <button id="btn-register" class="nav-btn" onclick="window.switchTab('register')">Register Squad</button>
     </div>
 
-    <!-- STANDINGS TAB -->
+    <!-- STANDINGS & UPDATES TAB -->
     <div id="section-standings" class="section active">
-        <h2>Tournament Standings</h2>
-        <div class="card">
-            <p style="text-align: center; color: #8b949e;">Standings will be updated once the tournament begins.</p>
+        <h2>Active Tournament & Updates</h2>
+        
+        <div id="public-tournament-banner" class="tournament-banner">
+            <h3 id="tourney-title">Loading Active Tournament...</h3>
+            <p id="tourney-details" style="color: #8b949e; font-size: 0.85rem; margin-top: 5px;">Fetching info from database...</p>
+        </div>
+
+        <h3 style="color: #ff3e3e; font-size: 1.1rem; margin: 20px 0 10px;">Official Announcements</h3>
+        <div id="public-announcements-list">
+            <div class="card"><p style="text-align: center; color: #8b949e;">No announcements published yet.</p></div>
+        </div>
+
+        <h3 style="color: #ff3e3e; font-size: 1.1rem; margin: 20px 0 10px;">Leaderboard / Standings</h3>
+        <div id="public-standings-content" class="card">
+            <p style="text-align: center; color: #8b949e;">Standings will be updated once matches begin.</p>
         </div>
     </div>
 
@@ -205,51 +250,75 @@
         <h2>Squad Registration</h2>
         <form id="reg-form">
             <div class="form-group">
+                <label>Tournament</label>
+                <input type="text" id="regTourneyName" value="Loading active tournament..." readonly style="color: #8b949e;">
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Free Fire Region / Server</label>
+                    <select id="ffServer" required>
+                        <option value="">Select Server</option>
+                        <option value="Africa">Africa</option>
+                        <option value="MEA (Middle East & Africa)">MEA</option>
+                        <option value="Europe">Europe</option>
+                        <option value="SAC (South America)">SAC</option>
+                        <option value="India">India</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Country</label>
+                    <input type="text" id="teamCountry" placeholder="e.g. Nigeria" required>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label>Team Name</label>
                 <input type="text" id="teamName" placeholder="e.g., Terminators Alpha" required>
             </div>
             
             <div class="form-group">
-                <label>Team Logo / Profile Picture</label>
+                <label>Upload Team Logo Image</label>
                 <input type="file" id="teamLogo" accept="image/*" required>
-            </div>
-
-            <div class="form-group">
-                <label>Leader Gmail</label>
-                <input type="email" id="leaderGmail" placeholder="leader@gmail.com" required>
             </div>
 
             <div class="grid-2">
                 <div class="form-group">
-                    <label>WhatsApp Number</label>
-                    <input type="text" id="whatsappNum" placeholder="+234..." required>
+                    <label>Leader Gmail</label>
+                    <input type="email" id="leaderGmail" placeholder="leader@gmail.com" required>
                 </div>
                 <div class="form-group">
-                    <label>Discord Tag (Optional)</label>
-                    <input type="text" id="discordId" placeholder="User#1234">
+                    <label>Leader WhatsApp Number</label>
+                    <input type="text" id="whatsappNum" placeholder="+234..." required>
                 </div>
+            </div>
+
+            <div class="form-group">
+                <label>Discord Tag (Optional)</label>
+                <input type="text" id="discordId" placeholder="User#1234">
             </div>
 
             <h3 style="color: #ff3e3e; font-size: 1rem; margin: 15px 0 10px;">Main Roster (Required 4 Players)</h3>
             
             <div class="grid-2">
-                <input type="text" id="p1_ign" placeholder="Player 1 IGN" required>
-                <input type="text" id="p1_uid" placeholder="Player 1 UID" required>
+                <input type="text" id="p1_ign" placeholder="P1 In-Game Name (IGN)" required>
+                <input type="text" id="p1_uid" placeholder="P1 UID" required>
             </div>
             <br>
             <div class="grid-2">
-                <input type="text" id="p2_ign" placeholder="Player 2 IGN" required>
-                <input type="text" id="p2_uid" placeholder="Player 2 UID" required>
+                <input type="text" id="p2_ign" placeholder="P2 In-Game Name (IGN)" required>
+                <input type="text" id="p2_uid" placeholder="P2 UID" required>
             </div>
             <br>
             <div class="grid-2">
-                <input type="text" id="p3_ign" placeholder="Player 3 IGN" required>
-                <input type="text" id="p3_uid" placeholder="Player 3 UID" required>
+                <input type="text" id="p3_ign" placeholder="P3 In-Game Name (IGN)" required>
+                <input type="text" id="p3_uid" placeholder="P3 UID" required>
             </div>
             <br>
             <div class="grid-2">
-                <input type="text" id="p4_ign" placeholder="Player 4 IGN" required>
-                <input type="text" id="p4_uid" placeholder="Player 4 UID" required>
+                <input type="text" id="p4_ign" placeholder="P4 In-Game Name (IGN)" required>
+                <input type="text" id="p4_uid" placeholder="P4 UID" required>
             </div>
 
             <h3 style="color: #ff3e3e; font-size: 1rem; margin: 15px 0 10px;">Substitutes (Optional)</h3>
@@ -270,10 +339,34 @@
 
     <!-- ADMIN PANEL TAB -->
     <div id="section-admin" class="section">
-        <h2>Admin Management Panel</h2>
+        <h2>Admin Control Panel (MICO)</h2>
         
-        <div style="margin-bottom: 20px;">
-            <h3 style="color: #fff; font-size: 0.95rem; margin-bottom: 10px;">Update Dynamic Community Links</h3>
+        <!-- Active Tournament Control -->
+        <div class="card">
+            <h3 style="color: #ff3e3e; font-size: 1rem; margin-bottom: 10px;">Active Tournament Settings</h3>
+            <div class="form-group">
+                <label>Tournament Title</label>
+                <input type="text" id="admin_tourney_title" placeholder="e.g., Free Fire League Season 1">
+            </div>
+            <div class="form-group">
+                <label>Status & Description Details</label>
+                <input type="text" id="admin_tourney_details" placeholder="e.g., Registration Open | 48 Slots Available">
+            </div>
+            <button onclick="window.saveTournamentInfo()" class="submit-btn" style="background: #238636;">Publish Tournament Info</button>
+        </div>
+
+        <!-- Standings / Leaderboard Control -->
+        <div class="card">
+            <h3 style="color: #ff3e3e; font-size: 1rem; margin-bottom: 10px;">Update Tournament Standings</h3>
+            <div class="form-group">
+                <textarea id="admin_standings_text" rows="4" placeholder="Enter score table or standings text here..."></textarea>
+            </div>
+            <button onclick="window.saveStandings()" class="submit-btn" style="background: #238636;">Update Standings</button>
+        </div>
+
+        <!-- Dynamic Socials -->
+        <div class="card">
+            <h3 style="color: #ff3e3e; font-size: 1rem; margin-bottom: 10px;">Update Community Links</h3>
             <div class="form-group">
                 <input type="text" id="admin_whatsapp" placeholder="WhatsApp Group Link">
             </div>
@@ -286,15 +379,17 @@
             <div class="form-group">
                 <input type="text" id="admin_youtube" placeholder="YouTube Channel Link">
             </div>
-            <button onclick="saveSocials()" class="submit-btn" style="background: #238636; margin-bottom: 20px;">Save Social Links</button>
+            <button onclick="window.saveSocials()" class="submit-btn" style="background: #238636;">Save Social Links</button>
         </div>
 
-        <h3 style="color: #fff; font-size: 0.95rem; margin-bottom: 10px;">Database Registered Teams</h3>
+        <!-- Registered Squads database management -->
+        <h3 style="color: #fff; font-size: 1rem; margin: 15px 0 10px;">Registered Teams Database</h3>
         <div id="admin-teams-list">
-            <p style="text-align: center; color: #8b949e;">Loading full administrative data...</p>
+            <p style="text-align: center; color: #8b949e;">Loading administrative squad data...</p>
         </div>
     </div>
 
+    <!-- Social Links Footer -->
     <div class="socials">
         <a id="link_whatsapp" href="#" target="_blank">WhatsApp</a>
         <a id="link_discord" href="#" target="_blank">Discord</a>
@@ -303,15 +398,14 @@
     </div>
 
     <div class="admin-trigger">
-        <span class="admin-link" onclick="openAdmin()">Admin Login</span>
+        <span class="admin-link" onclick="window.openAdmin()">Admin Login</span>
     </div>
 
     <!-- FIREBASE MODULE SCRIPT -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, deleteDoc, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Firebase Project Credentials
         const firebaseConfig = {
             apiKey: "AIzaSyB4nLlRgIbYL6vxmyw5V8D1F3_Fixtfc5w",
             authDomain: "terminators-esports.firebaseapp.com",
@@ -324,7 +418,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Global Window Expositions for HTML Onclick Binding
+        // Global Navigation Window Functions
         window.switchTab = function(tab) {
             document.getElementById('section-standings').classList.remove('active');
             document.getElementById('section-teams').classList.remove('active');
@@ -341,7 +435,6 @@
             } else if (tab === 'teams') {
                 document.getElementById('section-teams').classList.add('active');
                 document.getElementById('btn-teams').classList.add('active');
-                renderPublicTeams();
             } else if (tab === 'register') {
                 document.getElementById('section-register').classList.add('active');
                 document.getElementById('btn-register').classList.add('active');
@@ -355,14 +448,59 @@
                 document.getElementById('section-teams').classList.remove('active');
                 document.getElementById('section-register').classList.remove('active');
                 document.getElementById('section-admin').classList.add('active');
-                renderAdminTeams();
-                loadAdminSocialInputs();
-                alert("Access Granted!");
+                alert("Access Granted! Welcome MICO.");
             } else if (password !== null) {
                 alert("Incorrect Password!");
             }
         };
 
+        // Realtime Tournament Info Sync
+        onSnapshot(doc(db, "settings", "tournament"), (docSnap) => {
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                document.getElementById('tourney-title').innerText = data.title || "No Active Tournament";
+                document.getElementById('tourney-details').innerText = data.details || "Check back soon for upcoming events.";
+                document.getElementById('regTourneyName').value = data.title || "No Active Tournament";
+                document.getElementById('admin_tourney_title').value = data.title || "";
+                document.getElementById('admin_tourney_details').value = data.details || "";
+            } else {
+                document.getElementById('tourney-title').innerText = "Terminators Championship";
+                document.getElementById('tourney-details').innerText = "Registration is currently open!";
+                document.getElementById('regTourneyName').value = "Terminators Championship";
+            }
+        });
+
+        window.saveTournamentInfo = async function() {
+            const title = document.getElementById('admin_tourney_title').value;
+            const details = document.getElementById('admin_tourney_details').value;
+            try {
+                await setDoc(doc(db, "settings", "tournament"), { title, details });
+                alert("Tournament Info updated successfully!");
+            } catch (err) {
+                alert("Error updating tournament: " + err.message);
+            }
+        };
+
+        // Realtime Standings Sync
+        onSnapshot(doc(db, "settings", "standings"), (docSnap) => {
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                document.getElementById('public-standings-content').innerHTML = `<pre style="white-space: pre-wrap; font-family: inherit; color: #fff;">${data.text}</pre>`;
+                document.getElementById('admin_standings_text').value = data.text || "";
+            }
+        });
+
+        window.saveStandings = async function() {
+            const text = document.getElementById('admin_standings_text').value;
+            try {
+                await setDoc(doc(db, "settings", "standings"), { text });
+                alert("Standings updated successfully!");
+            } catch (err) {
+                alert("Error updating standings: " + err.message);
+            }
+        };
+
+        // Social Links Logic
         window.saveSocials = function() {
             const socials = {
                 whatsapp: document.getElementById('admin_whatsapp').value,
@@ -381,118 +519,4 @@
             };
             if(document.getElementById('link_whatsapp')) document.getElementById('link_whatsapp').href = saved.whatsapp || "#";
             if(document.getElementById('link_discord')) document.getElementById('link_discord').href = saved.discord || "#";
-            if(document.getElementById('link_tiktok')) document.getElementById('link_tiktok').href = saved.tiktok || "#";
-            if(document.getElementById('link_youtube')) document.getElementById('link_youtube').href = saved.youtube || "#";
-        }
-
-        function loadAdminSocialInputs() {
-            const saved = JSON.parse(localStorage.getItem('terminators_socials')) || {};
-            if(document.getElementById('admin_whatsapp')) document.getElementById('admin_whatsapp').value = saved.whatsapp || "";
-            if(document.getElementById('admin_discord')) document.getElementById('admin_discord').value = saved.discord || "";
-            if(document.getElementById('admin_tiktok')) document.getElementById('admin_tiktok').value = saved.tiktok || "";
-            if(document.getElementById('admin_youtube')) document.getElementById('admin_youtube').value = saved.youtube || "";
-        }
-
-        // Handle Registration Form Submission
-        const regForm = document.getElementById('reg-form');
-        if (regForm) {
-            regForm.addEventListener('submit', function(event) {
-                event.preventDefault();
-                const fileInput = document.getElementById('teamLogo');
-                const file = fileInput.files[0];
-
-                if (!file) {
-                    alert("Please upload a team logo.");
-                    return;
-                }
-
-                const reader = new FileReader();
-                reader.onload = async function(e) {
-                    const teamData = {
-                        name: document.getElementById('teamName').value,
-                        logo: e.target.result,
-                        gmail: document.getElementById('leaderGmail').value,
-                        whatsapp: document.getElementById('whatsappNum').value,
-                        discord: document.getElementById('discordId').value,
-                        p1: { ign: document.getElementById('p1_ign').value, uid: document.getElementById('p1_uid').value },
-                        p2: { ign: document.getElementById('p2_ign').value, uid: document.getElementById('p2_uid').value },
-                        p3: { ign: document.getElementById('p3_ign').value, uid: document.getElementById('p3_uid').value },
-                        p4: { ign: document.getElementById('p4_ign').value, uid: document.getElementById('p4_uid').value },
-                        sub1: { ign: document.getElementById('sub1_ign').value, uid: document.getElementById('sub1_uid').value },
-                        sub2: { ign: document.getElementById('sub2_ign').value, uid: document.getElementById('sub2_uid').value },
-                        createdAt: new Date().toISOString()
-                    };
-
-                    try {
-                        await addDoc(collection(db, "registeredTeams"), teamData);
-                        alert("Squad Registered Successfully to Database!");
-                        regForm.reset();
-                        window.switchTab('teams');
-                    } catch (err) {
-                        console.error("Firestore Error: ", err);
-                        alert("Failed to register squad. Please check network connection.");
-                    }
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-
-        // Render Public Teams List
-        function renderPublicTeams() {
-            const container = document.getElementById('public-teams-list');
-            if (!container) return;
-
-            onSnapshot(collection(db, "registeredTeams"), (snapshot) => {
-                container.innerHTML = "";
-                if (snapshot.empty) {
-                    container.innerHTML = `<p style="text-align: center; color: #8b949e;">No squads registered yet. Be the first!</p>`;
-                    return;
-                }
-
-                snapshot.forEach((docSnap) => {
-                    const t = docSnap.data();
-                    let subsHtml = "";
-                    if (t.sub1 && t.sub1.ign) {
-                        subsHtml += ` | <b>Subs:</b> ${t.sub1.ign} (${t.sub1.uid})`;
-                    }
-                    if (t.sub2 && t.sub2.ign) {
-                        subsHtml += `, ${t.sub2.ign} (${t.sub2.uid})`;
-                    }
-
-                    container.innerHTML += `
-                        <div class="card" style="display: flex; align-items: center; gap: 15px; text-align: left;">
-                            <img src="${t.logo}" style="width:55px; height:55px; border-radius:50%; object-fit:cover; border:2px solid #ff3e3e;">
-                            <div style="flex: 1;">
-                                <h4 style="color: #ff3e3e; margin-bottom: 4px;">${t.name}</h4>
-                                <p style="color: #fff; font-size: 0.82rem; margin-bottom: 2px;"><b>Main:</b> ${t.p1.ign} (${t.p1.uid}), ${t.p2.ign} (${t.p2.uid}), ${t.p3.ign} (${t.p3.uid}), ${t.p4.ign} (${t.p4.uid})${subsHtml}</p>
-                            </div>
-                        </div>
-                    `;
-                });
-            });
-        }
-
-        // Render Admin Teams List
-        function renderAdminTeams() {
-            const container = document.getElementById('admin-teams-list');
-            if (!container) return;
-
-            onSnapshot(collection(db, "registeredTeams"), (snapshot) => {
-                container.innerHTML = "";
-                if (snapshot.empty) {
-                    container.innerHTML = `<p style="text-align: center; color: #8b949e;">No registered squads found.</p>`;
-                    return;
-                }
-
-                snapshot.forEach((docSnap) => {
-                    const t = docSnap.data();
-                    const docId = docSnap.id;
-
-                    container.innerHTML += `
-                        <div style="background: #0d0f12; border: 1px solid #ff3e3e; border-radius: 8px; padding: 12px; margin-bottom: 10px; text-align: left;">
-                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
-                                <img src="${t.logo}" style="width:45px; height:45px; border-radius:50%; object-fit:cover;">
-                                <div>
-                                    <h4 style="color: #ff3e3e; font-size: 0.95rem;">${t.name}</h4>
-                                    <p style="color: #8b949e; font-size: 0.78rem;">📧 Gmail: ${t.gmail}</p>
-                                    <p style="color: #8b949e; font-s
+ 
