@@ -11,7 +11,7 @@
     <meta name="author" content="M I C O">
     <meta name="robots" content="index, follow">
 
-    <!-- Firebase SDKs -->
+    <!-- Firebase SDKs & Core Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -29,7 +29,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Expose Firebase functions globally for the app scripts
+        // Expose Firebase tools and UI functions globally
         window.db = db;
         window.collection = collection;
         window.addDoc = addDoc;
@@ -37,7 +37,11 @@
         window.deleteDoc = deleteDoc;
         window.doc = doc;
 
-        // Trigger initial data load once Firebase is ready
+        window.switchTab = switchTab;
+        window.openAdmin = openAdmin;
+        window.deleteTeam = deleteTeam;
+        window.handleRegistration = handleRegistration;
+
         window.addEventListener('DOMContentLoaded', () => {
             loadDynamicSocials();
             renderPublicTeams();
@@ -369,7 +373,6 @@
             }
         }
 
-        // Socials loader (kept localStorage for quick links)
         function loadDynamicSocials() {
             const saved = JSON.parse(localStorage.getItem('terminators_socials')) || { whatsapp: "#", discord: "#", tiktok: "#", youtube: "#" };
             document.getElementById('link_whatsapp').href = saved.whatsapp || "#";
@@ -378,7 +381,6 @@
             document.getElementById('link_youtube').href = saved.youtube || "#";
         }
 
-        // Save Registration Data to Firebase Cloud Firestore
         function handleRegistration(event) {
             event.preventDefault();
             const fileInput = document.getElementById('teamLogo');
@@ -419,7 +421,6 @@
             reader.readAsDataURL(file);
         }
 
-        // Render Public Teams from Firestore
         async function renderPublicTeams() {
             const container = document.getElementById('public-teams-list');
             container.innerHTML = '<p style="text-align: center; color: #b8949e;">Loading squads...</p>';
@@ -451,7 +452,6 @@
             }
         }
 
-        // Render Admin Panel Teams from Firestore
         async function renderAdminTeams() {
             const container = document.getElementById('admin-teams-list');
             container.innerHTML = '<p style="text-align: center; color: #b8949e;">Loading records...</p>';
@@ -474,4 +474,5 @@
                                 <div style="flex: 1;">
                                     <h4 style="color: #ff3e3e; font-size: 1.1rem;">${t.name}</h4>
                                     <p style="color: #238636; font-size: 0.85rem;">✉️ Gmail: ${t.gmail}</p>
-                                    <p style="color: 
+                                    <p style="color: #238636; font-size: 0.85rem;">💬 WhatsApp: ${t.whatsapp}</p>
+                                    <p st
