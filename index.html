@@ -1,517 +1,493 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terminators Esports | Free Fire Hub</title>
-    <style>
-        :root {
-            --bg-deep: #0b0c10;
-            --bg-panel: #1f2833;
-            --accent-red: #ff3366;
-            --accent-gold: #f39c12;
-            --accent-neon: #00f2fe;
-            --text-main: #c5c6c7;
-            --text-bright: #ffffff;
-            --border-glass: rgba(255, 51, 102, 0.2);
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terminators Esports - Free Fire Portal</title>
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Official Terminators Esports platform for Free Fire tournaments, live standings, and squad registrations.">
+  <meta name="keywords" content="Terminators Esports, M I C O, Free Fire Tournament, Leaderboard, Esports Registration">
+  <meta name="author" content="M I C O">
+  <meta name="robots" content="index, follow">
 
-        body {
-            background-color: var(--bg-deep);
-            color: var(--text-main);
-            min-height: 100vh;
-            padding: 12px;
-            padding-bottom: 40px;
-        }
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-        .container {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-        }
+    body {
+      background-color: #0d0f12;
+      color: #ffffff;
+      padding-bottom: 40px;
+    }
 
-        header {
-            text-align: center;
-            margin-bottom: 15px;
-        }
+    .navbar {
+      background: #161a22;
+      border-bottom: 1px solid #2a313d;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 15px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
 
-        .brand-logo {
-            font-size: 24px;
-            font-weight: 900;
-            color: var(--accent-red);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-        }
+    .brand {
+      color: #ff3e3e;
+      font-weight: bold;
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+    }
 
-        /* NAVIGATION TABS */
-        .nav-tabs {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            background: #12161f;
-            border: 1px solid var(--border-glass);
-            border-radius: 8px;
-            padding: 4px;
-            gap: 4px;
-            margin-bottom: 15px;
-        }
+    .nav-links {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
 
-        .tab-btn {
-            background: #1a222d;
-            border: none;
-            color: var(--text-main);
-            padding: 10px 0;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            border-radius: 6px;
-            cursor: pointer;
-            text-align: center;
-            transition: 0.2s;
-        }
+    .nav-btn {
+      background: #0d0f12;
+      border: 1px solid #2a313d;
+      color: #8b949e;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: 0.2s;
+    }
 
-        .tab-btn.active {
-            background: var(--accent-red);
-            color: var(--text-bright);
-            box-shadow: 0 0 10px rgba(255, 51, 102, 0.4);
-        }
+    .nav-btn.active, .nav-btn:hover {
+      background: #ff3e3e;
+      color: #fff;
+      border-color: #ff3e3e;
+    }
 
-        .tab-content {
-            display: none;
-            width: 100%;
-        }
+    .admin-btn {
+      background: #ff3e3e !important;
+      color: white !important;
+      border: none !important;
+    }
 
-        .tab-content.active {
-            display: block;
-        }
+    .container {
+      max-width: 650px;
+      margin: 20px auto;
+      padding: 0 15px;
+    }
 
-        .panel {
-            background: var(--bg-panel);
-            border: 1px solid var(--border-glass);
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
-            margin-bottom: 15px;
-        }
+    .card {
+      background: #161a22;
+      border: 1px solid #2a313d;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
 
-        .panel-title {
-            font-size: 14px;
-            font-weight: 800;
-            color: var(--accent-red);
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            text-align: center;
-        }
+    /* Sections toggling */
+    .page-section {
+      display: none;
+    }
+    .page-section.active {
+      display: block;
+    }
 
-        .form-group {
-            margin-bottom: 10px;
-        }
+    h2, h3 {
+      color: #ff3e3e;
+      margin-bottom: 15px;
+      text-align: center;
+    }
 
-        label {
-            display: block;
-            font-size: 10px;
-            font-weight: 700;
-            margin-bottom: 3px;
-            color: var(--text-main);
-            text-transform: uppercase;
-        }
+    .form-group {
+      margin-bottom: 15px;
+    }
 
-        .gaming-input {
-            width: 100%;
-            padding: 9px 10px;
-            background: #0b0c10;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text-bright);
-            border-radius: 6px;
-            font-size: 12px;
-            outline: none;
-        }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 0.9rem;
+      color: #8b949e;
+    }
 
-        .gaming-input:focus {
-            border-color: var(--accent-red);
-        }
+    select, input {
+      width: 100%;
+      padding: 10px;
+      background: #0d0f12;
+      border: 1px solid #3a4252;
+      border-radius: 6px;
+      color: white;
+    }
 
-        /* CUSTOM FILE UPLOAD BUTTON FIX */
-        .file-upload-wrapper {
-            position: relative;
-            width: 100%;
-            background: #0b0c10;
-            border: 1px dashed var(--accent-red);
-            border-radius: 6px;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-        }
+    input[type="file"] {
+      padding: 6px;
+      background: #161a22;
+    }
 
-        .file-upload-wrapper input[type="file"] {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-        }
+    .player-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
 
-        .file-upload-text {
-            font-size: 11px;
-            color: var(--text-bright);
-            font-weight: 600;
-            pointer-events: none;
-        }
+    .section-title {
+      color: #ff3e3e;
+      font-size: 0.95rem;
+      margin: 15px 0 8px 0;
+      border-bottom: 1px solid #2a313d;
+      padding-bottom: 4px;
+    }
 
-        .section-subtitle {
-            font-size: 12px;
-            font-weight: 800;
-            color: var(--accent-neon);
-            margin: 14px 0 6px 0;
-            text-transform: uppercase;
-            border-bottom: 1px solid var(--border-glass);
-            padding-bottom: 3px;
-        }
+    .action-btn {
+      width: 100%;
+      background: #238636;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+      margin-top: 10px;
+    }
 
-        .action-btn {
-            width: 100%;
-            padding: 11px;
-            background: var(--accent-red);
-            color: var(--text-bright);
-            font-weight: 800;
-            border: none;
-            border-radius: 6px;
-            font-size: 12px;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 12px;
-        }
+    .action-btn:hover {
+      background: #2ea043;
+    }
 
-        /* REGISTERED SQUAD CARD DESIGN */
-        .squad-card {
-            background: #12161f;
-            border: 1px solid var(--border-glass);
-            border-radius: 10px;
-            padding: 12px;
-            margin-bottom: 10px;
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
-        }
+    /* Team Card Styling (Public view) */
+    .team-card {
+      background: #0d0f12;
+      border: 1px solid #2a313d;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
 
-        .squad-logo-box {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            overflow: hidden;
-            flex-shrink: 0;
-            border: 2px solid var(--accent-gold);
-            background: #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    .team-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #ff3e3e;
+      background: #161a22;
+    }
 
-        .squad-logo-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+    .team-info h4 {
+      color: #fff;
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+    }
 
-        .squad-info {
-            flex-grow: 1;
-            font-size: 11px;
-        }
+    .team-info p {
+      color: #8b949e;
+      font-size: 0.82rem;
+      margin-bottom: 2px;
+    }
 
-        .squad-name-title {
-            font-size: 13px;
-            font-weight: 900;
-            color: var(--accent-red);
-            margin-bottom: 4px;
-            text-transform: uppercase;
-        }
-
-        .squad-detail-line {
-            margin-bottom: 2px;
-            color: var(--text-main);
-        }
-
-        .squad-detail-line span {
-            color: #00e676;
-            font-weight: 600;
-        }
-
-        /* SOCIAL CONNECT BUTTONS */
-        .social-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            margin-top: 15px;
-        }
-
-        .social-card {
-            background: #12161f;
-            border: 1px solid var(--border-glass);
-            padding: 10px;
-            border-radius: 8px;
-            text-align: center;
-            text-decoration: none;
-            color: #fff;
-            font-weight: 700;
-            font-size: 11px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-
-        .social-card.whatsapp { border-color: #00e676; color: #00e676; }
-        .social-card.discord { border-color: #5865F2; color: #5865F2; }
-        .social-card.tiktok { border-color: #ff3366; color: #ff3366; }
-        .social-card.telegram { border-color: #229ED9; color: #229ED9; }
-        .social-card.youtube { border-color: #ff0000; color: #ff0000; grid-column: span 2; }
-
-        footer {
-            margin-top: 20px;
-            font-size: 10px;
-            color: var(--text-main);
-            text-align: center;
-        }
-    </style>
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #8b949e;
+      font-size: 0.9rem;
+    }
+  </style>
 </head>
-<body>
+<body onload="loadDynamicSocials()">
 
-    <div class="container">
-        <header>
-            <div class="brand-logo">Terminators</div>
-        </header>
+  <div class="navbar">
+    <div class="brand">TERMINATORS</div>
+    <div class="nav-links">
+      <button class="nav-btn active" id="btn-standings" onclick="switchTab('standings')">Standings</button>
+      <button class="nav-btn" id="btn-teams" onclick="switchTab('teams')">Teams</button>
+      <button class="nav-btn" id="btn-register" onclick="switchTab('register')">Register</button>
+      <button class="nav-btn admin-btn" onclick="openAdmin()">Admin</button>
+    </div>
+  </div>
 
-        <!-- NAVIGATION TABS -->
-        <div class="nav-tabs">
-            <button type="button" class="tab-btn active" onclick="switchTab('tab-standings', this)">Standings</button>
-            <button type="button" class="tab-btn" onclick="switchTab('tab-teams', this)">Teams</button>
-            <button type="button" class="tab-btn" onclick="switchTab('tab-register', this)">Register</button>
-            <button type="button" class="tab-btn" onclick="switchTab('tab-admin', this)">Admin</button>
-        </div>
-
-        <!-- STANDINGS TAB -->
-        <div id="tab-standings" class="tab-content active">
-            <div class="panel">
-                <div class="panel-title">Tournament Standings</div>
-                <p style="font-size: 11px; text-align: center; color: var(--text-main);">Standings tables will update live once match results are recorded.</p>
-            </div>
-        </div>
-
-        <!-- TEAMS TAB -->
-        <div id="tab-teams" class="tab-content">
-            <div class="panel">
-                <div class="panel-title">Registered Squads</div>
-                <p style="font-size: 11px; margin-bottom: 10px; text-align: center;">Browse all participating teams and their rosters.</p>
-                <div id="teamsContainer"></div>
-            </div>
-        </div>
-
-        <!-- REGISTER TAB -->
-        <div id="tab-register" class="tab-content">
-            <div class="panel">
-                <div class="panel-title">Squad Registration</div>
-                <form id="registrationForm">
-                    <div class="form-group">
-                        <label for="squadName">Squad Name</label>
-                        <input type="text" id="squadName" placeholder="e.g., TERMINATORS E-SPORTS" required class="gaming-input">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Upload Team Logo Image</label>
-                        <div class="file-upload-wrapper">
-                            <input type="file" id="squadLogoFile" accept="image/*">
-                            <div class="file-upload-text" id="fileChosenText">📂 Tap to choose logo from gallery</div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="leaderEmail">Email Address</label>
-                        <input type="email" id="leaderEmail" placeholder="leader@gmail.com" required class="gaming-input">
-                    </div>
-                    <div class="form-group">
-                        <label for="leaderWhatsapp">WhatsApp Number</label>
-                        <input type="tel" id="leaderWhatsapp" placeholder="+234..." required class="gaming-input">
-                    </div>
-                    <div class="form-group">
-                        <label for="discordUser">Discord Username</label>
-                        <input type="text" id="discordUser" placeholder="username#0000" class="gaming-input">
-                    </div>
-
-                    <!-- Main 4 Players -->
-                    <div class="section-subtitle">Main Roster (4 Players)</div>
-                    <div class="form-group">
-                        <label>Player 1 (Leader IGN & UID)</label>
-                        <input type="text" id="p1" placeholder="e.g., TMT 💀 MICO (2546752842)" required class="gaming-input">
-                    </div>
-                    <div class="form-group">
-                        <label>Player 2 (IGN & UID)</label>
-                        <input type="text" id="p2" placeholder="e.g., TMT 💀 JASMINE (7210180499)" required class="gaming-input">
-                    </div>
-                    <div class="form-group">
-                        <label>Player 3 (IGN & UID)</label>
-                        <input type="text" id="p3" placeholder="e.g., TMT 💀 YOUNG (7992579641)" required class="gaming-input">
-                    </div>
-                    <div class="form-group">
-                        <label>Player 4 (IGN & UID)</label>
-                        <input type="text" id="p4" placeholder="e.g., TMT 💀 MARFIA (11764840766)" required class="gaming-input">
-                    </div>
-
-                    <!-- Substitutes -->
-                    <div class="section-subtitle">Substitutes (2 Players)</div>
-                    <div class="form-group">
-                        <label>Substitute 1 (IGN & UID - Optional)</label>
-                        <input type="text" id="sub1" placeholder="e.g., Sub Name (UID)" class="gaming-input">
-                    </div>
-                    <div class="form-group">
-                        <label>Substitute 2 (IGN & UID - Optional)</label>
-                        <input type="text" id="sub2" placeholder="e.g., Sub Name (UID)" class="gaming-input">
-                    </div>
-
-                    <button type="submit" class="action-btn">Submit Registration</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- ADMIN TAB -->
-        <div id="tab-admin" class="tab-content">
-            <div class="panel">
-                <div class="panel-title">Admin Control Panel</div>
-                <div id="adminLoginSection">
-                    <div class="form-group">
-                        <label for="adminPin">Admin Passcode</label>
-                        <input type="password" id="adminPin" placeholder="Enter PIN" class="gaming-input">
-                    </div>
-                    <button type="button" id="adminLoginBtn" class="action-btn">Unlock Admin</button>
-                </div>
-                
-                <div id="adminControlsSection" style="display: none;">
-                    <p style="font-size: 11px; color: #00e676; font-weight: 700; margin-bottom: 12px; text-align: center;">🔒 Secure Access Unlocked</p>
-                    
-                    <div style="font-size: 12px; font-weight: 800; color: var(--accent-red); margin-bottom: 8px; text-transform: uppercase;">🌐 Manage Social Links</div>
-                    <div class="form-group">
-                        <label>WhatsApp GC Link</label>
-                        <input type="url" id="adminWhatsappLink" class="gaming-input">
-                    </div>
-                    <div class="form-group">
-                        <label>Discord Link</label>
-                        <input type="url" id="adminDiscordLink" class="gaming-input">
-                    </div>
-                    <div class="form-group">
-                        <label>TikTok Link</label>
-                        <input type="url" id="adminTiktokLink" class="gaming-input">
-                    </div>
-                    <div class="form-group">
-                        <label>Telegram Link</label>
-                        <input type="url" id="adminTelegramLink" class="gaming-input">
-                    </div>
-                    <div class="form-group">
-                        <label>YouTube Link</label>
-                        <input type="url" id="adminYoutubeLink" class="gaming-input">
-                    </div>
-                    <button type="button" id="saveSocialsBtn" class="action-btn" style="background: #00e676; color: #000;">Save Social Links Live</button>
-
-                    <div style="font-size: 12px; font-weight: 800; color: var(--accent-red); margin: 15px 0 8px 0; text-transform: uppercase;">Registered Squads Manager</div>
-                    <div id="adminTeamsContainer"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- CONNECT & FOLLOW SECTION (Visible everywhere) -->
-        <div class="panel" style="margin-top: 20px;">
-            <div class="panel-title">Connect & Follow</div>
-            <div class="social-grid">
-                <a id="linkWhatsapp" href="#" target="_blank" class="social-card whatsapp">💬 WhatsApp GC</a>
-                <a id="linkDiscord" href="#" target="_blank" class="social-card discord">🎮 Discord</a>
-                <a id="linkTiktok" href="#" target="_blank" class="social-card tiktok">🔥 TikTok</a>
-                <a id="linkTelegram" href="#" target="_blank" class="social-card telegram">✈️ Telegram</a>
-                <a id="linkYoutube" href="#" target="_blank" class="social-card youtube">📺 YouTube</a>
-            </div>
-        </div>
-
-        <footer>
-            &copy; 2026 Terminators Esports. Founded by M I C O.
-        </footer>
+  <div class="container">
+    
+    <!-- 1. STANDINGS SECTION -->
+    <div id="section-standings" class="page-section active card">
+      <h3>Tournament Leaderboard</h3>
+      <p style="color: #8b949e; text-align: center;">Squad standings and live results will display here.</p>
     </div>
 
-    <script>
-        function switchTab(targetId, btnElement) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    <!-- 2. TEAMS SECTION (Public Roster) -->
+    <div id="section-teams" class="page-section card">
+      <h3>Registered Squads</h3>
+      <p style="color: #8b949e; text-align: center; margin-bottom: 15px; font-size: 0.85rem;">Browse all participating teams and their rosters.</p>
+      <div id="public-teams-list">
+        <p style="text-align: center; color: #8b949e;">No squads registered yet.</p>
+      </div>
+    </div>
 
-            const target = document.getElementById(targetId);
-            if (target) target.classList.add('active');
-            if (btnElement) btnElement.classList.add('active');
-        }
+    <!-- 3. REGISTER SECTION -->
+    <div id="section-register" class="page-section card">
+      <h2>SQUAD REGISTRATION</h2>
+      <form id="reg-form" onsubmit="handleRegistration(event)">
+        
+        <div class="form-group">
+          <label>Squad / Team Name</label>
+          <input type="text" id="teamName" placeholder="e.g. Terminators Elite" required>
+        </div>
 
-        let squads = JSON.parse(localStorage.getItem('terminators_squads_v6')) || [];
-        let socialLinks = JSON.parse(localStorage.getItem('terminators_socials_v6')) || {
-            whatsapp: "https://chat.whatsapp.com/FOJ0srnmrAAbdwkT2mcpLF",
-            discord: "https://discord.gg/",
-            tiktok: "https://tiktok.com/@terminators.esport",
-            telegram: "https://t.me/",
-            youtube: "https://www.youtube.com/@MICOB2K"
+        <div class="form-group">
+          <label>Squad Profile Picture / Logo</label>
+          <input type="file" id="teamLogo" accept="image/*" required>
+        </div>
+
+        <div class="form-group">
+          <label>Team Leader Gmail (Private - Admin Only)</label>
+          <input type="email" id="leaderGmail" placeholder="e.g. leader@gmail.com" required>
+        </div>
+
+        <div class="form-group">
+          <label>WhatsApp Number (Private - Admin Only)</label>
+          <input type="text" id="whatsappNum" placeholder="e.g. +234..." required>
+        </div>
+
+        <div class="form-group">
+          <label>Discord Username / ID (Private - Admin Only)</label>
+          <input type="text" id="discordId" placeholder="e.g. mico#2060">
+        </div>
+
+        <div class="section-title">Main Players (4 Squad Members)</div>
+        <div class="player-row"><input type="text" id="p1_ign" placeholder="Player 1 IGN" required style="flex:1;"><input type="text" id="p1_uid" placeholder="UID" required style="flex:1;"></div>
+        <div class="player-row"><input type="text" id="p2_ign" placeholder="Player 2 IGN" required style="flex:1;"><input type="text" id="p2_uid" placeholder="UID" required style="flex:1;"></div>
+        <div class="player-row"><input type="text" id="p3_ign" placeholder="Player 3 IGN" required style="flex:1;"><input type="text" id="p3_uid" placeholder="UID" required style="flex:1;"></div>
+        <div class="player-row"><input type="text" id="p4_ign" placeholder="Player 4 IGN" required style="flex:1;"><input type="text" id="p4_uid" placeholder="UID" required style="flex:1;"></div>
+
+        <div class="section-title">Substitute Players (Optional - Max 2)</div>
+        <div class="player-row"><input type="text" id="sub1_ign" placeholder="Sub 1 IGN" style="flex:1;"><input type="text" id="sub1_uid" placeholder="UID" style="flex:1;"></div>
+        <div class="player-row"><input type="text" id="sub2_ign" placeholder="Sub 2 IGN" style="flex:1;"><input type="text" id="sub2_uid" placeholder="UID" style="flex:1;"></div>
+
+        <button type="submit" class="action-btn">Submit Registration</button>
+      </form>
+    </div>
+
+    <!-- 4. ADMIN PANEL (Locked) -->
+    <div id="section-admin" class="page-section card" style="border: 1px solid #ff3e3e;">
+      <h2>ADMIN CONTROL PANEL</h2>
+      <p style="color: #238636; text-align: center; margin-bottom: 15px; font-size: 0.85rem;">🔒 Secure Access Unlocked</p>
+      
+      <!-- SOCIAL LINK MANAGER (Only Admin Can See & Update This) -->
+      <div style="background: #161a22; border: 1px solid #3a4252; border-radius: 6px; padding: 12px; margin-bottom: 20px;">
+        <h4 style="color: #ff3e3e; font-size: 0.95rem; margin-bottom: 10px; text-align: center;">🌐 Manage Social Links</h4>
+        <div class="form-group" style="margin-bottom: 8px;"><label style="font-size: 0.8rem;">WhatsApp GC Link</label><input type="text" id="admin_whatsapp" placeholder="https://chat.whatsapp.com/..."></div>
+        <div class="form-group" style="margin-bottom: 8px;"><label style="font-size: 0.8rem;">Discord Link</label><input type="text" id="admin_discord" placeholder="https://discord.gg/..."></div>
+        <div class="form-group" style="margin-bottom: 8px;"><label style="font-size: 0.8rem;">TikTok Link</label><input type="text" id="admin_tiktok" placeholder="https://tiktok.com/@..."></div>
+        <div class="form-group" style="margin-bottom: 12px;"><label style="font-size: 0.8rem;">YouTube Link</label><input type="text" id="admin_youtube" placeholder="https://youtube.com/@..."></div>
+        <button onclick="saveSocials()" class="action-btn" style="margin-top:0; padding: 8px; font-size: 0.85rem;">Save Social Links Live</button>
+      </div>
+
+      <div class="section-title" style="margin-top: 20px;">Registered Squads Manager</div>
+      <div id="admin-teams-list">
+        <p style="text-align: center; color: #8b949e;">No registered squads found.</p>
+      </div>
+    </div>
+
+    <!-- SOCIALS SECTION (Displayed publicly on the site, dynamically updated by Admin) -->
+    <div class="card" style="text-align: center; margin-top: 20px;">
+      <h3 style="color: #ff3e3e; margin-bottom: 10px; font-size: 1.1rem;">CONNECT & FOLLOW</h3>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <a id="link_whatsapp" href="#" target="_blank" style="background: #25D366; color: white; padding: 10px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.85rem;">💬 WhatsApp GC</a>
+        <a id="link_discord" href="#" target="_blank" style="background: #5865F2; color: white; padding: 10px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.85rem;">🎮 Discord</a>
+        <a id="link_tiktok" href="#" target="_blank" style="background: #000000; border: 1px solid #3a4252; color: white; padding: 10px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.85rem;">🔥 TikTok</a>
+        <a id="link_youtube" href="#" target="_blank" style="background: #FF0000; color: white; padding: 10px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.85rem;">▶️ YouTube</a>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Terminators Esports. Founded by M I C O.</p>
+  </footer>
+
+  <script>
+    function switchTab(tab) {
+      document.getElementById('section-standings').classList.remove('active');
+      document.getElementById('section-teams').classList.remove('active');
+      document.getElementById('section-register').classList.remove('active');
+      document.getElementById('section-admin').classList.remove('active');
+
+      document.getElementById('btn-standings').classList.remove('active');
+      document.getElementById('btn-teams').classList.remove('active');
+      document.getElementById('btn-register').classList.remove('active');
+
+      if (tab === 'standings') {
+        document.getElementById('section-standings').classList.add('active');
+        document.getElementById('btn-standings').classList.add('active');
+      } else if (tab === 'teams') {
+        document.getElementById('section-teams').classList.add('active');
+        document.getElementById('btn-teams').classList.add('active');
+        renderPublicTeams();
+      } else if (tab === 'register') {
+        document.getElementById('section-register').classList.add('active');
+        document.getElementById('btn-register').classList.add('active');
+      }
+    }
+
+    function openAdmin() {
+      const password = prompt("Enter Admin Password:");
+      if (password === "2060") {
+        document.getElementById('section-standings').classList.remove('active');
+        document.getElementById('section-teams').classList.remove('active');
+        document.getElementById('section-register').classList.remove('active');
+        document.getElementById('section-admin').classList.add('active');
+        renderAdminTeams();
+        loadAdminSocialInputs();
+        alert("Access Granted!");
+      } else if (password !== null) {
+        alert("Incorrect Password! Access Denied.");
+      }
+    }
+
+    // Dynamic Social Links Logic
+    function saveSocials() {
+      const socials = {
+        whatsapp: document.getElementById('admin_whatsapp').value,
+        discord: document.getElementById('admin_discord').value,
+        tiktok: document.getElementById('admin_tiktok').value,
+        youtube: document.getElementById('admin_youtube').value
+      };
+      localStorage.setItem('terminators_socials', JSON.stringify(socials));
+      loadDynamicSocials();
+      alert("Social links updated live across the website!");
+    }
+
+    function loadDynamicSocials() {
+      const saved = JSON.parse(localStorage.getItem('terminators_socials')) || {
+        whatsapp: "#", discord: "#", tiktok: "#", youtube: "#"
+      };
+      document.getElementById('link_whatsapp').href = saved.whatsapp || "#";
+      document.getElementById('link_discord').href = saved.discord || "#";
+      document.getElementById('link_tiktok').href = saved.tiktok || "#";
+      document.getElementById('link_youtube').href = saved.youtube || "#";
+    }
+
+    function loadAdminSocialInputs() {
+      const saved = JSON.parse(localStorage.getItem('terminators_socials')) || {};
+      document.getElementById('admin_whatsapp').value = saved.whatsapp || "";
+      document.getElementById('admin_discord').value = saved.discord || "";
+      document.getElementById('admin_tiktok').value = saved.tiktok || "";
+      document.getElementById('admin_youtube').value = saved.youtube || "";
+    }
+
+    // Save Registration Data Locally
+    function handleRegistration(event) {
+      event.preventDefault();
+      const fileInput = document.getElementById('teamLogo');
+      const file = fileInput.files[0];
+
+      if (!file) {
+        alert("Please upload a team profile picture.");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const teamData = {
+          name: document.getElementById('teamName').value,
+          logo: e.target.result,
+          gmail: document.getElementById('leaderGmail').value,
+          whatsapp: document.getElementById('whatsappNum').value,
+          discord: document.getElementById('discordId').value,
+          p1: { ign: document.getElementById('p1_ign').value, uid: document.getElementById('p1_uid').value },
+          p2: { ign: document.getElementById('p2_ign').value, uid: document.getElementById('p2_uid').value },
+          p3: { ign: document.getElementById('p3_ign').value, uid: document.getElementById('p3_uid').value },
+          p4: { ign: document.getElementById('p4_ign').value, uid: document.getElementById('p4_uid').value },
+          sub1: { ign: document.getElementById('sub1_ign').value, uid: document.getElementById('sub1_uid').value },
+          sub2: { ign: document.getElementById('sub2_ign').value, uid: document.getElementById('sub2_uid').value }
         };
 
-        function updateSocialLinksUI() {
-            document.getElementById('linkWhatsapp').href = socialLinks.whatsapp;
-            document.getElementById('linkDiscord').href = socialLinks.discord;
-            document.getElementById('linkTiktok').href = socialLinks.tiktok;
-            document.getElementById('linkTelegram').href = socialLinks.telegram;
-            document.getElementById('linkYoutube').href = socialLinks.youtube;
+        let teams = JSON.parse(localStorage.getItem('terminators_teams')) || [];
+        teams.push(teamData);
+        localStorage.setItem('terminators_teams', JSON.stringify(teams));
 
-            document.getElementById('adminWhatsappLink').value = socialLinks.whatsapp;
-            document.getElementById('adminDiscordLink').value = socialLinks.discord;
-            document.getElementById('adminTiktokLink').value = socialLinks.tiktok;
-            document.getElementById('adminTelegramLink').value = socialLinks.telegram;
-            document.getElementById('adminYoutubeLink').value = socialLinks.youtube;
-        }
+        alert("Squad Registered Successfully!");
+        document.getElementById('reg-form').reset();
+        switchTab('teams');
+      };
+      reader.readAsDataURL(file);
+    }
 
-        // Show image file name when selected
-        document.getElementById('squadLogoFile').addEventListener('change', function(e) {
-            const fileNameText = document.getElementById('fileChosenText');
-            if (e.target.files && e.target.files[0]) {
-                fileNameText.textContent = "✅ Selected: " + e.target.files[0].name;
-                fileNameText.style.color = "#00e676";
-            } else {
-                fileNameText.textContent = "📂 Tap to choose logo from gallery";
-                fileNameText.style.color = "var(--text-bright)";
-            }
-        });
+    // Render Public Teams Page
+    function renderPublicTeams() {
+      const container = document.getElementById('public-teams-list');
+      const teams = JSON.parse(localStorage.getItem('terminators_teams')) || [];
 
-        function renderSquads() {
-            const teamsContainer = document.getElementById('teamsContainer');
-            const adminTeamsContainer = document.getElementById('adminTeamsContainer');
-            
-            teamsContainer.innerHTML = '';
-            adminTeamsContainer.innerHTML = '';
+      if (teams.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: #8b949e;">No squads registered yet.</p>';
+        return;
+      }
 
-            if (squads.length === 0) {
-                teamsContainer.innerHTML = '<p style="font-size: 11px; text-align: center; color: var(--text-main);">No registered squads found.</p>';
-                adminTeamsContainer.innerHTML = '<p style="font-size: 11px; text-align: center; color: var(--text-main);">No registered squads found.</p>';
-                return;
-            }
+      let html = '';
+      teams.forEach(t => {
+        html += `
+          <div class="team-card">
+            <img src="${t.logo}" class="team-logo" alt="Logo">
+            <div class="team-info" style="flex: 1;">
+              <h4>${t.name}</h4>
+              <p>🎯 <b>Main:</b> ${t.p1.ign} (${t.p1.uid}), ${t.p2.ign} (${t.p2.uid}), ${t.p3.ign} (${t.p3.uid}), ${t.p4.ign} (${t.p4.uid})</p>
+              ${t.sub1.ign ? `<p>🔄 <b>Subs:</b> ${t.sub1.ign} (${t.sub1.uid}) ${t.sub2.ign ? ', ' + t.sub2.ign + ' (' + t.sub2.uid + ')' : ''}</p>` : ''}
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
 
-            squads.forEach((s, index) => {
-                const defaultLogo = 'https://images.unsplash.com/photo-1566378246526-d1408d9da45e?w=100&auto=format&fit=crop&q=60';
-                
-                // Public View Card
-                const card = document.createElement('div');
-                card.className = 'squad-card';
-                card.innerHTML = `
-                    <div class="squad-logo-box"><img src="${s.logo || defaultLogo}" alt="Logo"></div>
-                    <div class="squad-info">
-                        <div class="squad-name-title">${s.name}</div>
-                        <div class="squad-detail-line">🎯 <b>Main:</b> 1. ${s.p1} | 2. ${s.p2} | 3. ${s.p3} | 4. ${s.p4}</div>
-        
+    // Render Admin Panel Teams
+    function renderAdminTeams() {
+      const container = document.getElementById('admin-teams-list');
+      const teams = JSON.parse(localStorage.getItem('terminators_teams')) || [];
+
+      if (teams.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: #8b949e;">No registered squads found.</p>';
+        return;
+      }
+
+      let html = '';
+      teams.forEach((t, index) => {
+        html += `
+          <div style="background: #0d0f12; border: 1px solid #ff3e3e; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
+              <img src="${t.logo}" class="team-logo" alt="Logo">
+              <div>
+                <h4 style="color: #ff3e3e; font-size: 1.1rem;">${t.name}</h4>
+                <p style="color: #238636; font-size: 0.85rem;">📧 Gmail: ${t.gmail}</p>
+                <p style="color: #238636; font-size: 0.85rem;">💬 WhatsApp: ${t.whatsapp}</p>
+                <p style="color: #238636; font-size: 0.85rem;">🎮 Discord: ${t.discord || 'N/A'}</p>
+              </div>
+            </div>
+            <p style="color: #8b949e; font-size: 0.82rem; margin-bottom: 5px;"><b>Roster:</b> ${t.p1.ign}, ${t.p2.ign}, ${t.p3.ign}, ${t.p4.ign}</p>
+            <button onclick="deleteTeam(${index})" style="background: #da3633; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; margin-top: 8px;">Delete Squad</button>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    function deleteTeam(index) {
+      if (confirm("Are you sure you want to delete this squad?")) {
+        let teams = JSON.parse(localStorage.getItem('terminators_teams')) || [];
+        teams.splice(index, 1);
+        localStorage.setItem('terminators_teams', JSON.stringify(teams));
+        renderAdminTeams();
+      }
+    }
+  </script>
+
+</body>
+            </html>
+                                                                                                                                                                                                 
