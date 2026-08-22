@@ -1,1 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminators Esports</title>
+    <style>
+        body { background: #050508; color: #fff; font-family: sans-serif; padding: 20px; text-align: center; }
+        .nav { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; }
+        button { padding: 12px 20px; font-weight: bold; cursor: pointer; background: #222; color: #fff; border: 1px solid #f39c12; border-radius: 8px; }
+        button.active { background: #f39c12; color: #000; }
+        .tab-content { display: none; padding: 20px; background: #111; border-radius: 10px; margin-top: 10px; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
 
+    <h1>Terminators Esports</h1>
+    <p>Founder: M I C O</p>
+
+    <div class="nav">
+        <button onclick="openTab('hub', event)" class="active">Hub</button>
+        <button onclick="openTab('reg', event)">Register</button>
+    </div>
+
+    <div id="hub" class="tab-content active">
+        <h2>Welcome to the Hub</h2>
+        <p>Next custom room drop coming soon.</p>
+    </div>
+
+    <div id="reg" class="tab-content">
+        <h2>Squad Registration</h2>
+        <input type="text" placeholder="Squad Name" style="padding:10px; width:80%; margin-bottom:10px;"><br>
+        <button style="background:#f39c12; color:#000;">Submit</button>
+    </div>
+
+    <script>
+        function openTab(tabName, evt) {
+            var contents = document.getElementsByClassName("tab-content");
+            for (var i = 0; i < contents.length; i++) {
+                contents[i].classList.remove("active");
+            }
+            var buttons = document.getElementsByTagName("button");
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
+
+</body>
+</html>
