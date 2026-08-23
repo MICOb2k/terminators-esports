@@ -209,6 +209,10 @@
 
     <!-- NAVIGATION LOGIC -->
     <script>
+        window.onerror = function(msg, url, line) {
+    alert("CRASH ON LINE " + line + ":\n" + msg);
+};
+        
         function openTab(tabName) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -436,60 +440,64 @@ document.getElementById('reg-form').addEventListener('submit', async function(e)
     }
 });
         
-        
-        
-
         // REALTIME TEAMS LIST
-        onSnapshot(collection(db, "registeredTeams"), (snapshot) => {
-            const pub = document.getElementById('public-teams-container');
-            const adm = document.getElementById('admin-teams-container');
+onSnapshot(collection(db, "registeredTeams"), (snapshot) => {
+    const pub = document.getElementById('public-teams-container');
+    const adn = document.getElementById('admin-teams-container');
 
-            pub.innerHTML = snapshot.empty ? `<p style="text-align: center; color: #8b949e;">No squads registered yet.</p>` : "";
-            adm.innerHTML = snapshot.empty ? `<p style="text-align: center; color: #8b949e;">No registered squads in database.</p>` : "";
+    if (pub) pub.innerHTML = snapshot.empty ? '<p style="text-align: center; color: #8b949e;">No squads registered yet.</p>' : '';
+    if (adn) adn.innerHTML = snapshot.empty ? '<p style="text-align: center; color: #8b949e;">No registered squads found.</p>' : '';
 
-            snapshot.forEach((docSnap) => {
-                const t = docSnap.data();
-                const docId = docSnap.id;
+    snapshot.forEach((docSnap) => {
+        const t = docSnap.data();
+        const docId = docSnap.id;
 
-                let subs = "";
-                if (t.sub1 && t.sub1.ign) subs += `, Sub1: ${t.sub1.ign}`;
-                if (t.sub2 && t.sub2.ign) subs += `, Sub2: ${t.sub2.ign}`;
+        let subs = "";
+        if (t.sub1 && t.sub1.ign) subs += `, Sub1: ${t.sub1.ign}`;
+        if (t.sub2 && t.sub2.ign) subs += `, Sub2: ${t.sub2.ign}`;
 
-                pub.innerHTML += `
-                    <div class="card" style="display: flex; align-items: center; gap: 12px; text-align: left;">
-                        <img src="${t.logo}" style="width:50px; height:50px; border-radius:50%; object-fit:cover; border:2px solid #ff3e3e;">
-                        <div style="flex: 1;">
-                            <h4 style="color: #ff3e3e; margin-bottom: 2px;">${t.name} <span style="font-size: 0.75rem; color: #8b949e;">[${t.server} / ${t.country}]</span></h4>
-                            <p style="color: #fff; font-size: 0.8rem;"><b>Roster:</b> ${t.p1.ign}, ${t.p2.ign}, ${t.p3.ign}, ${t.p4.ign}${subs}</p>
+        if (pub) {
+            pub.innerHTML += `
+                <div class="card" style="display: flex; align-items: center; gap: 12px; text-align: left;">
+                    <img src="${t.logo}" style="width:50px; height:50px; border-radius:50%; object-fit:cover;">
+                    <div style="flex: 1;">
+                        <h4 style="color: #ff333e; margin-bottom: 2px;">${t.name}</h4>
+                        <p style="color: #fff; font-size: 0.8rem;"><b>Roster:</b> ${t.p1.ign}, ${t.p2.ign}, ${t.p3.ign}, ${t.p4.ign}${subs}</p>
+                    </div>
+                </div>`;
+        }
+
+        if (adn) {
+            adn.innerHTML += `
+                <div style="background: #0d0f12; border: 1px solid #ff333e; border-radius: 8px; padding: 12px; margin-bottom: 10px;">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                        <img src="${t.logo}" style="width:40px; height:40px; border-radius:50%; object-fit:cover;">
+                        <div>
+                            <h4 style="color: #ff333e; font-size: 0.95rem;">${t.name}</h4>
+                            <p style="color: #8b949e; font-size: 0.75rem;">Server: ${t.server} | Country: ${t.country}</p>
+                            <p style="color: #8b949e; font-size: 0.73rem;">Gmail: ${t.gmail} | WhatsApp: ${t.whatsapp}</p>
                         </div>
                     </div>
-                `;
+                    <button class="btn-delete" data-id="${docId}" style="background: #da3633; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Delete Squad</button>
+                </div>`;
+        }
+    });
 
-                adm.innerHTML += `
-                    <div style="background: #0d0f12; border: 1px solid #ff3e3e; border-radius: 8px; padding: 12px; margin-bottom: 10px; text-align: left;">
-                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-                            <img src="${t.logo}" style="width:40px; height:40px; border-radius:50%; object-fit:cover;">
-                            <div>
-                                <h4 style="color: #ff3e3e; font-size: 0.95rem;">${t.name}</h4>
-                                <p style="color: #8b949e; font-size: 0.75rem;">Server: ${t.server} | Country: ${t.country}</p>
-                                <p style="color: #8b949e; font-size: 0.75rem;">📧 Gmail: ${t.gmail} | 📞 WhatsApp: ${t.whatsapp}</p>
-                            </div>
-                        </div>
-                        <button class="btn-delete" data-id="${docId}" style="background: #da3633; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Delete Squad</button>
-                    </div>
-                `;
-            });
-
-            document.querySelectorAll('.btn-delete').forEach(btn => {
-                btn.addEventListener('click', async (e) => {
-                    const id = e.target.getAttribute('data-id');
-                    if (confirm("Delete this squad from the database?")) {
-                        try { await deleteDoc(doc(db, "registeredTeams", id)); alert("Squad deleted."); }
-                        catch (err) { alert("Failed to delete: " + err.message); }
-                    }
-                });
-            });
-        }, (err) => { console.error("Firestore Teams Error:", err); });
+    document.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            const id = e.target.getAttribute('data-id');
+            if (confirm("Delete this squad from the database?")) {
+                try { 
+                    await deleteDoc(doc(db, "registeredTeams", id)); 
+                    alert("Squad deleted."); 
+                } catch (err) { 
+                    alert("Failed to delete: " + err.message); 
+                }
+            }
+        });
+    });
+}, (err) => console.error("Firestore Teams Error:", err));
+        
     </script>
 </body>
 </html>
