@@ -322,17 +322,22 @@
         });
 
         // REALTIME SYNC LISTENERS
-        onSnapshot(doc(db, "settings", "tournament"), (docSnap) => {
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                document.getElementById('tourney-title').innerText = data.title || "Terminators Championship";
-                document.getElementById('tourney-details').innerText = data.details || "Registration is open!";
-                document.getElementById('regTourneyName').value = data.title || "Terminators Championship";
-            } else {
-                document.getElementById('tourney-title').innerText = "Terminators Championship";
-                document.getElementById('tourney-details').innerText = "Registration is open!";
-            }
-        }, (err) => { console.error("Firestore Error:", err); });
+onSnapshot(doc(db, "settings", "tournament"), (docSnap) => {
+    const titleEl = document.getElementById('tourney-title');
+    const detailsEl = document.getElementById('tourney-details');
+    const regInput = document.getElementById('regTourneyName');
+    
+    if (docSnap.exists()) {
+        const data = docSnap.data();
+        if (titleEl) titleEl.innerText = data.title || "Terminators Championship";
+        if (detailsEl) detailsEl.innerText = data.details || "Registration is open!";
+        if (regInput) regInput.value = data.title || "Terminators Championship";
+    } else {
+        if (titleEl) titleEl.innerText = "No Active Tournament";
+        if (detailsEl) detailsEl.innerText = "Check back soon for upcoming events.";
+    }
+}, (err) => { console.error("Firestore Error:", err); });
+        
 
         onSnapshot(doc(db, "settings", "standings"), (docSnap) => {
             if (docSnap.exists()) {
