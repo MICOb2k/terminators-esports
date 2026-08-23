@@ -429,18 +429,16 @@ document.getElementById('reg-form').addEventListener('submit', async function(e)
         document.getElementById('reg-form').reset();
         openTab('teams');
 
-    } catch (err) {
+        } catch (err) {
         alert("ERROR: " + err.message);
     } finally {
         submitBtn.innerText = originalBtnText;
         submitBtn.disabled = false;
     }
 });
-        
-    }
-});
-        
-        // REALTIME TEAMS LIST
+
+// REALTIME TEAMS LIST
+
 onSnapshot(collection(db, "registeredTeams"), (snapshot) => {
     const pub = document.getElementById('public-teams-container');
     const adn = document.getElementById('admin-teams-container');
