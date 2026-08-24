@@ -168,48 +168,58 @@
         <h2>Admin Control Panel (MICO)</h2>
         
         <div class="card">
-    <h3 style="color: #ff3e3e; font-size: 1rem; margin-bottom: 10px;">Active Tournament Settings</h3>
-    
+    <h3 style="color: #ff3e3e; font-size: 1rem; margin-bottom: 15px;">Active Tournament Settings</h3>
+
+<div class="form-group">
+    <label>Tournament Title</label>
+    <input type="text" id="tourneyTitle" placeholder="Tournament Name (e.g., Free Fire Pro Scrims)">
+</div>
+
+<div class="form-group">
+    <label>Game Mode</label>
+    <select id="tourneyMode" style="width: 100%; padding: 10px; background: #0d0f12; color: #fff; border: 1px solid #333; border-radius: 5px;">
+        <option value="" disabled selected>Select Game Mode</option>
+        <option value="Battle Royale">Battle Royale (BR)</option>
+        <option value="Clash Squad">Clash Squad (CS)</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label>Maps & Details</label>
+    <input type="text" id="tourneyDetails" placeholder="e.g. Maps: Bermuda & Kalahari">
+</div>
+
+<div class="grid-2">
     <div class="form-group">
-        <label>Tournament Title</label>
-        <input type="text" id="admin_tourney_title" placeholder="Tournament Name...">
+        <label>Max Squad Limit</label>
+        <input type="number" id="tourneyMaxSquad" placeholder="e.g. 16">
     </div>
-    
     <div class="form-group">
-        <label>Status & Details / Announcement</label>
-        <input type="text" id="admin_tourney_details" placeholder="e.g. Maps: Bermuda & Kalahari">
+        <!-- Spacer or additional setting if needed -->
     </div>
+</div>
 
-    <div class="grid-2">
-        <div class="form-group">
-            <label>Max Squad Limit</label>
-            <input type="number" id="admin_max_squads" placeholder="e.g. 16">
-        </div>
-        <div class="form-group">
-            <label>Registration Mode</label>
-            <select id="admin_reg_override" style="width: 100%; padding: 10px; background: #0d0f12; color: #fff; border: 1px solid #30363d; border-radius: 6px;">
-                <option value="auto">Auto (Managed by Dates)</option>
-                <option value="open">Force Open (Override)</option>
-                <option value="postponed">Postponed / Paused</option>
-            </select>
-        </div>
+<div class="grid-2">
+    <div class="form-group">
+        <label>Start Date & Time</label>
+        <input type="datetime-local" id="tourneyStartDate" style="width: 100%; padding: 10px; background: #0d0f12; color: #fff; border: 1px solid #333; border-radius: 5px;">
     </div>
+    <div class="form-group">
+        <label>End / Deadline Date</label>
+        <input type="datetime-local" id="tourneyEndDate" style="width: 100%; padding: 10px; background: #0d0f12; color: #fff; border: 1px solid #333; border-radius: 5px;">
+    </div>
+    <button id="btn-save-tourney" type="button" class="submit-btn" style="background: #238636; margin-top: 10px;" onclick="publishTournament()">Publish New Tournament</button>
+</div>
 
-    <div class="grid-2">
-        <div class="form-group">
-            <label>New Start Date & Time</label>
-            <input type="datetime-local" id="admin_start_date" style="width: 100%; padding: 10px; background: #0d0f12; color: #fff; border: 1px solid #30363d; border-radius: 6px;">
-        </div>
-        <div class="form-group">
-            <label>New End / Deadline Date</label>
-            <input type="datetime-local" id="admin_end_date" style="width: 100%; padding: 10px; background: #0d0f12; color: #fff; border: 1px solid #30363d; border-radius: 6px;">
+<div class="card" style="margin-top: 20px;">
+    <h3 style="color: #ff3e3e; font-size: 1rem; margin-bottom: 10px;">Active Tournaments Control Panel</h3>
+    <div class="form-group">
+        <div id="adminTourneyList" style="background: #0d0f12; padding: 10px; border-radius: 5px; border: 1px solid #333;">
+            <!-- Dynamically populated list -->
         </div>
     </div>
-
-    <button id="btn-save-tourney" type="button" class="submit-btn" style="background: #238636; margin-top: 10px;">Publish Tournament Settings</button>
-        </div>
-        
-        <div class="card">
+</div>
+            
             <h3 style="color: #ff3e3e; font-size: 1rem; margin-bottom: 10px;">Update Tournament Standings</h3>
             <div class="form-group"><textarea id="admin_standings_text" rows="4" placeholder="Enter score table or standings text here..."></textarea></div>
             <button id="btn-save-standings" type="button" class="submit-btn" style="background: #238636;">Update Standings</button>
@@ -347,32 +357,39 @@
             }
         });
 
-        // 2. SAVE TOURNAMENT INFO
+        // 2. SAVE NEW TOURNAMENT
 document.getElementById('btn-save-tourney').addEventListener('click', async () => {
-    const title = document.getElementById('admin_tourney_title').value;
-    const details = document.getElementById('admin_tourney_details').value;
-    const maxSquads = document.getElementById('admin_max_squads').value;
-    const regOverride = document.getElementById('admin_reg_override').value;
-    const startDate = document.getElementById('admin_start_date').value;
-    const endDate = document.getElementById('admin_end_date').value;
+    const title = document.getElementById('tourneyTitle').value;
+    const mode = document.getElementById('tourneyMode').value;
+    const details = document.getElementById('tourneyDetails').value;
+    const maxSquads = document.getElementById('tourneyMaxSquad').value;
+    const startDate = document.getElementById('tourneyStartDate').value;
+    const endDate = document.getElementById('tourneyEndDate').value;
 
-    if (!title) return alert("Please enter a Tournament Title!");
+    if (!title || !mode) {
+        alert("Please enter a Tournament Title and select a Game Mode!");
+        return;
+    }
 
     try {
-        await setDoc(doc(db, "settings", "tournament"), {
+        const tourneyId = 'tourney_' + Date.now();
+        await setDoc(doc(db, "tournaments", tourneyId), {
+            id: tourneyId,
             title: title,
+            mode: mode,
             details: details,
             maxSquads: maxSquads ? parseInt(maxSquads) : 0,
-            regOverride: regOverride,
             startDate: startDate,
-            endDate: endDate
-        }, { merge: true });
-        alert("SUCCESS: Tournament Rescheduled & Published Live!");
+            endDate: endDate,
+            createdAt: new Date().toISOString()
+        });
+        alert("SUCCESS: New Tournament Published Live!");
+        location.reload();
     } catch (err) {
         alert("ERROR Saving Tournament: " + err.message);
     }
 });
-        
+                
 
         // 3. SAVE STANDINGS
         document.getElementById('btn-save-standings').addEventListener('click', async () => {
@@ -392,6 +409,69 @@ document.getElementById('btn-save-champions').addEventListener('click', async ()
         alert("SUCCESS: Champions Crowned Live!");
     } catch (err) {
         alert("ERROR Saving Champions: " + err.message);
+    }
+});
+// 2.5 REAL-TIME ACTIVE TOURNAMENTS LIST & ADMIN CONTROLS
+onSnapshot(collection(db, "tournaments"), (snapshot) => {
+    const adminList = document.getElementById('adminTourneyList');
+    
+    if (adminList) {
+        adminList.innerHTML = snapshot.empty ? '<p style="color:#8b9494; text-align:center;">No active tournaments.</p>' : '';
+        
+        snapshot.forEach((docSnap) => {
+            const t = docSnap.data();
+            const id = docSnap.id;
+
+            adminList.innerHTML += `
+                <div style="background: #1a1a1a; padding: 10px; margin-bottom: 8px; border-radius: 5px; border: 1px solid #333;">
+                    <p style="color: #fff; margin: 0 0 5px 0;"><strong>${t.title}</strong> (${t.mode})</p>
+                    <p style="color: #aaa; font-size: 12px; margin: 0 0 8px 0;">Maps: ${t.details || 'Standard'} | Ends: ${t.endDate || 'TBD'}</p>
+                    <button class="btn-crown" data-id="${id}" data-title="${t.title}" data-mode="${t.mode}" style="background: #ffc107; color: #000; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px; font-weight: bold; margin-right: 5px;">Crown Winner</button>
+                    <button class="btn-delete-tourney" data-id="${id}" style="background: #da3633; color: #fff; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px; font-weight: bold;">Delete</button>
+                </div>
+            `;
+        });
+
+        // Delete Tournament Event Listeners
+        document.querySelectorAll('.btn-delete-tourney').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const id = e.target.getAttribute('data-id');
+                if (confirm("Are you sure you want to delete this tournament?")) {
+                    try {
+                        await deleteDoc(doc(db, "tournaments", id));
+                        alert("Tournament deleted successfully.");
+                    } catch (err) {
+                        alert("Failed to delete: " + err.message);
+                    }
+                }
+            });
+        });
+
+        // Crown Winner Event Listeners (Archives to Hall of Fame & Clears Active Tourney)
+        document.querySelectorAll('.btn-crown').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const id = e.target.getAttribute('data-id');
+                const title = e.target.getAttribute('data-title');
+                const mode = e.target.getAttribute('data-mode');
+
+                const winnerName = prompt(`Enter winning team/player name for "${title}":`);
+                if (!winnerName) return;
+
+                try {
+                    await addDoc(collection(db, "hallOfFame"), {
+                        tournamentTitle: title,
+                        mode: mode,
+                        winner: winnerName,
+                        crownedAt: new Date().toLocaleDateString()
+                    });
+
+                    await deleteDoc(doc(db, "tournaments", id));
+                    alert(`Successfully crowned ${winnerName}! Moved to Previous Tournaments Hall of Fame.`);
+                } catch (err) {
+                    alert("Error crowning winner: " + err.message);
+                }
+            });
+        });
     }
 });
         
