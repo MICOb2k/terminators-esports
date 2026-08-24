@@ -81,7 +81,12 @@
             <p style="text-align: center; color: #8b949e;">Standings will be updated once matches begin.</p>
         </div>
     </div>
-
+<!-- CHAMPIONS HALL OF FAME -->
+<h3 style="color: #ff3e3e; font-size: 1.1rem; margin: 20px 0 10px;">🏆 Hall of Fame - Champions</h3>
+<div id="champions-content" class="card">
+    <p style="text-align: center; color: #8b949e;">No champions crowned yet.</p>
+</div>
+    
     <!-- TEAMS TAB -->
     <div id="sec-teams" class="section">
         <h2>Registered Teams</h2>
@@ -183,7 +188,14 @@
             <div class="form-group"><input type="text" id="admin_youtube" placeholder="YouTube Channel Link"></div>
             <button id="btn-save-socials" type="button" class="submit-btn" style="background: #238636;">Save Social Links</button>
         </div>
-
+    <div class="card">
+        <h3 style="color: #ff3e3e; font-size: 1rem; margin-bottom: 10px;">Crown Tournament Champions</h3>
+        <div class="form-group">
+            <textarea id="admin_champions_text" rows="3" placeholder="Enter Champion Team Name, Captain, and Players..."></textarea>
+        </div>
+        <button id="btn-save-champions" type="button" class="submit-btn" style="background: #238636;">Publish Champions</button>
+    </div>
+        
         <h3 style="color: #fff; font-size: 1rem; margin: 15px 0 10px;">Registered Teams Database</h3>
         <div id="admin-teams-container"><p style="text-align: center; color: #8b949e;">Loading administrative squad data...</p></div>
     </div>
@@ -324,7 +336,17 @@
                 alert("ERROR Saving Standings: " + err.message);
             }
         });
-
+// 4. SAVE CHAMPIONS
+document.getElementById('btn-save-champions').addEventListener('click', async () => {
+    const text = document.getElementById('admin_champions_text').value;
+    try {
+        await setDoc(doc(db, "settings", "champions"), { text: text }, { merge: true });
+        alert("SUCCESS: Champions Crowned Live!");
+    } catch (err) {
+        alert("ERROR Saving Champions: " + err.message);
+    }
+});
+        
         // REALTIME SYNC LISTENERS
 onSnapshot(doc(db, "settings", "tournament"), (docSnap) => {
     const titleEl = document.getElementById('tourney-title');
@@ -359,7 +381,14 @@ onSnapshot(doc(db, "settings", "tournament"), (docSnap) => {
                 if(data.youtube) document.getElementById('link_youtube').href = data.youtube;
             }
         }, (err) => { console.error("Firestore Error:", err); });
-
+// REAL-TIME CHAMPIONS LISTENER
+onSnapshot(doc(db, "settings", "champions"), (docSnap) => {
+    if (docSnap.exists()) {
+        const data = docSnap.data();
+        document.getElementById('champions-content').innerHTML = `<pre style="white-space: pre-wrap; font-family: inherit; color: #fff; margin: 0;">${data.text}</pre>`;
+    }
+}, (err) => { console.error("Firestore Champions Error:", err); });
+        
         // SQUAD REGISTRATION
 document.getElementById('reg-form').addEventListener('submit', async function(e) {
     e.preventDefault();
