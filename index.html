@@ -416,7 +416,8 @@ document.getElementById('btn-save-champions').addEventListener('click', async ()
 });
 // 2.5 REAL-TIME ACTIVE TOURNAMENTS LIST & ADMIN CONTROLS
 onSnapshot(collection(db, "tournaments"), (snapshot) => {
-    const adminList = document.getElementBy'adminTourneyList');
+    const adminList = document.getElementById('adminTourneyList');
+    
     
     if (adminList) {
         adminList.innerHTML = snapshot.empty ? '<p style="color:#8b9494; text-align:center;">No active tournaments.</p>' : '';
