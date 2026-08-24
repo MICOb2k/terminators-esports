@@ -636,8 +636,8 @@ onSnapshot(collection(db, "registeredTeams"), (snapshot) => {
                     <img src="${t.logo}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
                     <div style="flex: 1;">
                         <h4 style="color: #ff333e; margin-bottom: 2px;">${t.name}</h4>
-                        <p style="color: #fff; font-size: 0.8rem;"><b>Roster:</b> ${t.p1?.igs || ''}, ${t.p2?.igs || ''}, ${t.p3?.igs || ''}, ${t.p4?.igs || ''}</p>
-                    </div>
+                        <p style="color: #fff; font-size: 0.8rem;"><b>Roster:</b> ${t.p1?.ign || t.p1 || ''}, ${t.p2?.ign || t.p2 || ''}, ${t.p3?.ign || t.p3 || ''}, ${t.p4?.ign || t.p4 || ''}</p>
+                        
                 </div>
             `;
         }
