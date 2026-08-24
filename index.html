@@ -619,9 +619,7 @@ document.getElementById('reg-form').addEventListener('submit', async function(e)
 });
 
 // REALTIME TEAMS LIST
-
 onSnapshot(collection(db, "registeredTeams"), (snapshot) => {
-
     const pub = document.getElementById('public-teams-container');
     const adn = document.getElementById('admin-teams-container');
 
@@ -632,98 +630,97 @@ onSnapshot(collection(db, "registeredTeams"), (snapshot) => {
         const t = docSnap.data();
         const docId = docSnap.id;
 
-        let subs = "";
-        if (t.sub1 && t.sub1.ign) subs += `, Sub1: ${t.sub1.ign}`;
-        if (t.sub2 && t.sub2.ign) subs += `, Sub2: ${t.sub2.ign}`;
-
         if (pub) {
             pub.innerHTML += `
                 <div class="card" style="display: flex; align-items: center; gap: 12px; text-align: left;">
-                    <img src="${t.logo}" style="width:50px; height:50px; border-radius:50%; object-fit:cover;">
+                    <img src="${t.logo}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
                     <div style="flex: 1;">
                         <h4 style="color: #ff333e; margin-bottom: 2px;">${t.name}</h4>
-                        <p style="color: #fff; font-size: 0.8rem;"><b>Roster:</b> ${t.p1.ign}, ${t.p2.ign}, ${t.p3.ign}, ${t.p4.ign}${subs}</p>
+                        <p style="color: #fff; font-size: 0.8rem;"><b>Roster:</b> ${t.p1?.igs || ''}, ${t.p2?.igs || ''}, ${t.p3?.igs || ''}, ${t.p4?.igs || ''}</p>
                     </div>
-                </div>`;
+                </div>
+            `;
         }
 
         if (adn) {
-    adn.innerHTML += `
-        <div style="background: #0d0f12; border: 1px solid ${t.disqualified ? '#da3633' : '#ff333e'}; border-radius: 8px; padding: 12px; margin-bottom: 10px;">
-            <div style="display: flex; align-items: center; gap: 12px;">
-                <img src="${t.logo}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
-                <div>
-                    <h4 style="color: #ff333e; font-size: 0.95rem;">${t.name} ${t.disqualified ? '<span style="color: #da3633; font-size: 0.8rem;">[DISQUALIFIED]</span>' : ''}</h4>
-                    <p style="color: #0b949e; font-size: 0.75rem;">Server: ${t.server} | Country: ${t.country}</p>
-                    <p style="color: #0b949e; font-size: 0.75rem;">Gmail: ${t.gmail} | WhatsApp: ${t.whatsapp}</p>
+            adn.innerHTML += `
+                <div style="background: #0d0f12; border: 1px solid ${t.disqualified ? '#da3633' : '#ff333e'}; border-radius: 8px; padding: 12px; margin-bottom: 10px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <img src="${t.logo}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                        <div>
+                            <h4 style="color: #ff333e; font-size: 0.95rem;">${t.name} ${t.disqualified ? '<span style="color: #da3633; font-size: 0.8rem;">[DISQUALIFIED]</span>' : ''}</h4>
+                            <p style="color: #0b949e; font-size: 0.75rem;">Server: ${t.server} | Country: ${t.country}</p>
+                            <p style="color: #0b949e; font-size: 0.75rem;">Gmail: ${t.gmail} | WhatsApp: ${t.whatsapp}</p>
+                        </div>
+                    </div>
+                    <div style="margin-top: 10px; display: flex; gap: 6px; flex-wrap: wrap;">
+                        <button class="btn-crown-team" data-name="${t.name}" data-logo="${t.logo}" style="background: #ffc107; color: #000; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Crown Winner</button>
+                        <button class="btn-disqualify" data-id="${docId}" data-status="${t.disqualified ? 'false' : 'true'}" style="background: ${t.disqualified ? '#28a745' : '#ff9800'}; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">${t.disqualified ? 'Re-admit' : 'Disqualify'}</button>
+                        <button class="btn-delete" data-id="${docId}" style="background: #da3633; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Delete</button>
+                    </div>
                 </div>
-            </div>
-            <div style="margin-top: 10px; display: flex; gap: 6px; flex-wrap: wrap;">
-                <button class="btn-crown-team" data-name="${t.name}" data-logo="${t.logo}" style="background: #ffc107; color: #000; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Crown Winner</button>
-                <button class="btn-disqualify" data-id="${docId}" data-status="${t.disqualified ? 'false' : 'true'}" style="background: ${t.disqualified ? '#28a745' : '#ff9800'}; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">${t.disqualified ? 'Re-admit' : 'Disqualify'}</button>
-                <button class="btn-delete" data-id="${docId}" style="background: #da3633; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Delete</button>
-            </div>
-        </div>
-    `;
+            `;
         }
-        
+    });
 
+    // Delete Squad Event Listener
     document.querySelectorAll('.btn-delete').forEach(btn => {
         btn.addEventListener('click', async (e) => {
             const id = e.target.getAttribute('data-id');
             if (confirm("Delete this squad from the database?")) {
-                try { 
-                    await deleteDoc(doc(db, "registeredTeams", id)); 
-                    alert("Squad deleted."); 
-                } catch (err) { 
-                    alert("Failed to delete: " + err.message); 
+                try {
+                    await deleteDoc(doc(db, "registeredTeams", id));
+                    alert("Squad deleted.");
+                } catch (err) {
+                    alert("Failed to delete: " + err.message);
                 }
             }
-// Crown Specific Squad as Winner Live
-document.querySelectorAll('.btn-crown-team').forEach(btn => {
-    btn.addEventListener('click', async (e) => {
-        const teamName = e.target.getAttribute('data-name');
-        const teamLogo = e.target.getAttribute('data-logo');
+        });
+    });
 
-        if (confirm(`Are you sure you want to crown ${teamName} as the tournament champion?`)) {
+    // Crown Specific Squad as Winner Live
+    document.querySelectorAll('.btn-crown-team').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            const teamName = e.target.getAttribute('data-name');
+            const teamLogo = e.target.getAttribute('data-logo');
+
+            if (confirm(`Are you sure you want to crown ${teamName} as the tournament champion?`)) {
+                try {
+                    await setDoc(doc(db, "settings", "champions"), {
+                        text: teamName,
+                        logo: teamLogo,
+                        crownedAt: new Date().toLocaleDateString()
+                    }, { merge: true });
+                    
+                    alert(`SUCCESS: ${teamName} is crowned champion live!`);
+                    location.reload();
+                } catch (err) {
+                    alert("ERROR crowning team: " + err.message);
+                }
+            }
+        });
+    });
+
+        // Toggle Public Disqualification Status
+    document.querySelectorAll('.btn-disqualify').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            const squadId = e.target.getAttribute('data-id');
+            const newStatus = e.target.getAttribute('data-status') === 'true';
+
             try {
-                await setDoc(doc(db, "settings", "champions"), {
-                    text: teamName,
-                    logo: teamLogo,
-                    crownedAt: new Date().toLocaleDateString()
+                await setDoc(doc(db, "registeredTeams", squadId), {
+                    disqualified: newStatus
                 }, { merge: true });
                 
-                alert(`SUCCESS: ${teamName} is crowned champion live!`);
+                alert(newStatus ? "Squad marked as Disqualified publicly." : "Squad re-admitted successfully.");
                 location.reload();
             } catch (err) {
-                alert("ERROR crowning team: " + err.message);
+                alert("ERROR updating status: " + err.message);
             }
-        }
+        });
     });
-});
 
-// Toggle Public Disqualification Status
-document.querySelectorAll('.btn-disqualify').forEach(btn => {
-    btn.addEventListener('click', async (e) => {
-        const squadId = e.target.getAttribute('data-id');
-        const newStatus = e.target.getAttribute('data-status') === 'true';
-
-        try {
-            await setDoc(doc(db, "registeredTeams", squadId), {
-                disqualified: newStatus
-            }, { merge: true });
-            
-            alert(newStatus ? "Squad marked as Disqualified publicly." : "Squad re-admitted successfully.");
-            location.reload();
-        } catch (err) {
-            alert("ERROR updating status: " + err.message);
-        }
-    });
-});
-            
-    });
 }, (err) => console.error("Firestore Teams Error:", err));
         
-    </script>
 </body>
 </html>
