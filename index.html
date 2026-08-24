@@ -630,16 +630,18 @@ onSnapshot(collection(db, "registeredTeams"), (snapshot) => {
         const t = docSnap.data();
         const docId = docSnap.id;
 
-        if (pub) {
+                if (pub) {
             pub.innerHTML += `
                 <div class="card" style="display: flex; align-items: center; gap: 12px; text-align: left;">
                     <img src="${t.logo}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
                     <div style="flex: 1;">
                         <h4 style="color: #ff333e; margin-bottom: 2px;">${t.name}</h4>
                         <p style="color: #fff; font-size: 0.8rem;"><b>Roster:</b> ${t.p1?.ign || t.p1 || ''}, ${t.p2?.ign || t.p2 || ''}, ${t.p3?.ign || t.p3 || ''}, ${t.p4?.ign || t.p4 || ''}</p>
-                        
+                    </div>
                 </div>
             `;
+        }
+        
         }
 
         if (adn) {
