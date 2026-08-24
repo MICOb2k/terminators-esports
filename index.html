@@ -168,12 +168,47 @@
         <h2>Admin Control Panel (MICO)</h2>
         
         <div class="card">
-            <h3 style="color: #ff3e3e; font-size: 1rem; margin-bottom: 10px;">Active Tournament Settings</h3>
-            <div class="form-group"><label>Tournament Title</label><input type="text" id="admin_tourney_title" placeholder="e.g., Free Fire League Season 1"></div>
-            <div class="form-group"><label>Status & Details</label><input type="text" id="admin_tourney_details" placeholder="e.g., Registration Open | 48 Slots"></div>
-            <button id="btn-save-tourney" type="button" class="submit-btn" style="background: #238636;">Publish Tournament Info</button>
-        </div>
+    <h3 style="color: #ff3e3e; font-size: 1rem; margin-bottom: 10px;">Active Tournament Settings</h3>
+    
+    <div class="form-group">
+        <label>Tournament Title</label>
+        <input type="text" id="admin_tourney_title" placeholder="Tournament Name...">
+    </div>
+    
+    <div class="form-group">
+        <label>Status & Details / Announcement</label>
+        <input type="text" id="admin_tourney_details" placeholder="e.g. Maps: Bermuda & Kalahari">
+    </div>
 
+    <div class="grid-2">
+        <div class="form-group">
+            <label>Max Squad Limit</label>
+            <input type="number" id="admin_max_squads" placeholder="e.g. 16">
+        </div>
+        <div class="form-group">
+            <label>Registration Mode</label>
+            <select id="admin_reg_override" style="width: 100%; padding: 10px; background: #0d0f12; color: #fff; border: 1px solid #30363d; border-radius: 6px;">
+                <option value="auto">Auto (Managed by Dates)</option>
+                <option value="open">Force Open (Override)</option>
+                <option value="postponed">Postponed / Paused</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="form-group">
+            <label>New Start Date & Time</label>
+            <input type="datetime-local" id="admin_start_date" style="width: 100%; padding: 10px; background: #0d0f12; color: #fff; border: 1px solid #30363d; border-radius: 6px;">
+        </div>
+        <div class="form-group">
+            <label>New End / Deadline Date</label>
+            <input type="datetime-local" id="admin_end_date" style="width: 100%; padding: 10px; background: #0d0f12; color: #fff; border: 1px solid #30363d; border-radius: 6px;">
+        </div>
+    </div>
+
+    <button id="btn-save-tourney" type="button" class="submit-btn" style="background: #238636; margin-top: 10px;">Publish Tournament Settings</button>
+        </div>
+        
         <div class="card">
             <h3 style="color: #ff3e3e; font-size: 1rem; margin-bottom: 10px;">Update Tournament Standings</h3>
             <div class="form-group"><textarea id="admin_standings_text" rows="4" placeholder="Enter score table or standings text here..."></textarea></div>
@@ -313,18 +348,31 @@
         });
 
         // 2. SAVE TOURNAMENT INFO
-        document.getElementById('btn-save-tourney').addEventListener('click', async () => {
-            const title = document.getElementById('admin_tourney_title').value;
-            const details = document.getElementById('admin_tourney_details').value;
-            if (!title) return alert("Please enter a Tournament Title!");
+document.getElementById('btn-save-tourney').addEventListener('click', async () => {
+    const title = document.getElementById('admin_tourney_title').value;
+    const details = document.getElementById('admin_tourney_details').value;
+    const maxSquads = document.getElementById('admin_max_squads').value;
+    const regOverride = document.getElementById('admin_reg_override').value;
+    const startDate = document.getElementById('admin_start_date').value;
+    const endDate = document.getElementById('admin_end_date').value;
 
-            try {
-                await setDoc(doc(db, "settings", "tournament"), { title: title, details: details }, { merge: true });
-                alert("SUCCESS: Tournament Info Published Live!");
-            } catch (err) {
-                alert("ERROR Saving Tournament: " + err.message + "\n\nMake sure Firebase Rules are published!");
-            }
-        });
+    if (!title) return alert("Please enter a Tournament Title!");
+
+    try {
+        await setDoc(doc(db, "settings", "tournament"), {
+            title: title,
+            details: details,
+            maxSquads: maxSquads ? parseInt(maxSquads) : 0,
+            regOverride: regOverride,
+            startDate: startDate,
+            endDate: endDate
+        }, { merge: true });
+        alert("SUCCESS: Tournament Rescheduled & Published Live!");
+    } catch (err) {
+        alert("ERROR Saving Tournament: " + err.message);
+    }
+});
+        
 
         // 3. SAVE STANDINGS
         document.getElementById('btn-save-standings').addEventListener('click', async () => {
@@ -347,22 +395,58 @@ document.getElementById('btn-save-champions').addEventListener('click', async ()
     }
 });
         
-        // REALTIME SYNC LISTENERS
+        
+// REAL-TIME TOURNAMENT & DEADLINE GUARD
 onSnapshot(doc(db, "settings", "tournament"), (docSnap) => {
     const titleEl = document.getElementById('tourney-title');
     const detailsEl = document.getElementById('tourney-details');
     const regInput = document.getElementById('regTourneyName');
-    
+    const regForm = document.getElementById('reg-form');
+
     if (docSnap.exists()) {
         const data = docSnap.data();
-        if (titleEl) titleEl.innerText = data.title || "Terminators Championship";
-        if (detailsEl) detailsEl.innerText = data.details || "Registration is open!";
-        if (regInput) regInput.value = data.title || "Terminators Championship";
-    } else {
-        if (titleEl) titleEl.innerText = "No Active Tournament";
-        if (detailsEl) detailsEl.innerText = "Check back soon for upcoming events.";
+        if (titleEl) titleEl.innerText = data.title || 'Terminators Championship';
+        if (regInput) regInput.value = data.title || 'Terminators Championship';
+
+        const now = new Date().getTime();
+        let statusText = data.details || 'Registration is open!';
+        let isRegistrationClosed = false;
+
+        // Check postponement or active schedule rules
+        if (data.regOverride === 'postponed') {
+            statusText = "⚠️ Tournament Postponed / Rescheduling in Progress.";
+            isRegistrationClosed = true;
+        } else if (data.regOverride === 'open') {
+            statusText = data.details || 'Registration is open!';
+        } else {
+            if (data.startDate && now < new Date(data.startDate).getTime()) {
+                statusText = "⏳ Registration Has Not Started Yet.";
+                isRegistrationClosed = true;
+            } else if (data.endDate && now > new Date(data.endDate).getTime()) {
+                statusText = "❌ Registration Ended! Unable to register.";
+                isRegistrationClosed = true;
+            }
+        }
+
+        if (detailsEl) detailsEl.innerText = statusText;
+
+        if (regForm) {
+            const submitBtn = regForm.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                if (isRegistrationClosed) {
+                    submitBtn.innerText = "Registration Closed";
+                    submitBtn.disabled = true;
+                    submitBtn.style.background = "#30363d";
+                } else {
+                    submitBtn.innerText = "Submit Registration";
+                    submitBtn.disabled = false;
+                    submitBtn.style.background = "#238636";
+                }
+            }
+        }
     }
 }, (err) => { console.error("Firestore Error:", err); });
+
         
 
         onSnapshot(doc(db, "settings", "standings"), (docSnap) => {
