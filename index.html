@@ -359,17 +359,20 @@
 
         // 2. SAVE NEW TOURNAMENT
 document.getElementById('btn-save-tourney').addEventListener('click', async () => {
-    const title = document.getElementById('tourneyTitle').value;
-    const mode = document.getElementById('tourneyMode').value;
+    const title = document.getElementById('admin_tourney_title').value;
+    const mode = document.getElementById('admin_reg_override').value;
+
     const details = document.getElementById('tourneyDetails').value;
     const maxSquads = document.getElementById('tourneyMaxSquad').value;
     const startDate = document.getElementById('tourneyStartDate').value;
     const endDate = document.getElementById('tourneyEndDate').value;
 
-    if (!title || !mode) {
-        alert("Please enter a Tournament Title and select a Game Mode!");
+        if (!title) {
+        alert("Please enter a Tournament Title!");
         return;
-    }
+        }
+    
+    
 
     try {
         const tourneyId = 'tourney_' + Date.now();
@@ -413,7 +416,7 @@ document.getElementById('btn-save-champions').addEventListener('click', async ()
 });
 // 2.5 REAL-TIME ACTIVE TOURNAMENTS LIST & ADMIN CONTROLS
 onSnapshot(collection(db, "tournaments"), (snapshot) => {
-    const adminList = document.getElementById('adminTourneyList');
+    const adminList = document.getElementBy'adminTourneyList');
     
     if (adminList) {
         adminList.innerHTML = snapshot.empty ? '<p style="color:#8b9494; text-align:center;">No active tournaments.</p>' : '';
