@@ -630,7 +630,7 @@ onSnapshot(collection(db, "registeredTeams"), (snapshot) => {
         const t = docSnap.data();
         const docId = docSnap.id;
 
-                if (pub) {
+                        if (pub) {
             pub.innerHTML += `
                 <div class="card" style="display: flex; align-items: center; gap: 12px; text-align: left;">
                     <img src="${t.logo}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
