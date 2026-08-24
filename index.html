@@ -374,38 +374,22 @@ document.getElementById('reg-form').addEventListener('submit', async function(e)
     const val = (id) => document.getElementById(id)?.value?.trim() || "";
 
     try {
-        submitBtn.innerText = "Compressing Logo...";
-        submitBtn.disabled = true;
+    submitBtn.innerText = "Processing Logo...";
+    submitBtn.disabled = true;
 
-        const compressedLogo = await new Promise((resolve, reject) => {
-            const img = new Image();
-            const objectUrl = URL.createObjectURL(file);
+    const compressedLogo = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            resolve(e.target.result);
+        };
+        reader.onerror = function() {
+            resolve(""); 
+        };
+        reader.readAsDataURL(file);
+    });
 
-            img.onload = function() {
-                try {
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 250;
-                    const scale = MAX_WIDTH / img.width;
-                    canvas.width = MAX_WIDTH;
-                    canvas.height = img.height * scale;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    const dataUrl = canvas.toDataURL('image/png');
-                    URL.revokeObjectURL(objectUrl);
-                    resolve(dataUrl);
-                } catch (err) { reject(err); }
-            };
-
-            img.onerror = function() {
-                URL.revokeObjectURL(objectUrl);
-                reject(new Error("Failed to process image. Try another photo."));
-            };
-
-            img.src = objectUrl;
-        });
-
-        submitBtn.innerText = "Uploading Team Data...";
-
+    submitBtn.innerText = "Uploading Team Data...";
+        
         const teamData = {
             tournament: val('regTourneyName') || val('regTournayName') || "Terminators Championship",
             server: val('ffServer'),
