@@ -24,7 +24,7 @@
         .glow-accent { box-shadow: 0 0 20px rgba(0, 255, 136, 0.2); }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center pb-12">
+<body class="min-h-screen flex flex-col items-center pb-24">
 
     <!-- App Shell Container -->
     <div class="w-full max-w-md mx-auto p-4 space-y-6">
@@ -35,13 +35,13 @@
                 <h1 class="text-xl font-black tracking-wider text-white uppercase flex items-center gap-2">
                     <i class="fa-solid fa-crosshairs text-accent"></i> Terminators
                 </h1>
-                <p class="text-xs text-gray-400">Founder & Dir: M I C O</p>
+                <p class="text-xs text-gray-400">Founded by M I C O</p>
             </div>
             <div class="flex items-center gap-2">
-                <button onclick="openAdminPanel()" class="bg-gray-800 hover:bg-gray-700 text-accent p-2.5 rounded-xl border border-gray-700 transition">
+                <button onclick="openAdminPanel()" class="bg-gray-800 hover:bg-gray-700 text-accent p-2.5 rounded-xl border border-gray-700 transition" title="Admin Panel">
                     <i class="fa-solid fa-shield-halved"></i>
                 </button>
-                <button onclick="openRegisterModal()" class="bg-accent hover:bg-emerald-400 text-dark font-extrabold px-4 py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
+                <button onclick="switchTab('register')" class="bg-accent hover:bg-emerald-400 text-dark font-extrabold px-4 py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
                     Register Team
                 </button>
             </div>
@@ -72,116 +72,162 @@
             </div>
         </div>
 
-        <!-- Championship Arenas Selector -->
-        <div class="space-y-3">
-            <div class="flex justify-between items-center">
-                <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Select Championship Arena</h2>
-                <span id="arenaDates" class="text-[10px] text-gray-500 font-mono"></span>
-            </div>
-            <div id="tourneyTabs" class="flex gap-2 overflow-x-auto pb-1">
-                <!-- Dynamically populated tourney tabs -->
-            </div>
-        </div>
-
-        <!-- Active Arena Info Card -->
-        <div class="bg-gradient-to-br from-dark to-darker p-5 rounded-2xl border border-gray-800 relative overflow-hidden">
-            <div class="absolute -right-6 -bottom-6 opacity-5 text-8xl pointer-events-none">
-                <i class="fa-solid fa-trophy"></i>
-            </div>
-            <span class="text-[10px] uppercase font-bold tracking-widest bg-accent/10 text-accent px-2 py-1 rounded-md">Active Arena</span>
-            <h3 id="activeTourneyName" class="text-lg font-black text-white mt-2">No Active Tournament</h3>
-            <p id="activeTourneyPrize" class="text-xs text-gray-400 mt-1">Please wait for the Director to publish an arena.</p>
-        </div>
-
-        <!-- Live Stream Embed Section -->
-        <div id="liveStreamContainer" class="hidden bg-dark p-3 rounded-2xl border border-gray-800 space-y-2">
-            <p class="text-xs font-bold text-red-400 uppercase flex items-center gap-2">
-                <i class="fa-solid fa-video animate-pulse"></i> Live Stream Broadcast
-            </p>
-            <div class="relative w-full aspect-video rounded-xl overflow-hidden bg-black border border-gray-800">
-                <iframe id="liveStreamIframe" class="w-full h-full" src="" frameborder="0" allowfullscreen></iframe>
-            </div>
-        </div>
-
-        <!-- Custom Room Slot Bookings -->
-        <div class="space-y-3">
-            <div class="flex justify-between items-center">
-                <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Custom Room Slot Bookings</h2>
-                <span id="slotCountInfo" class="text-xs text-gray-500">0 Available Slots</span>
-            </div>
-            <div id="slotsContainer" class="space-y-2.5">
-                <!-- Dynamically populated slots -->
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Registration Modal -->
-    <div id="registerModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-dark border border-gray-800 w-full max-w-md max-h-[90vh] overflow-y-auto rounded-3xl p-6 space-y-4">
-            <div class="flex justify-between items-center border-b border-gray-800 pb-3">
-                <h3 id="modalTourneyTitle" class="font-black text-white uppercase text-sm">Register For Tournament</h3>
-                <button onclick="closeRegisterModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
+        <!-- ================= PAGE TAB 1: STANDINGS & ARENAS ================= -->
+        <div id="pageStandings" class="space-y-6">
+            <!-- Championship Arenas Selector -->
             <div class="space-y-3">
-                <div>
-                    <label class="text-[10px] uppercase font-bold text-gray-400">Team Name</label>
-                    <input type="text" id="regTeamName" placeholder="e.g. Apex Terminators" class="w-full bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white text-xs mt-1">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Select Championship Arena</h2>
+                    <span id="arenaDates" class="text-[10px] text-gray-500 font-mono"></span>
                 </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="text-[10px] uppercase font-bold text-gray-400">Preferred Slot (1-12)</label>
-                        <input type="number" id="regSlotNum" min="1" max="12" value="1" class="w-full bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white text-xs mt-1">
-                    </div>
-                    <div>
-                        <label class="text-[10px] uppercase font-bold text-gray-400">Game Server</label>
-                        <select id="regServer" class="w-full bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white text-xs mt-1">
-                            <option value="Africa">Africa Server</option>
-                            <option value="Middle East">Middle East</option>
-                            <option value="India">India Server</option>
-                            <option value="Pakistan">Pakistan</option>
-                            <option value="Bangladesh">Bangladesh</option>
-                            <option value="Europe">Europe Server</option>
-                            <option value="South America">South America</option>
-                            <option value="Global / Other">Global / Other</option>
-                        </select>
-                    </div>
+                <div id="tourneyTabs" class="flex gap-2 overflow-x-auto pb-1">
+                    <!-- Dynamically populated tourney tabs -->
                 </div>
-                <div>
-                    <label class="text-[10px] uppercase font-bold text-gray-400">Team Logo</label>
-                    <input type="file" id="regLogoFile" accept="image/*" class="w-full bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white text-xs mt-1">
-                </div>
+            </div>
 
-                <!-- Team Leader Details -->
-                <div class="bg-darker/60 p-3 rounded-xl border border-emerald-500/20 space-y-2">
-                    <p class="text-[10px] uppercase font-black text-emerald-400">Team Leader Details (Contact Hidden Publicly)</p>
-                    <div class="grid grid-cols-2 gap-2">
-                        <input type="text" id="regLeaderIgn" placeholder="Leader IGN" class="bg-dark border border-gray-700 rounded-xl px-3 py-2 text-white text-xs">
-                        <input type="text" id="regLeaderUid" placeholder="Leader UID" class="bg-dark border border-gray-700 rounded-xl px-3 py-2 text-white text-xs">
-                    </div>
-                    <input type="text" id="regLeaderContact" placeholder="Leader Contact (Gmail / WhatsApp No / Discord Tag)" class="w-full bg-dark border border-gray-700 rounded-xl px-3 py-2 text-white text-xs">
+            <!-- Active Arena Info Card -->
+            <div class="bg-gradient-to-br from-dark to-darker p-5 rounded-2xl border border-gray-800 relative overflow-hidden">
+                <div class="absolute -right-6 -bottom-6 opacity-5 text-8xl pointer-events-none">
+                    <i class="fa-solid fa-trophy"></i>
                 </div>
+                <span class="text-[10px] uppercase font-bold tracking-widest bg-accent/10 text-accent px-2 py-1 rounded-md">Active Arena</span>
+                <h3 id="activeTourneyName" class="text-lg font-black text-white mt-2">No Active Tournament</h3>
+                <p id="activeTourneyPrize" class="text-xs text-gray-400 mt-1">Please wait for the Director to publish an arena.</p>
+            </div>
 
-                <!-- Main Roster -->
-                <div class="space-y-2">
-                    <p class="text-[10px] uppercase font-bold text-gray-400">Main Roster (4 Players)</p>
-                    <div class="grid grid-cols-2 gap-2"><input type="text" id="regP1Ign" placeholder="Player 1 IGN" class="bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white text-xs"><input type="text" id="regP1Uid" placeholder="Player 1 UID" class="bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white text-xs"></div>
-                    <div class="grid grid-cols-2 gap-2"><input type="text" id="regP2Ign" placeholder="Player 2 IGN" class="bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white text-xs"><input type="text" id="regP2Uid" placeholder="Player 2 UID" class="bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white text-xs"></div>
-                    <div class="grid grid-cols-2 gap-2"><input type="text" id="regP3Ign" placeholder="Player 3 IGN" class="bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white text-xs"><input type="text" id="regP3Uid" placeholder="Player 3 UID" class="bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white text-xs"></div>
-                    <div class="grid grid-cols-2 gap-2"><input type="text" id="regP4Ign" placeholder="Player 4 IGN" class="bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white text-xs"><input type="text" id="regP4Uid" placeholder="Player 4 UID" class="bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white text-xs"></div>
+            <!-- Custom Room Slot Bookings -->
+            <div class="space-y-3">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Custom Room Slot Bookings</h2>
+                    <span id="slotCountInfo" class="text-xs text-gray-500">0 Available Slots</span>
                 </div>
-
-                <!-- Substitutes -->
-                <div class="space-y-2">
-                    <p class="text-[10px] uppercase font-bold text-gray-400">Substitutes (2 Players)</p>
-                    <div class="grid grid-cols-2 gap-2"><input type="text" id="regSub1Ign" placeholder="Sub 1 IGN" class="bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white text-xs"><input type="text" id="regSub1Uid" placeholder="Sub 1 UID" class="bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white text-xs"></div>
-                    <div class="grid grid-cols-2 gap-2"><input type="text" id="regSub2Ign" placeholder="Sub 2 IGN" class="bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white text-xs"><input type="text" id="regSub2Uid" placeholder="Sub 2 UID" class="bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white text-xs"></div>
+                <div id="slotsContainer" class="space-y-2.5">
+                    <!-- Dynamically populated slots -->
                 </div>
-
-                <button onclick="submitTeamRegistration()" class="w-full bg-accent hover:bg-emerald-400 text-dark font-black py-3 rounded-xl uppercase text-xs tracking-wider transition">Confirm Registration</button>
             </div>
         </div>
+
+        <!-- ================= PAGE TAB 2: TEAMS DIRECTORY ================= -->
+        <div id="pageTeams" class="space-y-4 hidden">
+            <div class="flex justify-between items-center">
+                <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Registered Squads & Roster</h2>
+                <span id="totalRegisteredCount" class="text-xs text-accent font-bold">0 Squads Registered</span>
+            </div>
+            <div id="allTeamsContainer" class="space-y-3">
+                <!-- Dynamically populated registered squads -->
+            </div>
+        </div>
+
+        <!-- ================= PAGE TAB 3: REGISTER SQUAD ================= -->
+        <div id="pageRegister" class="space-y-4 hidden">
+            <div class="bg-dark border border-gray-800 rounded-3xl p-5 space-y-4">
+                <div class="border-b border-gray-800 pb-3 flex justify-between items-center">
+                    <h3 id="modalTourneyTitle" class="font-black text-white uppercase text-sm">Register For Tournament</h3>
+                    <button onclick="switchTab('standings')" class="text-gray-400 hover:text-white text-xs"><i class="fa-solid fa-arrow-left mr-1"></i> Back</button>
+                </div>
+                <div class="space-y-3 text-xs">
+                    <div>
+                        <label class="text-[10px] uppercase font-bold text-gray-400">Team Name</label>
+                        <input type="text" id="regTeamName" placeholder="e.g. Apex Terminators" class="w-full bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white mt-1">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-[10px] uppercase font-bold text-gray-400">Preferred Slot (1-12)</label>
+                            <input type="number" id="regSlotNum" min="1" max="12" value="1" class="w-full bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white mt-1">
+                        </div>
+                        <div>
+                            <label class="text-[10px] uppercase font-bold text-gray-400">Game Server</label>
+                            <select id="regServer" class="w-full bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white mt-1">
+                                <option value="Africa">Africa Server</option>
+                                <option value="Middle East">Middle East</option>
+                                <option value="India">India Server</option>
+                                <option value="Pakistan">Pakistan</option>
+                                <option value="Bangladesh">Bangladesh</option>
+                                <option value="Europe">Europe Server</option>
+                                <option value="South America">South America</option>
+                                <option value="Global / Other">Global / Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] uppercase font-bold text-gray-400">Team Logo</label>
+                        <input type="file" id="regLogoFile" accept="image/*" class="w-full bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white mt-1">
+                    </div>
+
+                    <!-- Team Leader Details -->
+                    <div class="bg-darker/60 p-3 rounded-xl border border-emerald-500/20 space-y-2">
+                        <p class="text-[10px] uppercase font-black text-emerald-400">Team Leader Details (Contact Hidden Publicly)</p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="regLeaderIgn" placeholder="Leader IGN" class="bg-dark border border-gray-700 rounded-xl px-3 py-2 text-white">
+                            <input type="text" id="regLeaderUid" placeholder="Leader UID" class="bg-dark border border-gray-700 rounded-xl px-3 py-2 text-white">
+                        </div>
+                        <input type="text" id="regLeaderContact" placeholder="Leader Contact (WhatsApp No / Discord Tag)" class="w-full bg-dark border border-gray-700 rounded-xl px-3 py-2 text-white">
+                    </div>
+
+                    <!-- Main Roster -->
+                    <div class="space-y-2">
+                        <p class="text-[10px] uppercase font-bold text-gray-400">Main Roster (4 Players)</p>
+                        <div class="grid grid-cols-2 gap-2"><input type="text" id="regP1Ign" placeholder="Player 1 IGN" class="bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white"><input type="text" id="regP1Uid" placeholder="Player 1 UID" class="bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white"></div>
+                        <div class="grid grid-cols-2 gap-2"><input type="text" id="regP2Ign" placeholder="Player 2 IGN" class="bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white"><input type="text" id="regP2Uid" placeholder="Player 2 UID" class="bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white"></div>
+                        <div class="grid grid-cols-2 gap-2"><input type="text" id="regP3Ign" placeholder="Player 3 IGN" class="bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white"><input type="text" id="regP3Uid" placeholder="Player 3 UID" class="bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white"></div>
+                        <div class="grid grid-cols-2 gap-2"><input type="text" id="regP4Ign" placeholder="Player 4 IGN" class="bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white"><input type="text" id="regP4Uid" placeholder="Player 4 UID" class="bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white"></div>
+                    </div>
+
+                    <!-- Substitutes -->
+                    <div class="space-y-2">
+                        <p class="text-[10px] uppercase font-bold text-gray-400">Substitutes (2 Players)</p>
+                        <div class="grid grid-cols-2 gap-2"><input type="text" id="regSub1Ign" placeholder="Sub 1 IGN" class="bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white"><input type="text" id="regSub1Uid" placeholder="Sub 1 UID" class="bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white"></div>
+                        <div class="grid grid-cols-2 gap-2"><input type="text" id="regSub2Ign" placeholder="Sub 2 IGN" class="bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white"><input type="text" id="regSub2Uid" placeholder="Sub 2 UID" class="bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white"></div>
+                    </div>
+
+                    <button onclick="submitTeamRegistration()" class="w-full bg-accent hover:bg-emerald-400 text-dark font-black py-3 rounded-xl uppercase tracking-wider transition">Confirm Registration</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PAGE TAB 4: LIVE BROADCAST ================= -->
+        <div id="pageLive" class="space-y-4 hidden">
+            <div class="flex justify-between items-center">
+                <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Official Live Broadcast</h2>
+                <span class="text-[10px] bg-red-950/80 text-red-400 border border-red-500/30 px-2 py-0.5 rounded-full font-bold animate-pulse flex items-center gap-1">
+                    <i class="fa-solid fa-circle text-[8px]"></i> LIVE FEED
+                </span>
+            </div>
+            
+            <div id="liveStreamContainer" class="bg-dark p-3 rounded-2xl border border-gray-800 space-y-2">
+                <div class="relative w-full aspect-video rounded-xl overflow-hidden bg-black border border-gray-800 flex items-center justify-center">
+                    <iframe id="liveStreamIframe" class="w-full h-full" src="" frameborder="0" allowfullscreen></iframe>
+                    <div id="noStreamPlaceholder" class="absolute inset-0 flex flex-col items-center justify-center text-gray-500 text-xs space-y-2 p-4 text-center">
+                        <i class="fa-solid fa-video-slash text-2xl text-gray-600"></i>
+                        <p class="font-bold text-gray-400">No active live broadcast stream right now.</p>
+                        <p class="text-[10px] text-gray-500">The Director (Admin) will launch the live broadcast feed shortly before match kickoff.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-dark/95 backdrop-blur-md border-t border-gray-800 px-4 py-3 flex justify-around items-center z-40">
+        <button onclick="switchTab('standings')" id="navBtn-standings" class="flex flex-col items-center gap-1 text-accent transition">
+            <i class="fa-solid fa-trophy text-sm"></i>
+            <span class="text-[10px] font-bold uppercase">Standings</span>
+        </button>
+        <button onclick="switchTab('teams')" id="navBtn-teams" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white transition">
+            <i class="fa-solid fa-users text-sm"></i>
+            <span class="text-[10px] font-bold uppercase">Teams</span>
+        </button>
+        <button onclick="switchTab('register')" id="navBtn-register" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white transition">
+            <i class="fa-solid fa-file-pen text-sm"></i>
+            <span class="text-[10px] font-bold uppercase">Register</span>
+        </button>
+        <button onclick="switchTab('live')" id="navBtn-live" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white transition relative">
+            <i class="fa-solid fa-tower-broadcast text-sm"></i>
+            <span class="text-[10px] font-bold uppercase">Live Broadcast</span>
+            <span id="liveDot" class="absolute top-0 right-2 w-2 h-2 bg-red-500 rounded-full hidden"></span>
+        </button>
+    </nav>
 
     <!-- Admin Panel Modal -->
     <div id="adminModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
@@ -197,7 +243,7 @@
                 <div class="bg-darker p-3 rounded-xl border border-gray-800 space-y-2">
                     <p class="font-bold text-white uppercase">1. Create New Tournament</p>
                     <input type="text" id="adminTourneyNameInput" placeholder="Tournament Name" class="w-full bg-dark border border-gray-700 rounded-xl px-3 py-2 text-white">
-                    <input type="text" id="adminTourneyPrizeInput" placeholder="Prize Pool (e.g. ₦50,000)" class="w-full bg-dark border border-gray-700 rounded-xl px-3 py-2 text-white">
+                    <input type="text" id="adminTourneyPrizeInput" placeholder="Prize Pool (Leave blank for Pride Match)" class="w-full bg-dark border border-gray-700 rounded-xl px-3 py-2 text-white">
                     <div class="grid grid-cols-2 gap-2">
                         <div>
                             <label class="text-[10px] text-gray-400">Start Date</label>
@@ -229,11 +275,15 @@
                     <button onclick="updateSocialLinks()" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-2 rounded-xl uppercase">Save Social Links</button>
                 </div>
 
-                <!-- 4. Live Stream -->
-                <div class="bg-darker p-3 rounded-xl border border-gray-800 space-y-2">
-                    <p class="font-bold text-white uppercase">4. Set Live Stream Embed URL</p>
+                <!-- 4. Live Stream Control (Admin Only) -->
+                <div class="bg-darker p-3 rounded-xl border border-red-500/30 space-y-2">
+                    <p class="font-bold text-red-400 uppercase flex items-center gap-1.5"><i class="fa-solid fa-lock"></i> 4. Admin Live Broadcast Studio</p>
+                    <p class="text-[10px] text-gray-400">Paste your stream embed URL (YouTube live embed link, or screen broadcast source) to instantly stream live to all users on the Live Broadcast tab.</p>
                     <input type="text" id="adminStreamUrl" placeholder="e.g. https://www.youtube.com/embed/VIDEO_ID" class="w-full bg-dark border border-gray-700 rounded-xl px-3 py-2 text-white">
-                    <button onclick="updateStreamUrl()" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded-xl uppercase">Update Live Stream</button>
+                    <div class="flex gap-2">
+                        <button onclick="updateStreamUrl()" class="flex-1 bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded-xl uppercase">Start / Update Stream</button>
+                        <button onclick="stopStreamUrl()" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-2 rounded-xl font-bold uppercase">End Stream</button>
+                    </div>
                 </div>
 
                 <!-- 5. Crown Winner -->
@@ -277,6 +327,40 @@
             initTournamentsListener();
         });
 
+        // Tab Switching Mechanism
+        function switchTab(tabName) {
+            document.getElementById('pageStandings').classList.add('hidden');
+            document.getElementById('pageTeams').classList.add('hidden');
+            document.getElementById('pageRegister').classList.add('hidden');
+            document.getElementById('pageLive').classList.add('hidden');
+
+            ['standings', 'teams', 'register', 'live'].forEach(t => {
+                const btn = document.getElementById(`navBtn-${t}`);
+                if (btn) btn.className = "flex flex-col items-center gap-1 text-gray-400 hover:text-white transition relative";
+            });
+
+            if (tabName === 'standings') {
+                document.getElementById('pageStandings').classList.remove('hidden');
+                document.getElementById('navBtn-standings').className = "flex flex-col items-center gap-1 text-accent transition relative";
+            } else if (tabName === 'teams') {
+                document.getElementById('pageTeams').classList.remove('hidden');
+                document.getElementById('navBtn-teams').className = "flex flex-col items-center gap-1 text-accent transition relative";
+                renderAllTeamsDirectory();
+            } else if (tabName === 'register') {
+                if (!activeTournamentId) {
+                    alert("No active tournament available for registration right now!");
+                    switchTab('standings');
+                    return;
+                }
+                document.getElementById('pageRegister').classList.remove('hidden');
+                document.getElementById('navBtn-register').className = "flex flex-col items-center gap-1 text-accent transition relative";
+                document.getElementById('modalTourneyTitle').innerText = `Register For ${tournamentsCache[activeTournamentId]?.name || 'Tournament'}`;
+            } else if (tabName === 'live') {
+                document.getElementById('pageLive').classList.remove('hidden');
+                document.getElementById('navBtn-live').className = "flex flex-col items-center gap-1 text-accent transition relative";
+            }
+        }
+
         function initGlobalConfigListener() {
             db.collection('settings').doc('config').onSnapshot(doc => {
                 if (doc.exists) {
@@ -285,9 +369,16 @@
                         document.getElementById('broadcastContainer').classList.remove('hidden');
                         document.getElementById('broadcastText').innerText = data.broadcast;
                     }
-                                        if (data.streamUrl) {
-                        document.getElementById('liveStreamContainer').classList.remove('hidden');
+                    if (data.streamUrl && data.streamUrl.trim() !== '') {
                         document.getElementById('liveStreamIframe').src = data.streamUrl;
+                        document.getElementById('liveStreamIframe').classList.remove('hidden');
+                        document.getElementById('noStreamPlaceholder').classList.add('hidden');
+                        document.getElementById('liveDot').classList.remove('hidden');
+                    } else {
+                        document.getElementById('liveStreamIframe').src = '';
+                        document.getElementById('liveStreamIframe').classList.add('hidden');
+                        document.getElementById('noStreamPlaceholder').classList.remove('hidden');
+                        document.getElementById('liveDot').classList.add('hidden');
                     }
                     if (data.whatsapp) document.getElementById('socWhatsapp').href = data.whatsapp;
                     if (data.tiktok) document.getElementById('socTiktok').href = data.tiktok;
@@ -363,7 +454,10 @@
             if (!activeTournamentId || !tournamentsCache[activeTournamentId]) return;
             const t = tournamentsCache[activeTournamentId];
             document.getElementById('activeTourneyName').innerText = t.name;
-            document.getElementById('activeTourneyPrize').innerText = `Prize Pool: ${t.prize}`;
+            
+            // Pride Match Fallback Support
+            const prizeText = (t.prize && t.prize.trim() !== '') ? t.prize : 'Pride Match';
+            document.getElementById('activeTourneyPrize').innerText = `Prize Pool: ${prizeText}`;
             document.getElementById('arenaDates').innerText = t.startDate && t.endDate ? `${t.startDate} ➔ ${t.endDate}` : '';
             
             const tabs = document.getElementById('tourneyTabs').children;
@@ -469,187 +563,51 @@
             chevron.classList.toggle('rotate-180');
         }
 
-        function openRegisterModal() {
-            if (!activeTournamentId) { alert("No tournament is currently active! Please wait for the Director to publish an arena."); return; }
-            document.getElementById('modalTourneyTitle').innerText = `Register For ${tournamentsCache[activeTournamentId]?.name || 'Tournament'}`;
-            document.getElementById('registerModal').classList.remove('hidden');
-        }
         function openRegisterModalForSlot(slotNum) {
-            if (!activeTournamentId) { alert("No tournament is currently active!"); return; }
+            if (!activeTournamentId) { alert("No active tournament!"); return; }
             document.getElementById('regSlotNum').value = slotNum;
-            openRegisterModal();
+            switchTab('register');
         }
-        function closeRegisterModal() { document.getElementById('registerModal').classList.add('hidden'); }
 
-        function submitTeamRegistration() {
-            if (!activeTournamentId) return alert("No active tournament.");
-            const teamName = document.getElementById('regTeamName').value.trim();
-            const slotNum = parseInt(document.getElementById('regSlotNum').value);
-            const server = document.getElementById('regServer').value;
-            const leaderIgn = document.getElementById('regLeaderIgn').value.trim();
-            const leaderUid = document.getElementById('regLeaderUid').value.trim();
-            const leaderContact = document.getElementById('regLeaderContact').value.trim();
-
-            if (!teamName || !leaderIgn || !leaderUid || !leaderContact) {
-                alert("Please fill in the Team Name and all Team Leader details!");
+        function renderAllTeamsDirectory() {
+            const container = document.getElementById('allTeamsContainer');
+            container.innerHTML = '<p class="text-xs text-gray-500 text-center py-4">Loading teams...</p>';
+            if (!activeTournamentId) {
+                container.innerHTML = '<p class="text-xs text-gray-500 text-center py-4">No active tournament selected.</p>';
+                document.getElementById('totalRegisteredCount').innerText = "0 Squads Registered";
                 return;
             }
 
-            const fileInput = document.getElementById('regLogoFile');
-
-            const saveData = (finalLogo) => {
-                db.collection('tournaments').doc(activeTournamentId).collection('slots').where('slotNum', '==', slotNum).get().then(snapshot => {
-                    if (!snapshot.empty) {
-                        alert(`Slot #${slotNum} is already booked! Choose another slot.`);
-                        return;
-                    }
-                    db.collection('tournaments').doc(activeTournamentId).collection('slots').add({
-                        slotNum,
-                        teamName,
-                        server,
-                        logoUrl: finalLogo || "",
-                        leaderIgn,
-                        leaderUid,
-                        leaderContact,
-                        p1Ign: document.getElementById('regP1Ign').value,
-                        p1Uid: document.getElementById('regP1Uid').value,
-                        p2Ign: document.getElementById('regP2Ign').value,
-                        p2Uid: document.getElementById('regP2Uid').value,
-                        p3Ign: document.getElementById('regP3Ign').value,
-                        p3Uid: document.getElementById('regP3Uid').value,
-                        p4Ign: document.getElementById('regP4Ign').value,
-                        p4Uid: document.getElementById('regP4Uid').value,
-                        sub1Ign: document.getElementById('regSub1Ign').value,
-                        sub2Ign: document.getElementById('regSub2Ign').value,
-                        disqualified: false,
-                        winner: false
-                    }).then(() => {
-                        alert("Team Registered Successfully!");
-                        closeRegisterModal();
-                    });
-                });
-            };
-
-            if (fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = new Image();
-                    img.src = e.target.result;
-                    img.onload = function() {
-                        const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-                        canvas.width = 100; canvas.height = 100;
-                        ctx.drawImage(img, 0, 0, 100, 100);
-                        saveData(canvas.toDataURL('image/jpeg', 0.7));
-                    };
-                };
-                reader.readAsDataURL(fileInput.files[0]);
-            } else {
-                saveData("");
-            }
-        }
-
-        function openAdminPanel() {
-            const pin = prompt("Enter Director Admin PIN:");
-            if (pin === "2060") {
-                isAdminLoggedIn = true;
-                document.getElementById('adminModal').classList.remove('hidden');
-                updateActiveArenaDisplay();
-            } else if (pin !== null) {
-                alert("Incorrect PIN!");
-            }
-        }
-        function closeAdminPanel() { document.getElementById('adminModal').classList.add('hidden'); }
-
-        function createNewTournament() {
-            const name = document.getElementById('adminTourneyNameInput').value.trim();
-            const prize = document.getElementById('adminTourneyPrizeInput').value.trim();
-            const startDate = document.getElementById('adminStartDateInput').value;
-            const endDate = document.getElementById('adminEndDateInput').value;
-            if (!name) return alert("Enter tournament name!");
             
-            db.collection('tournaments').add({
-                name,
-                prize: prize || "Pride Match",
-                startDate,
-                endDate,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(docRef => {
-                activeTournamentId = docRef.id;
-                alert("Tournament Arena Published!");
-                document.getElementById('adminTourneyNameInput').value = '';
-                document.getElementById('adminTourneyPrizeInput').value = '';
-                closeAdminPanel();
-            });
-        }
-
-        function deleteActiveTournament() {
-            if (!activeTournamentId) return alert("No active tournament selected.");
-            if (confirm("Are you sure you want to delete this tournament and all its registered squads?")) {
-                db.collection('tournaments').doc(activeTournamentId).delete().then(() => {
-                    alert("Tournament deleted.");
-                    activeTournamentId = null;
-                    closeAdminPanel();
-                });
-            }
-        }
-
-        function updateBroadcastMessage() {
-            const msg = document.getElementById('adminBroadcastInput').value.trim();
-            db.collection('settings').doc('config').set({ broadcast: msg }, { merge: true }).then(() => alert("Ticker broadcasted!"));
-        }
-
-        function updateSocialLinks() {
-            db.collection('settings').doc('config').set({
-                whatsapp: document.getElementById('adminWhatsapp').value.trim(),
-                tiktok: document.getElementById('adminTiktok').value.trim(),
-                discord: document.getElementById('adminDiscord').value.trim(),
-                youtube: document.getElementById('adminYoutube').value.trim()
-            }, { merge: true }).then(() => alert("Social links updated!"));
-        }
-
-        function updateStreamUrl() {
-            let url = document.getElementById('adminStreamUrl').value.trim();
-            if (url.includes('watch?v=')) url = url.replace('watch?v=', 'embed/');
-            db.collection('settings').doc('config').set({ streamUrl: url }, { merge: true }).then(() => alert("Live stream updated!"));
-        }
-
-        function crownWinner() {
-            if (!activeTournamentId) return;
-            const slotNum = parseInt(document.getElementById('adminWinnerSlot').value);
-            db.collection('tournaments').doc(activeTournamentId).collection('slots').where('slotNum', '==', slotNum).get().then(snapshot => {
-                if (snapshot.empty) return alert("No team registered in this slot number!");
-                db.collection('tournaments').doc(activeTournamentId).collection('slots').get().then(allSlots => {
-                    const batch = db.batch();
-                    allSlots.forEach(doc => {
-                        batch.update(doc.ref, { winner: doc.data().slotNum === slotNum });
-                    });
-                    batch.commit().then(() => alert(`Slot #${slotNum} crowned Grand Champion!`));
+        db.collection('tournaments').doc(activeTournamentId).collection('slots').get().then(snapshot => {
+                container.innerHTML = '';
+                if (snapshot.empty) {
+                    container.innerHTML = '<p class="text-xs text-gray-500 text-center py-4">No squads registered for this arena yet.</p>';
+                    document.getElementById('totalRegisteredCount').innerText = "0 Squads Registered";
+                    return;
+                }
+                document.getElementById('totalRegisteredCount').innerText = `${snapshot.size} Squads Registered`;
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const card = document.createElement('div');
+                    card.className = "bg-dark border border-gray-800 p-4 rounded-2xl space-y-2 text-xs";
+                    card.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-darker border border-gray-700 overflow-hidden flex items-center justify-center">
+                                    ${data.logoUrl ? `<img src="${data.logoUrl}" class="w-full h-full object-cover">` : '<i class="fa-solid fa-shield text-gray-600"></i>'}
+                                </div>
+                                <div>
+                                    <p class="font-extrabold text-white text-sm">${data.teamName}</p>
+                                    <p class="text-gray-400">Slot #${data.slotNum} • Server: <span class="text-accent">${data.server || 'Africa'}</span></p>
+                                </div>
+                            </div>
+                            <span class="text-[10px] bg-darker border border-gray-700 px-2 py-1 rounded-lg text-gray-300 font-bold">Leader: ${data.leaderIgn || 'N/A'}</span>
+                        </div>
+                    `;
+                    container.appendChild(card);
                 });
             });
-        }
-
-        function resetCurrentSlots() {
-            if (!activeTournamentId) return;
-            if (confirm("Reset all slots and winner for this tournament?")) {
-                db.collection('tournaments').doc(activeTournamentId).collection('slots').get().then(snapshot => {
-                    const batch = db.batch();
-                    snapshot.forEach(doc => batch.delete(doc.ref));
-                    batch.commit().then(() => alert("Slots reset successfully!"));
-                });
-            }
-        }
-
-        function adminDisqualifySlot(docId, status) {
-            db.collection('tournaments').doc(activeTournamentId).collection('slots').doc(docId).update({ disqualified: status })
-                .then(() => alert(status ? "Squad disqualified publicly." : "Disqualification lifted."));
-        }
-
-        function adminDeleteSlot(docId) {
-            if (confirm("Delete this squad from the slot?")) {
-                db.collection('tournaments').doc(activeTournamentId).collection('slots').doc(docId).delete()
-                    .then(() => alert("Squad removed from slot."));
-            }
         }
     </script>
 </body>
