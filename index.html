@@ -323,15 +323,20 @@
         let activeTournamentId = null;
         let isAdminLoggedIn = false;
 function createNewTournament() {
-    const name = document.getElementById('adminTourneyNameInput').value.trim();
-    const prize = document.getElementById('adminTourneyPrizeInput').value.trim();
-    const startDate = document.getElementById('adminStartDateInput').value;
-    const endDate = document.getElementById('adminEndDateInput').value;
+    const nameInput = document.getElementById('adminTourneyNameInput');
+    const prizeInput = document.getElementById('adminTourneyPrizeInput');
+    const startDateInput = document.getElementById('adminStartDateInput');
+    const endDateInput = document.getElementById('adminEndDateInput');
 
-    if (!name) {
+    if (!nameInput || !nameInput.value.trim()) {
         alert("Please enter a tournament name!");
         return;
     }
+
+    const name = nameInput.value.trim();
+    const prize = prizeInput ? prizeInput.value.trim() : "";
+    const startDate = startDateInput ? startDateInput.value : "";
+    const endDate = endDateInput ? endDateInput.value : "";
 
     db.collection('tournaments').add({
         name: name,
@@ -341,13 +346,15 @@ function createNewTournament() {
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
     }).then(() => {
         alert("Tournament Published Successfully!");
-        document.getElementById('adminTourneyNameInput').value = '';
-        document.getElementById('adminTourneyPrizeInput').value = '';
-        document.getElementById('adminStartDateInput').value = '';
-        document.getElementById('adminEndDateInput').value = '';
+        nameInput.value = '';
+        if (prizeInput) prizeInput.value = '';
+        if (startDateInput) startDateInput.value = '';
+        if (endDateInput) endDateInput.value = '';
     }).catch((error) => {
         console.error("Error publishing tournament: ", error);
         alert("Error publishing tournament. Check console.");
+    });
+
     });
         
         window.addEventListener('DOMContentLoaded', () => {
