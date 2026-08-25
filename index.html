@@ -322,7 +322,34 @@
         let tournamentsCache = {};
         let activeTournamentId = null;
         let isAdminLoggedIn = false;
+function createNewTournament() {
+    const name = document.getElementById('adminTourneyNameInput').value.trim();
+    const prize = document.getElementById('adminTourneyPrizeInput').value.trim();
+    const startDate = document.getElementById('adminStartDateInput').value;
+    const endDate = document.getElementById('adminEndDateInput').value;
 
+    if (!name) {
+        alert("Please enter a tournament name!");
+        return;
+    }
+
+    db.collection('tournaments').add({
+        name: name,
+        prize: prize,
+        startDate: startDate,
+        endDate: endDate,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(() => {
+        alert("Tournament Published Successfully!");
+        document.getElementById('adminTourneyNameInput').value = '';
+        document.getElementById('adminTourneyPrizeInput').value = '';
+        document.getElementById('adminStartDateInput').value = '';
+        document.getElementById('adminEndDateInput').value = '';
+    }).catch((error) => {
+        console.error("Error publishing tournament: ", error);
+        alert("Error publishing tournament. Check console.");
+    });
+        
         window.addEventListener('DOMContentLoaded', () => {
             initGlobalConfigListener();
             initTournamentsListener();
