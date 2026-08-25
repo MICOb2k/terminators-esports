@@ -3,260 +3,290 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terminators E-Sports | Multi-Tournament Command Engine</title>
-    <!-- Tailwind CSS CDN -->
+    <title>TERMINATORS E-SPORTS | Championship Hub</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
-            darkMode: "class",
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        darker: "#030d16",
-                        dark: "#0f172a",
-                        card: "#1e293b",
-                        neon: "#10b981",
-                        neonGlow: '#059669',
-                        accent: '#6366f1',
-                        danger: '#ef4444',
-                        gold: '#f59e0b'
+                        dark: '#030d16',
+                        darker: '#01060b',
+                        card: '#0a192f',
+                        neon: '#10b981',
+                        neonHover: '#059669'
                     }
                 }
             }
         }
     </script>
-    <!-- FontAwesome Icons -->
+    <!-- FontAwesome & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Firebase App & Cloud Firestore SDKs (Compat v9) -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #030d16; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #10b981; }
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); }
-            50% { box-shadow: 0 0 30px rgba(245, 158, 11, 0.8); }
-        }
-        .champion-card {
-            animation: glow 2s infinite ease-in-out;
-            border: 2px solid #f59e0b !important;
-        }
+        body { font-family: 'Inter', sans-serif; background-color: #030d16; color: #f3f4f6; }
+        h1, h2, h3, .e-font { font-family: 'Rajdhani', sans-serif; }
+        .champion-card { background: linear-gradient(135deg, #0a192f 0%, #113523 100%); border: 2px solid #10b981; }
     </style>
 </head>
-<body class="bg-darker text-gray-100 font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-neon selection:text-black">
+<body class="min-h-screen flex flex-col">
 
-    <!-- LIVE ADMIN FLASH BROADCAST BANNER -->
-    <div class="bg-gradient-to-r from-neon via-accent to-neon text-black font-bold text-xs py-2 px-4 shadow-lg overflow-hidden">
-        <div class="whitespace-nowrap">
-            <i class="fa-solid fa-bullhorn mr-2"></i><span id="broadcastText">WELCOME TO TERMINATORS E-SPORTS MULTI-TOURNAMENT LEAGUE — FOUNDED BY M I C O</span>
+    <!-- Navbar -->
+    <header class="bg-darker border-b border-gray-800 sticky top-0 z-50 px-4 py-3 flex justify-between items-center shadow-xl">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-neon/10 border border-neon/50 flex items-center justify-center text-neon shadow-lg shadow-neon/20">
+                <i class="fa-solid fa-crosshairs text-lg"></i>
+            </div>
+            <div>
+                <h1 class="text-lg font-black tracking-wider text-white e-font">TERMINATORS</h1>
+                <p class="text-[10px] text-gray-400 tracking-widest uppercase">FOUNDER & DIR: M I C O</p>
+            </div>
         </div>
-    </div>
-
-    <!-- NAVIGATION BAR -->
-    <header class="sticky top-0 z-50 bg-darker/95 backdrop-blur-md border-b border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-11 h-11 bg-gradient-to-tr from-neon to-accent rounded-2xl flex items-center justify-center shadow-lg shadow-neon/20">
-                    <i class="fa-solid fa-crosshairs text-black text-xl font-black"></i>
-                </div>
-                <div>
-                    <span class="text-xl sm:text-2xl font-black tracking-wider bg-gradient-to-r from-white via-gray-200 to-neon bg-clip-text text-transparent">TERMINATORS</span>
-                    <span class="block text-[10px] text-gray-400 font-mono tracking-widest uppercase">Founder & Dir: M I C O</span>
-                </div>
-            </div>
-
-            <nav class="hidden xl:flex items-center space-x-5 font-medium text-xs text-gray-300">
-                <a href="#tournaments" class="hover:text-neon transition">Tournaments Hub</a>
-                <a href="#stream" class="hover:text-neon transition">Live Stream & Screen Share</a>
-                <a href="#slots" class="hover:text-neon transition">Slot Booker</a>
-            </nav>
-
-            <div class="flex items-center space-x-2">
-                <button onclick="promptAdminAccess()" class="hidden sm:flex items-center gap-1.5 text-xs px-3 py-2 bg-card hover:bg-gray-700 border border-gray-700 rounded-xl transition text-amber-400">
-                    <i class="fa-solid fa-lock text-amber-400"></i> Admin Portal
-                </button>
-                <button onclick="openRegisterModal()" class="bg-neon hover:bg-emerald-600 text-black font-bold px-4 py-2.5 rounded-xl text-xs shadow-lg shadow-neon/20 transition transform active:scale-95">
-                    Register Team
-                </button>
-            </div>
+        <div class="flex items-center space-x-2">
+            <!-- Admin Login Button -->
+            <button onclick="promptAdminAccess()" class="bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/40 px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 shadow-lg">
+                <i class="fa-solid fa-user-shield"></i>
+                <span class="hidden sm:inline">Admin</span>
+            </button>
+            <button onclick="openRegisterModal()" class="bg-neon hover:bg-neonHover text-black font-black px-4 py-2 rounded-xl text-xs uppercase tracking-wider transition shadow-lg shadow-neon/20">
+                Register Team
+            </button>
         </div>
     </header>
 
-    <!-- TOURNAMENTS SELECTOR HUB -->
-    <section id="tournaments" class="py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full space-y-4">
-        <div class="flex justify-between items-end flex-wrap gap-4">
-            <div>
-                <span class="text-xs uppercase font-mono text-neon tracking-widest">Active Multi-Tournament Engine</span>
-                <h2 class="text-2xl sm:text-3xl font-black tracking-tight">Select Championship Arena</h2>
-            </div>
-            <div id="tournamentTabsContainer" class="flex flex-wrap gap-2 font-mono text-xs">
-                <!-- Populated dynamically via Firestore -->
-            </div>
-        </div>
+    <!-- Global Live Broadcast Banner -->
+    <div id="broadcastBannerContainer" class="bg-neon/10 border-y border-neon/30 text-neon px-4 py-2 text-xs font-bold text-center tracking-wide uppercase truncate">
+        <i class="fa-solid fa-bullhorn mr-2"></i> <span id="broadcastText">Loading live tournament intelligence...</span>
+    </div>
 
-        <!-- Current Tournament Banner Card -->
-        <div id="currentTournamentInfoCard" class="bg-card border border-gray-800 rounded-3xl p-6 shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-                <span id="activeTourneyBadge" class="bg-neon/20 text-neon text-[10px] font-bold px-3 py-1 rounded-full border border-neon/30 uppercase">Active Arena</span>
-                <h3 id="activeTourneyTitle" class="text-xl sm:text-2xl font-black text-white mt-2">Loading Tournament...</h3>
-                <p id="activeTourneyStatus" class="text-xs text-gray-400 mt-1">Select a tournament above to view live slots, prize pools, and permanent winners.</p>
-            </div>
-            <div class="flex items-center gap-4 bg-dark px-5 py-3 rounded-2xl border border-gray-800">
-                <div>
-                    <span class="text-[10px] text-gray-400 block uppercase font-mono">Prize Pool</span>
-                    <span id="activeTourneyPrize" class="text-amber-400 font-bold text-sm">Loading...</span>
-                </div>
+    <!-- Social Media Connect Bar -->
+    <div class="bg-darker border-b border-gray-800 px-4 py-2.5">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs">
+            <span class="text-gray-400 font-bold uppercase tracking-wider e-font flex items-center"><i class="fa-solid fa-share-nodes text-neon mr-2"></i> Connect & Follow:</span>
+            <div id="socialLinksContainer" class="flex items-center space-x-3">
+                <a id="socWhatsapp" href="#" target="_blank" class="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-lg font-bold flex items-center space-x-1.5 transition"><i class="fa-brands fa-whatsapp text-sm"></i><span>WhatsApp</span></a>
+                <a id="socTiktok" href="#" target="_blank" class="bg-pink-500/10 hover:bg-pink-500/20 text-pink-400 border border-pink-500/30 px-3 py-1 rounded-lg font-bold flex items-center space-x-1.5 transition"><i class="fa-brands fa-tiktok text-sm"></i><span>TikTok</span></a>
+                <a id="socDiscord" href="#" target="_blank" class="bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 px-3 py-1 rounded-lg font-bold flex items-center space-x-1.5 transition"><i class="fa-brands fa-discord text-sm"></i><span>Discord</span></a>
+                <a id="socYoutube" href="#" target="_blank" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 px-3 py-1 rounded-lg font-bold flex items-center space-x-1.5 transition"><i class="fa-brands fa-youtube text-sm"></i><span>YouTube</span></a>
+                <a id="socTelegram" href="#" target="_blank" class="bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 border border-sky-500/30 px-3 py-1 rounded-lg font-bold flex items-center space-x-1.5 transition"><i class="fa-brands fa-telegram text-sm"></i><span>Telegram</span></a>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- PERMANENT WINNERS HISTORY SECTION -->
-    <section id="winnersHistory" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pb-6">
-        <div id="winnerDisplayContainer" class="hidden bg-gradient-to-r from-amber-500/10 via-card to-amber-500/10 border-2 border-amber-500/50 rounded-3xl p-6 shadow-2xl relative overflow-hidden">
-            <div class="absolute -right-16 -top-16 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl"></div>
-            <div class="flex flex-col sm:flex-row items-center gap-6 relative z-10">
-                <div id="winnerLogoContainer" class="w-20 h-20 rounded-2xl bg-dark border-2 border-amber-500 flex items-center justify-center shadow-xl overflow-hidden shrink-0">
-                    <i class="fa-solid fa-crown text-amber-500 text-3xl"></i>
-                </div>
-                <div class="text-center sm:text-left space-y-1">
-                    <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-500/20 text-amber-400 text-xs font-bold font-mono border border-amber-500/30">
-                        <i class="fa-solid fa-trophy"></i> PERMANENT TOURNAMENT CHAMPION
-                    </div>
-                    <h4 id="winnerTeamName" class="text-2xl font-black text-amber-400">Team Name</h4>
-                    <p id="winnerDetails" class="text-xs text-gray-300 font-mono">Leader: M I C O &bull; Crowned Slot #4</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 space-y-6">
 
-    <!-- LIVE STREAM & MOBILE SCREEN SHARE THEATER -->
-    <section id="stream" class="py-14 bg-dark/40 border-y border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-            <div class="flex justify-between items-end flex-wrap gap-4">
-                <div>
-                    <h2 class="text-2xl sm:text-3xl font-black tracking-tight">Live Broadcast Theater</h2>
-                    <p class="text-gray-400 text-sm mt-1">Stream your phone screen directly to your audience from your mobile browser.</p>
-                </div>
-                <button onclick="toggleMobileBroadcast()" class="bg-accent hover:bg-indigo-600 text-white font-bold px-4 py-2 rounded-xl text-xs transition flex items-center gap-2 shadow-lg">
-                    <i class="fa-solid fa-mobile-screen-button"></i> Start Phone Screen Broadcast
-                </button>
-            </div>
-
-            <div class="bg-card border border-gray-800 rounded-3xl overflow-hidden shadow-2xl aspect-video relative flex items-center justify-center bg-black">
-                <iframe id="defaultStreamFrame" class="w-full h-full absolute inset-0" src="https://www.youtube-nocookie.com/embed/live_stream?channel=UC_X_EXAMPLE" title="Live Stream" allowfullscreen></iframe>
-                <video id="localScreenVideo" autoplay playsinline muted class="w-full h-full object-contain absolute inset-0 hidden z-10 bg-black"></video>
-            </div>
-        </div>
-    </section>
-
-    <!-- AUTOMATED ROOM SLOT BOOKING SYSTEM -->
-    <section id="slots" class="py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full space-y-6">
-        <div class="flex justify-between items-end flex-wrap gap-4">
-            <div>
-                <h2 class="text-2xl sm:text-3xl font-black tracking-tight">Custom Room Slot Booker</h2>
-                <p class="text-gray-400 text-sm mt-1">Global Cloud Firestore slots syncing live for the selected tournament.</p>
-            </div>
-            <button onclick="openRegisterModal()" class="bg-neon hover:bg-emerald-600 text-black font-bold px-4 py-2 rounded-xl text-xs transition shadow-md">
-                <i class="fa-solid fa-user-plus mr-1"></i> Register New Team
-            </button>
-        </div>
-
-        <!-- Slot Grid -->
-        <div id="slotGridContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 font-mono text-xs">
-            <!-- Rendered via Firestore Real-Time Listener -->
-        </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="bg-darker border-t border-gray-800 py-8 text-center text-xs text-gray-500">
-        <p>&copy; 2026 Terminators E-Sports. Founded & Directed by M I C O &bull; All Rights Reserved.</p>
-    </footer>
-
-    <!-- REGISTRATION MODAL WITH COMPRESSED LOGO UPLOAD -->
-    <div id="registerModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-card border border-gray-700 w-full max-w-md rounded-3xl p-6 space-y-4 shadow-2xl relative">
+        <!-- Tournament Selector Bar -->
+        <section class="space-y-3">
             <div class="flex justify-between items-center">
-                <h3 id="modalTourneyTitle" class="text-lg font-bold text-white">Register Squad</h3>
-                <button onclick="closeRegisterModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <h2 class="text-sm font-bold uppercase tracking-wider text-gray-400 e-font">Select Championship Arena</h2>
             </div>
-            <form id="teamRegisterForm" onsubmit="handleTeamRegistration(event)" class="space-y-4">
+            <div id="tournamentTabsContainer" class="flex overflow-x-auto space-x-2 pb-2 scrollbar-none">
+                <!-- Injected dynamically -->
+            </div>
+        </section>
+
+        <!-- Active Tournament Header Card -->
+        <section class="bg-card border border-gray-800 rounded-3xl p-6 shadow-2xl relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 text-neon/5 text-9xl pointer-events-none">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative z-10">
                 <div>
-                    <label class="block text-xs text-gray-400 mb-1 font-mono">Team Name</label>
-                    <input type="text" id="regTeamName" required placeholder="e.g. Apex Terminators" class="w-full bg-dark border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-neon">
+                    <span class="bg-neon/20 text-neon text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-neon/30">Active Arena</span>
+                    <h3 id="activeTourneyTitle" class="text-2xl md:text-3xl font-black text-white mt-2 e-font">Loading Tournament...</h3>
+                    <p id="activeTourneyPrize" class="text-xs text-gray-400 mt-1">Prize Pool: Loading...</p>
                 </div>
+            </div>
+        </section>
+
+        <!-- Permanent Winner History Card -->
+        <div id="winnerDisplayContainer" class="hidden">
+            <div class="champion-card rounded-3xl p-6 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center space-x-4">
+                    <div id="winnerLogoContainer" class="w-16 h-16 rounded-2xl bg-dark border-2 border-amber-500 flex items-center justify-center overflow-hidden shadow-xl shrink-0">
+                        <i class="fa-solid fa-crown text-amber-500 text-3xl"></i>
+                    </div>
+                    <div>
+                        <span class="bg-amber-500 text-black text-[10px] font-black px-2.5 py-0.5 rounded uppercase tracking-widest">Grand Champion Crowned</span>
+                        <h4 id="winnerTeamName" class="text-2xl font-black text-amber-400 mt-1 e-font">Team Name</h4>
+                        <p id="winnerDetails" class="text-xs text-gray-300">Leader & Details</p>
+                    </div>
+                </div>
+                <div class="text-right hidden md:block">
+                    <i class="fa-solid fa-award text-amber-500/30 text-6xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom Room Slots Grid (12 Slots) -->
+        <section class="space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-black tracking-wider uppercase e-font">Custom Room Slot Bookings</h3>
+                <span class="text-xs text-gray-400">12 Available Slots</span>
+            </div>
+            <div id="slotGridContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <!-- Dynamically populated slots -->
+            </div>
+        </section>
+
+        <!-- Live Broadcast Theater -->
+        <section class="bg-card border border-gray-800 rounded-3xl p-6 shadow-2xl space-y-4">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                 <div>
-                    <label class="block text-xs text-gray-400 mb-1 font-mono">Team Leader Name / IGN</label>
-                    <input type="text" id="regLeaderName" required placeholder="e.g. M I C O" class="w-full bg-dark border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-neon">
+                    <h3 class="text-lg font-black uppercase tracking-wider e-font">Live Stream Broadcast Theater</h3>
+                    <p class="text-xs text-gray-400">Watch the official tournament match stream live.</p>
                 </div>
+                <span class="bg-red-500/10 text-red-400 border border-red-500/30 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest animate-pulse">
+                    <i class="fa-solid fa-circle text-[8px] mr-1"></i> Live Feed
+                </span>
+            </div>
+            <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-darker border border-gray-800">
+                <iframe id="liveStreamIframe" class="w-full h-full border-0" src="https://www.youtube.com/embed/live_stream?channel=YOUR_CHANNEL_ID" allowfullscreen></iframe>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Team Registration Modal -->
+    <div id="registerModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-card border border-gray-800 w-full max-w-xl rounded-3xl p-6 shadow-2xl relative my-8">
+            <button onclick="closeRegisterModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 id="modalTourneyTitle" class="text-xl font-black uppercase tracking-wider mb-4 e-font">Register Team Roster</h3>
+            
+            <form id="teamRegisterForm" onsubmit="handleTeamRegistration(event)" class="space-y-4 max-h-[75vh] overflow-y-auto pr-2">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[10px] uppercase font-bold text-gray-400 mb-1">Team Name</label>
+                        <input type="text" id="regTeamName" required placeholder="e.g. Apex Terminators" class="w-full bg-dark border border-gray-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-neon">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase font-bold text-gray-400 mb-1">Preferred Slot Number (1-12)</label>
+                        <input type="number" id="regSlotNumber" min="1" max="12" required value="1" class="w-full bg-dark border border-gray-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-neon">
+                    </div>
+                </div>
+
                 <div>
-                    <label class="block text-xs text-gray-400 mb-1 font-mono">Preferred Slot Number (1-12)</label>
-                    <input type="number" id="regSlotNumber" min="1" max="12" required placeholder="1" class="w-full bg-dark border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-neon">
+                    <label class="block text-[10px] uppercase font-bold text-gray-400 mb-1">Team Logo (Auto-Compressed)</label>
+                    <input type="file" id="regLogoFile" accept="image/*" class="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-neon file:text-black hover:file:bg-neonHover cursor-pointer">
                 </div>
-                <div>
-                    <label class="block text-xs text-gray-400 mb-1 font-mono">Team Logo (Auto-Compressed)</label>
-                    <input type="file" id="regLogoFile" accept="image/*" class="w-full bg-dark border border-gray-700 rounded-xl px-3 py-2 text-xs text-gray-300 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-neon file:text-black hover:file:bg-emerald-600">
-                    <span class="text-[10px] text-gray-500 mt-1 block">Optimized automatically for fast database sync.</span>
+
+                <hr class="border-gray-800 my-2">
+                <p class="text-xs font-bold text-neon uppercase tracking-wider">Main Roster (4 Players)</p>
+                
+                <!-- Main Player 1 -->
+                <div class="grid grid-cols-2 gap-2 bg-dark/50 p-3 rounded-xl border border-gray-800">
+                    <div><label class="text-[9px] text-gray-400 uppercase">Player 1 IGN</label><input type="text" id="p1_ign" required placeholder="IGN" class="w-full bg-dark border border-gray-700 rounded-lg p-1.5 text-xs text-white"></div>
+                    <div><label class="text-[9px] text-gray-400 uppercase">Player 1 UID</label><input type="text" id="p1_uid" required placeholder="UID" class="w-full bg-dark border border-gray-700 rounded-lg p-1.5 text-xs text-white"></div>
                 </div>
-                <button type="submit" id="submitBtn" class="w-full bg-neon hover:bg-emerald-600 text-black font-bold py-3 rounded-xl text-xs transition shadow-lg">
+                <!-- Main Player 2 -->
+                <div class="grid grid-cols-2 gap-2 bg-dark/50 p-3 rounded-xl border border-gray-800">
+                    <div><label class="text-[9px] text-gray-400 uppercase">Player 2 IGN</label><input type="text" id="p2_ign" required placeholder="IGN" class="w-full bg-dark border border-gray-700 rounded-lg p-1.5 text-xs text-white"></div>
+                    <div><label class="text-[9px] text-gray-400 uppercase">Player 2 UID</label><input type="text" id="p2_uid" required placeholder="UID" class="w-full bg-dark border border-gray-700 rounded-lg p-1.5 text-xs text-white"></div>
+                </div>
+                <!-- Main Player 3 -->
+                <div class="grid grid-cols-2 gap-2 bg-dark/50 p-3 rounded-xl border border-gray-800">
+                    <div><label class="text-[9px] text-gray-400 uppercase">Player 3 IGN</label><input type="text" id="p3_ign" required placeholder="IGN" class="w-full bg-dark border border-gray-700 rounded-lg p-1.5 text-xs text-white"></div>
+                    <div><label class="text-[9px] text-gray-400 uppercase">Player 3 UID</label><input type="text" id="p3_uid" required placeholder="UID" class="w-full bg-dark border border-gray-700 rounded-lg p-1.5 text-xs text-white"></div>
+                </div>
+                <!-- Main Player 4 -->
+                <div class="grid grid-cols-2 gap-2 bg-dark/50 p-3 rounded-xl border border-gray-800">
+                    <div><label class="text-[9px] text-gray-400 uppercase">Player 4 IGN</label><input type="text" id="p4_ign" required placeholder="IGN" class="w-full bg-dark border border-gray-700 rounded-lg p-1.5 text-xs text-white"></div>
+                    <div><label class="text-[9px] text-gray-400 uppercase">Player 4 UID</label><input type="text" id="p4_uid" required placeholder="UID" class="w-full bg-dark border border-gray-700 rounded-lg p-1.5 text-xs text-white"></div>
+                </div>
+
+                <hr class="border-gray-800 my-2">
+                <p class="text-xs font-bold text-amber-400 uppercase tracking-wider">Substitutes (2 Players)</p>
+
+                <!-- Sub 1 -->
+                <div class="grid grid-cols-2 gap-2 bg-dark/50 p-3 rounded-xl border border-gray-800">
+                    <div><label class="text-[9px] text-gray-400 uppercase">Sub 1 IGN</label><input type="text" id="sub1_ign" placeholder="IGN" class="w-full bg-dark border border-gray-700 rounded-lg p-1.5 text-xs text-white"></div>
+                    <div><label class="text-[9px] text-gray-400 uppercase">Sub 1 UID</label><input type="text" id="sub1_uid" placeholder="UID" class="w-full bg-dark border border-gray-700 rounded-lg p-1.5 text-xs text-white"></div>
+                </div>
+                <!-- Sub 2 -->
+                <div class="grid grid-cols-2 gap-2 bg-dark/50 p-3 rounded-xl border border-gray-800">
+                    <div><label class="text-[9px] text-gray-400 uppercase">Sub 2 IGN</label><input type="text" id="sub2_ign" placeholder="IGN" class="w-full bg-dark border border-gray-700 rounded-lg p-1.5 text-xs text-white"></div>
+                    <div><label class="text-[9px] text-gray-400 uppercase">Sub 2 UID</label><input type="text" id="sub2_uid" placeholder="UID" class="w-full bg-dark border border-gray-700 rounded-lg p-1.5 text-xs text-white"></div>
+                </div>
+
+                <button type="submit" id="submitBtn" class="w-full bg-neon hover:bg-neonHover text-black font-black py-3 rounded-xl text-sm uppercase tracking-wider transition shadow-xl shadow-neon/20 mt-4">
                     Save to Firestore Cloud
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- ADMIN MODAL (PIN: 2060) -->
-    <div id="adminModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-card border border-gray-700 w-full max-w-lg rounded-3xl p-6 space-y-4 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-amber-400"><i class="fa-solid fa-shield-halved mr-1"></i> Director M I C O Engine (PIN: 2060)</h3>
-                <button onclick="closeAdminModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+    <!-- Admin Control Panel Modal (PIN: 2060) -->
+    <div id="adminModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-card border border-amber-500/50 w-full max-w-md rounded-3xl p-6 shadow-2xl relative my-8">
+            <button onclick="closeAdminModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="flex items-center space-x-2 mb-4 text-amber-400">
+                <i class="fa-solid fa-shield-halved text-xl"></i>
+                <h3 class="text-xl font-black uppercase tracking-wider e-font">Director Admin Panel</h3>
             </div>
-            <div class="space-y-4">
-                <!-- Global Broadcast -->
-                <div class="bg-dark p-3 rounded-2xl border border-gray-800 space-y-2">
-                    <label class="block text-xs text-gray-400 font-mono">Global Broadcast Message</label>
-                    <input type="text" id="adminBroadcastInput" placeholder="Announcement..." class="w-full bg-card border border-gray-700 rounded-xl px-4 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
-                    <button onclick="updateBroadcastMessage()" class="w-full bg-amber-500 hover:bg-amber-600 text-black font-bold py-2 rounded-xl text-xs transition">
-                        Push Global Banner
-                    </button>
+            
+            <div class="space-y-4 text-xs max-h-[70vh] overflow-y-auto pr-1">
+                <!-- Create Tournament -->
+                <div class="bg-dark p-4 rounded-2xl border border-gray-800 space-y-2">
+                    <p class="font-bold text-white uppercase">1. Create New Tournament</p>
+                    <input type="text" id="newTourneyName" placeholder="Tournament Name" class="w-full bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white">
+                    <input type="text" id="newTourneyPrize" placeholder="Prize Pool (e.g. ₦50,000)" class="w-full bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white">
+                    <button onclick="createNewTournament()" class="w-full bg-amber-500 hover:bg-amber-400 text-black font-black py-2 rounded-xl uppercase">Publish Tournament</button>
                 </div>
 
-                <!-- Create New Tournament -->
-                <div class="bg-dark p-3 rounded-2xl border border-gray-800 space-y-2">
-                    <label class="block text-xs text-neon font-mono"><i class="fa-solid fa-plus-circle"></i> Create New Tournament Arena</label>
-                    <input type="text" id="newTourneyName" placeholder="Tournament Name (e.g. Squad Clash S2)" class="w-full bg-card border border-gray-700 rounded-xl px-4 py-2 text-xs text-white focus:outline-none focus:border-neon">
-                    <input type="text" id="newTourneyPrize" placeholder="Prize Pool (e.g. ₦300,000 or No Prize Pool)" class="w-full bg-card border border-gray-700 rounded-xl px-4 py-2 text-xs text-white focus:outline-none focus:border-neon">
-                    <button onclick="createNewTournament()" class="w-full bg-neon hover:bg-emerald-600 text-black font-bold py-2 rounded-xl text-xs transition">
-                        Publish New Tournament Live
-                    </button>
+                <!-- Broadcast Banner -->
+                <div class="bg-dark p-4 rounded-2xl border border-gray-800 space-y-2">
+                    <p class="font-bold text-white uppercase">2. Update Global Ticker</p>
+                    <input type="text" id="adminBroadcastInput" placeholder="New broadcast banner message..." class="w-full bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white">
+                    <button onclick="updateBroadcastMessage()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 rounded-xl uppercase">Broadcast Globally</button>
                 </div>
 
-                <!-- Crown Winner for Active Tournament -->
-                <div class="bg-dark p-3 rounded-2xl border border-amber-500/30 space-y-2">
-                    <label class="block text-xs text-amber-400 font-mono"><i class="fa-solid fa-crown"></i> Crown Permanent Winner (Active Tournament)</label>
-                    <input type="number" id="adminWinnerSlot" min="1" max="12" placeholder="Winning Slot Number (1-12)" class="w-full bg-card border border-amber-500/50 rounded-xl px-4 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
-                    <button onclick="crownWinner()" class="w-full bg-amber-500 hover:bg-amber-600 text-black font-bold py-2.5 rounded-xl text-xs transition shadow-lg">
-                        👑 Crown Permanent Grand Champion
-                    </button>
+                <!-- Social Media Links Config -->
+                <div class="bg-dark p-4 rounded-2xl border border-gray-800 space-y-2">
+                    <p class="font-bold text-white uppercase">3. Update Social Links</p>
+                    <input type="text" id="adminWhatsapp" placeholder="WhatsApp Group Link" class="w-full bg-darker border border-gray-700 rounded-lg px-2.5 py-1.5 text-white">
+                    <input type="text" id="adminTiktok" placeholder="TikTok Profile Link" class="w-full bg-darker border border-gray-700 rounded-lg px-2.5 py-1.5 text-white">
+                    <input type="text" id="adminDiscord" placeholder="Discord Invite Link" class="w-full bg-darker border border-gray-700 rounded-lg px-2.5 py-1.5 text-white">
+                    <input type="text" id="adminYoutube" placeholder="YouTube Channel Link" class="w-full bg-darker border border-gray-700 rounded-lg px-2.5 py-1.5 text-white">
+                    <input type="text" id="adminTelegram" placeholder="Telegram Channel Link" class="w-full bg-darker border border-gray-700 rounded-lg px-2.5 py-1.5 text-white">
+                    <button onclick="updateSocialLinks()" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-2 rounded-xl uppercase">Save Social Links</button>
+                </div>
+                <!-- Live Stream Embed URL Config -->
+                <div class="bg-dark p-4 rounded-2xl border border-gray-800 space-y-2">
+                    <p class="font-bold text-white uppercase">4. Set Live Stream Embed URL</p>
+                    <input type="text" id="adminStreamUrl" placeholder="e.g. https://www.youtube.com/embed/VIDEO_ID" class="w-full bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white">
+                    <button onclick="updateStreamUrl()" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded-xl uppercase">Update Live Stream</button>
+                </div>
+
+                <!-- Crown Winner -->
+                <div class="bg-dark p-4 rounded-2xl border border-gray-800 space-y-2">
+                    <p class="font-bold text-white uppercase">5. Crown Grand Champion</p>
+                    <input type="number" id="adminWinnerSlot" min="1" max="12" placeholder="Winning Slot Number (1-12)" class="w-full bg-darker border border-gray-700 rounded-xl px-3 py-2 text-white">
+                    <button onclick="crownWinner()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded-xl uppercase">Crown Slot Winner</button>
                 </div>
 
                 <!-- Reset Slots -->
-                <button onclick="resetCurrentSlots()" class="w-full bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 font-bold py-2.5 rounded-xl text-xs transition">
-                    Reset Slots for Active Tournament
-                </button>
+                <div class="bg-dark p-4 rounded-2xl border border-red-900/50 space-y-2">
+                    <p class="font-bold text-red-400 uppercase">6. Danger Zone</p>
+                    <button onclick="resetCurrentSlots()" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded-xl uppercase">Reset All Slots & Winner</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- CLOUD FIRESTORE MULTI-TOURNAMENT ENGINE -->
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script>
-        // Your Firebase Web App Configuration keys
+        // REPLACE WITH YOUR REAL FIREBASE CONFIG CREDENTIALS
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
+            apiKey: "APP_KEY",
             authDomain: "terminators-esports.firebaseapp.com",
             projectId: "terminators-esports",
             storageBucket: "terminators-esports.appspot.com",
@@ -264,97 +294,88 @@
             appId: "APP_ID"
         };
 
-        // Initialize Firebase & Firestore
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        let activeTournamentId = null;
         let tournamentsCache = {};
+        let activeTournamentId = null;
 
-        // Listen to Global Settings (Broadcast)
-        db.collection('settings').doc('config').onSnapshot((doc) => {
-            if (doc.exists && doc.data().broadcast) {
-                document.getElementById('broadcastText').innerText = doc.data().broadcast;
-            }
+        // Initialize Real-time Listeners
+        window.addEventListener('DOMContentLoaded', () => {
+            initGlobalConfigListener();
+            initTournamentsListener();
         });
 
-        // Listen to Tournaments Collection in Real-Time
-        db.collection('tournaments').orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
-            tournamentsCache = {};
-            const tabsContainer = document.getElementById('tournamentTabsContainer');
-            tabsContainer.innerHTML = '';
-
-            if (snapshot.empty) {
-                createDefaultTournament();
-                return;
-            }
-
-            let firstId = null;
-            snapshot.forEach((doc) => {
-                const data = doc.data();
-                const id = doc.id;
-                tournamentsCache[id] = data;
-                if (!firstId) firstId = id;
-
-                const btn = document.createElement('button');
-                const isActive = (activeTournamentId === id || (!activeTournamentId && id === firstId));
-                
-                btn.className = isActive 
-                    ? "bg-neon text-black font-bold px-4 py-2 rounded-xl shadow-lg transition" 
-                    : "bg-card hover:bg-gray-700 text-gray-300 font-medium px-4 py-2 rounded-xl border border-gray-700 transition";
-                
-                btn.innerHTML = `<i class="fa-solid fa-trophy mr-1"></i> ${data.name}`;
-                btn.onclick = () => switchTournament(id);
-                tabsContainer.appendChild(btn);
-            });
-
-            if (!activeTournamentId && firstId) {
-                activeTournamentId = firstId;
-            }
-            if (activeTournamentId) {
-                renderActiveTournament();
-            }
-        });
-
-        function createDefaultTournament() {
-            const defaultId = "tourney_main";
-            db.collection('tournaments').doc(defaultId).set({
-                name: "Terminators Pro League S1",
-                prizePool: "₦300,000 Payout",
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                slots: {},
-                winner: null
-            });
+        function initGlobalConfigListener() {
+        
+            db.collection('settings').doc('config').onSnapshot((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    if (data.broadcast) {
+                        document.getElementById('broadcastText').innerText = data.broadcast;
+                    }
+                    if (data.streamUrl) {
+                        document.getElementById('liveStreamIframe').src = data.streamUrl;
+                    }
+                    // Social Links
+                    if (data.whatsapp) document.getElementById('socWhatsapp').href = data.whatsapp;
+                    if (data.tiktok) document.getElementById('socTiktok').href = data.tiktok;
+                    if (data.discord) document.getElementById('socDiscord').href = data.discord;
+                    if (data.youtube) document.getElementById('socYoutube').href = data.youtube;
+                    if (data.telegram) document.getElementById('socTelegram').href = data.telegram;
+                }
+            }, (err) => { console.error(err); });
         }
 
-                function switchTournament(id) {
-            activeTournamentId = id;
-            renderActiveTournament();
-            db.collection('tournaments').orderBy('createdAt', 'desc').get().then((snapshot) => {
+        function initTournamentsListener() {
+            db.collection('tournaments').orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
+                tournamentsCache = {};
                 const tabsContainer = document.getElementById('tournamentTabsContainer');
                 tabsContainer.innerHTML = '';
+
+                if (snapshot.empty) {
+                    db.collection('tournaments').add({
+                        name: "Free Fire Pro Championship S1",
+                        prizePool: "₦50,000 + Pride",
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        slots: {},
+                        winner: null
+                    });
+                    return;
+                }
+
                 snapshot.forEach((doc) => {
                     const data = doc.data();
-                    const btn = document.createElement('button');
-                    const isActive = (doc.id === activeTournamentId);
-                    btn.className = isActive 
-                        ? "bg-neon text-black font-bold px-4 py-2 rounded-xl shadow-lg transition" 
-                        : "bg-card hover:bg-gray-700 text-gray-300 font-medium px-4 py-2 rounded-xl border border-gray-700 transition";
-                    btn.innerHTML = `<i class="fa-solid fa-trophy mr-1"></i> ${data.name}`;
-                    btn.onclick = () => switchTournament(doc.id);
-                    tabsContainer.appendChild(btn);
+                    tournamentsCache[doc.id] = data;
+
+                    if (!activeTournamentId) {
+                        activeTournamentId = doc.id;
+                    }
+
+                    const tabBtn = document.createElement('button');
+                    tabBtn.className = (doc.id === activeTournamentId)
+                        ? "bg-neon text-black font-black px-4 py-2 rounded-xl text-xs uppercase tracking-wider shrink-0 shadow-lg shadow-neon/20"
+                        : "bg-card hover:bg-gray-800 text-gray-300 border border-gray-800 font-bold px-4 py-2 rounded-xl text-xs uppercase tracking-wider shrink-0 transition";
+                    tabBtn.innerHTML = `<i class="fa-solid fa-trophy mr-1.5"></i> ${data.name}`;
+                    tabBtn.onclick = () => {
+                        activeTournamentId = doc.id;
+                        initTournamentsListener();
+                    };
+                    tabsContainer.appendChild(tabBtn);
                 });
-            });
+
+                renderActiveTournament();
+            }, (err) => { console.error(err); });
         }
-                function renderActiveTournament() {
+
+        function renderActiveTournament() {
             const tourney = tournamentsCache[activeTournamentId];
             if (!tourney) return;
 
             document.getElementById('activeTourneyTitle').innerText = tourney.name;
             document.getElementById('modalTourneyTitle').innerText = `Register for: ${tourney.name}`;
-            document.getElementById('activeTourneyPrize').innerText = tourney.prizePool || "No Prize Pool / Pride Match";
+            document.getElementById('activeTourneyPrize').innerText = `Prize Pool: ${tourney.prizePool || "No Prize Pool / Pride Match"}`;
 
-            // Render Permanent Winner History if available
             const winnerContainer = document.getElementById('winnerDisplayContainer');
             if (tourney.winner) {
                 winnerContainer.classList.remove('hidden');
@@ -371,10 +392,8 @@
                 winnerContainer.classList.add('hidden');
             }
 
-            // Render Slots Grid
             const grid = document.getElementById('slotGridContainer');
             grid.innerHTML = '';
-            let bookedCount = 0;
             const slots = tourney.slots || {};
             const winningSlot = tourney.winner ? tourney.winner.slot.toString() : null;
 
@@ -385,7 +404,6 @@
                 const isChampion = (winningSlot === slotKey);
 
                 if (slot) {
-                    bookedCount++;
                     slotDiv.className = isChampion 
                         ? "bg-card champion-card rounded-2xl p-4 text-center shadow-2xl flex flex-col justify-between relative overflow-hidden" 
                         : "bg-card border border-neon/50 rounded-2xl p-4 text-center shadow-lg flex flex-col justify-between";
@@ -422,11 +440,9 @@
             }
         }
 
-        // Modal Controls
         function openRegisterModal() { document.getElementById('registerModal').classList.remove('hidden'); }
         function closeRegisterModal() { document.getElementById('registerModal').classList.add('hidden'); }
         
-        // ADMIN ACCESS CHECK (PIN: 2060)
         function promptAdminAccess() {
             const pin = prompt("Enter Director Admin PIN (2060):");
             if (pin === "2060") {
@@ -437,7 +453,6 @@
         }
         function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
 
-        // Client-Side Image Compressor (Keeps Firebase Lightning Fast)
         function compressImage(file, maxWidth = 120, maxHeight = 120, quality = 0.7) {
             return new Promise((resolve) => {
                 if (!file) { resolve(null); return; }
@@ -465,22 +480,34 @@
             });
         }
 
-        // Team Registration Handler with Success Alerts
         async function handleTeamRegistration(e) {
             e.preventDefault();
             const submitBtn = document.getElementById('submitBtn');
-            submitBtn.innerText = "Compressing Logo & Saving...";
+            submitBtn.innerText = "Compressing Logo & Saving Roster...";
             submitBtn.disabled = true;
 
             const team = document.getElementById('regTeamName').value;
-            const leader = document.getElementById('regLeaderName').value;
             const slotNum = document.getElementById('regSlotNumber').value;
             const fileInput = document.getElementById('regLogoFile').files[0];
 
+            const roster = {
+                team: team,
+                leader: document.getElementById('p1_ign').value,
+                logo: await compressImage(fileInput) || "",
+                players: [
+                    { ign: document.getElementById('p1_ign').value, uid: document.getElementById('p1_uid').value },
+                    { ign: document.getElementById('p2_ign').value, uid: document.getElementById('p2_uid').value },
+                    { ign: document.getElementById('p3_ign').value, uid: document.getElementById('p3_uid').value },
+                    { ign: document.getElementById('p4_ign').value, uid: document.getElementById('p4_uid').value }
+                ],
+                substitutes: [
+                    { ign: document.getElementById('sub1_ign').value, uid: document.getElementById('sub1_uid').value },
+                    { ign: document.getElementById('sub2_ign').value, uid: document.getElementById('sub2_uid').value }
+                ]
+            };
+
             try {
-                const compressedLogo = await compressImage(fileInput);
                 const tourneyRef = db.collection('tournaments').doc(activeTournamentId);
-                
                 await db.runTransaction(async (transaction) => {
                     const doc = await transaction.get(tourneyRef);
                     if (!doc.exists) throw "Tournament does not exist!";
@@ -492,18 +519,13 @@
                         throw `Slot #${slotNum} is already booked in this tournament!`;
                     }
 
-                    slots[slotNum] = {
-                        team: team,
-                        leader: leader,
-                        logo: compressedLogo || ""
-                    };
-
+                    slots[slotNum] = roster;
                     transaction.update(tourneyRef, { slots: slots });
                 });
 
                 closeRegisterModal();
                 document.getElementById('teamRegisterForm').reset();
-                alert(`SUCCESS: Slot #${slotNum} registered successfully globally for "${team}"!`);
+                alert(`SUCCESS: Slot #${slotNum} registered with full 6-player roster for "${team}"!`);
             } catch (err) {
                 alert(err || 'Error saving booking.');
                 console.error(err);
@@ -513,15 +535,11 @@
             }
         }
 
-        // Admin Multi-Tournament Actions
         function createNewTournament() {
             const name = document.getElementById('newTourneyName').value;
             const prizePool = document.getElementById('newTourneyPrize').value || "No Prize Pool";
 
-            if (!name) {
-                alert('Please enter a tournament name.');
-                return;
-            }
+            if (!name) { alert('Please enter a tournament name.'); return; }
 
             const newId = 'tourney_' + Date.now();
             db.collection('tournaments').doc(newId).set({
@@ -549,21 +567,39 @@
             }
         }
 
+        function updateSocialLinks() {
+            const socialData = {
+                whatsapp: document.getElementById('adminWhatsapp').value,
+                tiktok: document.getElementById('adminTiktok').value,
+                discord: document.getElementById('adminDiscord').value,
+                youtube: document.getElementById('adminYoutube').value,
+                telegram: document.getElementById('adminTelegram').value
+            };
+            db.collection('settings').doc('config').set(socialData, { merge: true }).then(() => {
+                closeAdminModal();
+                alert('SUCCESS: Social media links updated!');
+            });
+        }
+
+        function updateStreamUrl() {
+            const url = document.getElementById('adminStreamUrl').value;
+            if (url) {
+                db.collection('settings').doc('config').set({ streamUrl: url }, { merge: true }).then(() => {
+                    closeAdminModal();
+                    alert('SUCCESS: Live stream URL updated!');
+                });
+            }
+        }
+
         function crownWinner() {
             const slotNum = document.getElementById('adminWinnerSlot').value;
-            if (!slotNum) {
-                alert('Please enter a valid slot number.');
-                return;
-            }
+            if (!slotNum) { alert('Please enter a valid slot number.'); return; }
 
             const tourney = tournamentsCache[activeTournamentId];
             const slots = tourney.slots || {};
             const winningTeam = slots[slotNum];
 
-            if (!winningTeam) {
-                alert(`Slot #${slotNum} is empty! Only occupied slots can be crowned.`);
-                return;
-            }
+            if (!winningTeam) { alert(`Slot #${slotNum} is empty!`); return; }
 
             const winnerData = {
                 slot: slotNum,
@@ -591,42 +627,6 @@
                     closeAdminModal();
                     alert('SUCCESS: Tournament slots and winner history reset.');
                 });
-            }
-        }
-
-        // Direct Mobile Screen Broadcast (WebRTC)
-        async function toggleMobileBroadcast() {
-            const videoElem = document.getElementById('localScreenVideo');
-            const iframeElem = document.getElementById('defaultStreamFrame');
-            
-            try {
-                if (!videoElem.classList.contains('hidden')) {
-                    const stream = videoElem.srcObject;
-                    if (stream) stream.getTracks().forEach(t => t.stop());
-                    videoElem.srcObject = null;
-                    videoElem.classList.add('hidden');
-                    iframeElem.classList.remove('hidden');
-                    alert('Screen broadcast ended.');
-                    return;
-                }
-
-                const mediaStream = await navigator.mediaDevices.getDisplayMedia({
-                    video: { cursor: "always" },
-                    audio: true
-                });
-
-                iframeElem.classList.add('hidden');
-                videoElem.classList.remove('hidden');
-                videoElem.srcObject = mediaStream;
-                alert('Screen broadcast active! Streaming live from your device.');
-
-                mediaStream.getVideoTracks()[0].onended = function() {
-                    videoElem.classList.add('hidden');
-                    iframeElem.classList.remove('hidden');
-                };
-            } catch (err) {
-                console.error("Screen share error:", err);
-                alert('Screen sharing canceled or not supported on this browser view.');
             }
         }
     </script>
