@@ -561,7 +561,7 @@ function promptAdminAccess() {
     if (pin === "2060") {
         isAdminLoggedIn = true;
         alert("Admin Access Granted!");
-        // Refresh views to show admin controls
+        document.getElementById('adminModal').classList.remove('hidden');
         if (typeof renderSlotsForTournament === 'function' && activeTournamentId) {
             renderSlotsForTournament(activeTournamentId);
         }
@@ -571,14 +571,16 @@ function promptAdminAccess() {
     } else if (pin !== null) {
         alert("Incorrect PIN!");
     }
+}
 
+function toggleSlotDetails(i) {
+    const el = document.getElementById(`details-${i}`);
+    const chevron = document.getElementById(`chevron-${i}`);
+    el.classList.toggle('hidden');
+    chevron.classList.toggle('rotate-180');
+}
         
-        function toggleSlotDetails(i) {
-            const el = document.getElementById(`details-${i}`);
-            const chevron = document.getElementById(`chevron-${i}`);
-            el.classList.toggle('hidden');
-            chevron.classList.toggle('rotate-180');
-        }
+        
 
         function openRegisterModalForSlot(slotNum) {
             if (!activeTournamentId) { alert("No active tournament!"); return; }
