@@ -556,7 +556,23 @@
                 document.getElementById('slotCountInfo').innerText = `${availableCount} Available Slots`;
             });
         }
+function promptAdminAccess() {
+    const pin = prompt("Enter Admin Security PIN:");
+    if (pin === "2060") {
+        isAdminLoggedIn = true;
+        alert("Admin Access Granted!");
+        // Refresh views to show admin controls
+        if (typeof renderSlotsForTournament === 'function' && activeTournamentId) {
+            renderSlotsForTournament(activeTournamentId);
+        }
+        if (typeof renderAllTeamsDirectory === 'function') {
+            renderAllTeamsDirectory();
+        }
+    } else if (pin !== null) {
+        alert("Incorrect PIN!");
+    }
 
+        
         function toggleSlotDetails(i) {
             const el = document.getElementById(`details-${i}`);
             const chevron = document.getElementById(`chevron-${i}`);
