@@ -765,46 +765,94 @@
         }
 
         function submitTeamRegistration() {
-            if (!activeTournamentId) {
-                alert("No active tournament selected!");
-                return;
+    if (!activeTournamentId) {
+        alert("No active tournament selected!");
+        return;
+    }
+    const teamName = document.getElementById('regTeamName').value.trim();
+    const slotNum = parseInt(document.getElementById('regSlotNum').value);
+    const server = document.getElementById('regServer').value;
+    const leaderIgn = document.getElementById('regLeaderIgn').value.trim();
+    const leaderUid = document.getElementById('regLeaderUid').value.trim();
+    const leaderContact = document.getElementById('regLeaderContact').value.trim();
+
+    if (!teamName || !leaderIgn || !leaderUid) {
+        alert("Please fill in all required team and leader details!");
+        return;
+    }
+
+    if (slotNum < 1 || slotNum > 12) {
+        alert("Please choose a valid slot number between 1 and 12.");
+        return;
+    }
+
+    const registrationData = {
+        teamName,
+        slotNum,
+        server,
+        leaderIgn,
+        leaderUid,
+        leaderContact,
+        p1Ign: document.getElementById('regP1Ign').value.trim(),
+        p1Uid: document.getElementById('regP1Uid').value.trim(),
+        p2Ign: document.getElementById('regP2Ign').value.trim(),
+        p2Uid: document.getElementById('regP2Uid').value.trim(),
+        p3Ign: document.getElementById('regP3Ign').value.trim(),
+        p3Uid: document.getElementById('regP3Uid').value.trim(),
+        p4Ign: document.getElementById('regP4Ign').value.trim(),
+        p4Uid: document.getElementById('regP4Uid').value.trim(),
+        sub1Ign: document.getElementById('regSub1Ign').value.trim(),
+        sub1Uid: document.getElementById('regSub1Uid').value.trim(),
+        sub2Ign: document.getElementById('regSub2Ign').value.trim(),
+        sub2Uid: document.getElementById('regSub2Uid').value.trim(),
+        winner: false,
+        disqualified: false,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+
+    const logoFile = document.getElementById('regLogoFile').files[0];
+    if (logoFile) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            registrationData.logoUrl = e.target.result;
+            executeTransactionRegistration(slotNum, registrationData);
+        };
+        reader.readAsDataURL(logoFile);
+    } else {
+        executeTransactionRegistration(slotNum, registrationData);
+    }
+}
+
+function executeTransactionRegistration(slotNum, registrationData) {
+    const slotDocRef = db.collection('tournaments').doc(activeTournamentId).collection('slots').doc(`slot_${slotNum}`);
+
+    db.runTransaction(transaction => {
+        return transaction.get(slotDocRef).then(slotDoc => {
+            if (slotDoc.exists) {
+                throw new Error(`Slot #${slotNum} is already booked! Please choose another slot.`);
             }
-            const teamName = document.getElementById('regTeamName').value.trim();
-            const slotNum = parseInt(document.getElementById('regSlotNum').value);
-            const server = document.getElementById('regServer').value;
-            const leaderIgn = document.getElementById('regLeaderIgn').value.trim();
-            const leaderUid = document.getElementById('regLeaderUid').value.trim();
-            const leaderContact = document.getElementById('regLeaderContact').value.trim();
-
-            if (!teamName || !leaderIgn || !leaderUid) {
-                alert("Please fill in all required team and leader details!");
-                return;
-            }
-
-            const registrationData = {
-                teamName,
-                slotNum,
-                server,
-                leaderIgn,
-                leaderUid,
-                leaderContact,
-                p1Ign: document.getElementById('regP1Ign').value.trim(),
-                p1Uid: document.getElementById('regP1Uid').value.trim(),
-                p2Ign: document.getElementById('regP2Ign').value.trim(),
-                p2Uid: document.getElementById('regP2Uid').value.trim(),
-                p3Ign: document.getElementById('regP3Ign').value.trim(),
-                p3Uid: document.getElementById('regP3Uid').value.trim(),
-                p4Ign: document.getElementById('regP4Ign').value.trim(),
-                p4Uid: document.getElementById('regP4Uid').value.trim(),
-                sub1Ign: document.getElementById('regSub1Ign').value.trim(),
-                sub1Uid: document.getElementById('regSub1Uid').value.trim(),
-                sub2Ign: document.getElementById('regSub2Ign').value.trim(),
-                sub2Uid: document.getElementById('regSub2Uid').value.trim(),
-                winner: false,
-                disqualified: false,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            };
-
+            transaction.set(slotDocRef, registrationData);
+        });
+    }).then(() => {
+        alert("Team Registered Successfully!");
+        switchTab('standings');
+        document.getElementById('regTeamName').value = '';
+        document.getElementById('regLeaderIgn').value = '';
+        document.getElementById('regLeaderUid').value = '';
+        document.getElementById('regLeaderContact').value = '';
+        ['P1', 'P2', 'P3', 'P4', 'Sub1', 'Sub2'].forEach(p => {
+            const ignEl = document.getElementById(`reg${p}Ign`);
+            const uidEl = document.getElementById(`reg${p}Uid`);
+            if(ignEl) ignEl.value = '';
+            if(uidEl) uidEl.value = '';
+        });
+        document.getElementById('regLogoFile').value = '';
+    }).catch(err => {
+        console.error("Registration error:", err);
+        alert(err.message || "Registration failed. Check console.");
+    });
+        }
+             
             const slotsRef = db.collection('tournaments').doc(activeTournamentId).collection('slots');
             
             slotsRef.where('slotNum', '==', slotNum).get().then(snapshot => {
