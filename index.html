@@ -39,7 +39,6 @@
             </div>
             <div class="flex items-center gap-2">
                 <button onclick="promptAdminAccess()" class="bg-gray-800 hover:bg-gray-700 text-accent p-2.5 rounded-xl border border-gray-700 transition" title="Admin Panel">
-                    
                     <i class="fa-solid fa-shield-halved"></i>
                 </button>
                 <button onclick="switchTab('register')" class="bg-accent hover:bg-emerald-400 text-dark font-extrabold px-4 py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
@@ -269,14 +268,14 @@
                 <!-- 3. Social Links -->
                 <div class="bg-darker p-3 rounded-xl border border-gray-800 space-y-2">
                     <p class="font-bold text-white uppercase">3. Update Social Links</p>
-                    <input type="text" id="adminWhatsapp" placeholder="WhatsApp Group Link" class="w-full bg-dark border border-gray-700 rounded-xl px-3 py-2 text-white">
+                                        <input type="text" id="adminWhatsapp" placeholder="WhatsApp Group Link" class="w-full bg-dark border border-gray-700 rounded-xl px-3 py-2 text-white">
                     <input type="text" id="adminTiktok" placeholder="TikTok Profile Link" class="w-full bg-dark border border-gray-700 rounded-xl px-3 py-2 text-white">
                     <input type="text" id="adminDiscord" placeholder="Discord Invite Link" class="w-full bg-dark border border-gray-700 rounded-xl px-3 py-2 text-white">
                     <input type="text" id="adminYoutube" placeholder="YouTube Channel Link" class="w-full bg-dark border border-gray-700 rounded-xl px-3 py-2 text-white">
                     <button onclick="updateSocialLinks()" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-2 rounded-xl uppercase">Save Social Links</button>
                 </div>
 
-                <!-- 4. Live Stream Control (Admin Only) -->
+                <!-- 4. Live Stream Control -->
                 <div class="bg-darker p-3 rounded-xl border border-red-500/30 space-y-2">
                     <p class="font-bold text-red-400 uppercase flex items-center gap-1.5"><i class="fa-solid fa-lock"></i> 4. Admin Live Broadcast Studio</p>
                     <p class="text-[10px] text-gray-400">Paste your stream embed URL (YouTube live embed link, or screen broadcast source) to instantly stream live to all users on the Live Broadcast tab.</p>
@@ -322,40 +321,40 @@
         let tournamentsCache = {};
         let activeTournamentId = null;
         let isAdminLoggedIn = false;
-function createNewTournament() {
-    const nameInput = document.getElementById('adminTourneyNameInput');
-    const prizeInput = document.getElementById('adminTourneyPrizeInput');
-    const startDateInput = document.getElementById('adminStartDateInput');
-    const endDateInput = document.getElementById('adminEndDateInput');
 
-    if (!nameInput || !nameInput.value.trim()) {
-        alert("Please enter a tournament name!");
-        return;
-    }
+        function createNewTournament() {
+            const nameInput = document.getElementById('adminTourneyNameInput');
+            const prizeInput = document.getElementById('adminTourneyPrizeInput');
+            const startDateInput = document.getElementById('adminStartDateInput');
+            const endDateInput = document.getElementById('adminEndDateInput');
 
-    const name = nameInput.value.trim();
-    const prize = prizeInput ? prizeInput.value.trim() : "";
-    const startDate = startDateInput ? startDateInput.value : "";
-    const endDate = endDateInput ? endDateInput.value : "";
+            if (!nameInput || !nameInput.value.trim()) {
+                alert("Please enter a tournament name!");
+                return;
+            }
 
-    db.collection('tournaments').add({
-        name: name,
-        prize: prize,
-        startDate: startDate,
-        endDate: endDate,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    }).then(() => {
-        alert("Tournament Published Successfully!");
-        nameInput.value = '';
-        if (prizeInput) prizeInput.value = '';
-        if (startDateInput) startDateInput.value = '';
-        if (endDateInput) endDateInput.value = '';
-    }).catch((error) => {
-        console.error("Error publishing tournament: ", error);
-        alert("Error publishing tournament. Check console.");
-    });
+            const name = nameInput.value.trim();
+            const prize = prizeInput ? prizeInput.value.trim() : "";
+            const startDate = startDateInput ? startDateInput.value : "";
+            const endDate = endDateInput ? endDateInput.value : "";
 
-    });
+            db.collection('tournaments').add({
+                name: name,
+                prize: prize,
+                startDate: startDate,
+                endDate: endDate,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                alert("Tournament Published Successfully!");
+                nameInput.value = '';
+                if (prizeInput) prizeInput.value = '';
+                if (startDateInput) startDateInput.value = '';
+                if (endDateInput) endDateInput.value = '';
+            }).catch((error) => {
+                console.error("Error publishing tournament: ", error);
+                alert("Error publishing tournament. Check console.");
+            });
+        }
         
         window.addEventListener('DOMContentLoaded', () => {
             initGlobalConfigListener();
@@ -490,7 +489,6 @@ function createNewTournament() {
             const t = tournamentsCache[activeTournamentId];
             document.getElementById('activeTourneyName').innerText = t.name;
             
-            // Pride Match Fallback Support
             const prizeText = (t.prize && t.prize.trim() !== '') ? t.prize : 'Pride Match';
             document.getElementById('activeTourneyPrize').innerText = `Prize Pool: ${prizeText}`;
             document.getElementById('arenaDates').innerText = t.startDate && t.endDate ? `${t.startDate} ➔ ${t.endDate}` : '';
@@ -575,7 +573,7 @@ function createNewTournament() {
                                 </div>` : ''}
                             </div>
                         `;
-                    } else {
+                                        } else {
                         slotDiv.className = "bg-dark border border-gray-800/60 p-3 rounded-2xl flex justify-between items-center";
                         slotDiv.innerHTML = `
                             <div class="flex items-center gap-3">
@@ -590,31 +588,34 @@ function createNewTournament() {
                 document.getElementById('slotCountInfo').innerText = `${availableCount} Available Slots`;
             });
         }
-function promptAdminAccess() {
-    const pin = prompt("Enter Admin Security PIN:");
-    if (pin === "2060") {
-        isAdminLoggedIn = true;
-        alert("Admin Access Granted!");
-        document.getElementById('adminModal').classList.remove('hidden');
-        if (typeof renderSlotsForTournament === 'function' && activeTournamentId) {
-            renderSlotsForTournament(activeTournamentId);
-        }
-        if (typeof renderAllTeamsDirectory === 'function') {
-            renderAllTeamsDirectory();
-        }
-    } else if (pin !== null) {
-        alert("Incorrect PIN!");
-    }
-}
 
-function toggleSlotDetails(i) {
-    const el = document.getElementById(`details-${i}`);
-    const chevron = document.getElementById(`chevron-${i}`);
-    el.classList.toggle('hidden');
-    chevron.classList.toggle('rotate-180');
-}
-        
-        
+        function promptAdminAccess() {
+            const pin = prompt("Enter Admin Security PIN:");
+            if (pin === "2060") {
+                isAdminLoggedIn = true;
+                alert("Admin Access Granted!");
+                document.getElementById('adminModal').classList.remove('hidden');
+                if (typeof renderSlotsForTournament === 'function' && activeTournamentId) {
+                    renderSlotsForTournament(activeTournamentId);
+                }
+                if (typeof renderAllTeamsDirectory === 'function') {
+                    renderAllTeamsDirectory();
+                }
+            } else if (pin !== null) {
+                alert("Incorrect PIN!");
+            }
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('adminModal').classList.add('hidden');
+        }
+
+        function toggleSlotDetails(i) {
+            const el = document.getElementById(`details-${i}`);
+            const chevron = document.getElementById(`chevron-${i}`);
+            el.classList.toggle('hidden');
+            chevron.classList.toggle('rotate-180');
+        }
 
         function openRegisterModalForSlot(slotNum) {
             if (!activeTournamentId) { alert("No active tournament!"); return; }
@@ -631,8 +632,7 @@ function toggleSlotDetails(i) {
                 return;
             }
 
-            
-        db.collection('tournaments').doc(activeTournamentId).collection('slots').get().then(snapshot => {
+            db.collection('tournaments').doc(activeTournamentId).collection('slots').get().then(snapshot => {
                 container.innerHTML = '';
                 if (snapshot.empty) {
                     container.innerHTML = '<p class="text-xs text-gray-500 text-center py-4">No squads registered for this arena yet.</p>';
@@ -660,6 +660,190 @@ function toggleSlotDetails(i) {
                     `;
                     container.appendChild(card);
                 });
+            });
+        }
+
+        function deleteActiveTournament() {
+            if (!activeTournamentId) {
+                alert("No active tournament to delete!");
+                return;
+            }
+            if (confirm("Are you sure you want to delete this active tournament and all its slots?")) {
+                db.collection('tournaments').doc(activeTournamentId).delete().then(() => {
+                    alert("Tournament deleted successfully.");
+                    activeTournamentId = null;
+                }).catch(err => {
+                    console.error(err);
+                    alert("Error deleting tournament.");
+                });
+            }
+        }
+
+        function updateBroadcastMessage() {
+            const msg = document.getElementById('adminBroadcastInput').value.trim();
+            db.collection('settings').doc('config').set({ broadcast: msg }, { merge: true }).then(() => {
+                alert("Broadcast ticker updated!");
+                document.getElementById('adminBroadcastInput').value = '';
+            });
+        }
+
+        function updateSocialLinks() {
+            const whatsapp = document.getElementById('adminWhatsapp').value.trim();
+            const tiktok = document.getElementById('adminTiktok').value.trim();
+            const discord = document.getElementById('adminDiscord').value.trim();
+            const youtube = document.getElementById('adminYoutube').value.trim();
+
+            db.collection('settings').doc('config').set({
+                whatsapp, tiktok, discord, youtube
+            }, { merge: true }).then(() => {
+                alert("Social links updated successfully!");
+            });
+        }
+
+        function updateStreamUrl() {
+            const streamUrl = document.getElementById('adminStreamUrl').value.trim();
+            db.collection('settings').doc('config').set({ streamUrl }, { merge: true }).then(() => {
+                alert("Live stream updated successfully!");
+            });
+        }
+
+        function stopStreamUrl() {
+            db.collection('settings').doc('config').set({ streamUrl: '' }, { merge: true }).then(() => {
+                alert("Live stream ended.");
+                document.getElementById('adminStreamUrl').value = '';
+            });
+        }
+
+        function crownWinner() {
+            const slotNum = parseInt(document.getElementById('adminWinnerSlot').value);
+            if (!activeTournamentId || isNaN(slotNum)) {
+                alert("Please enter a valid slot number and ensure a tournament is active.");
+                return;
+            }
+            db.collection('tournaments').doc(activeTournamentId).collection('slots').where('slotNum', '==', slotNum).get().then(snapshot => {
+                if (snapshot.empty) {
+                    alert(`Slot #${slotNum} is empty or not registered.`);
+                    return;
+                }
+                snapshot.forEach(doc => {
+                    doc.ref.update({ winner: true }).then(() => {
+                        alert(`Slot #${slotNum} crowned as Grand Champion!`);
+                    });
+                });
+            });
+        }
+
+        function resetCurrentSlots() {
+            if (!activeTournamentId) return;
+            if (confirm("Are you sure you want to reset all slots and winners for this tournament?")) {
+                db.collection('tournaments').doc(activeTournamentId).collection('slots').get().then(snapshot => {
+                    const batch = db.batch();
+                    snapshot.forEach(doc => {
+                        batch.delete(doc.ref);
+                    });
+                    batch.commit().then(() => {
+                        alert("All slots have been reset.");
+                    });
+                });
+            }
+        }
+
+        function adminDisqualifySlot(slotId, status) {
+            db.collection('tournaments').doc(activeTournamentId).collection('slots').doc(slotId).update({
+                disqualified: status
+            }).then(() => {
+                alert(status ? "Squad disqualified." : "Disqualification lifted.");
+            });
+        }
+
+        function adminDeleteSlot(slotId) {
+            if (confirm("Are you sure you want to delete this registered slot?")) {
+                db.collection('tournaments').doc(activeTournamentId).collection('slots').doc(slotId).delete().then(() => {
+                    alert("Slot deleted.");
+                });
+            }
+        }
+
+        function submitTeamRegistration() {
+            if (!activeTournamentId) {
+                alert("No active tournament selected!");
+                return;
+            }
+            const teamName = document.getElementById('regTeamName').value.trim();
+            const slotNum = parseInt(document.getElementById('regSlotNum').value);
+            const server = document.getElementById('regServer').value;
+            const leaderIgn = document.getElementById('regLeaderIgn').value.trim();
+            const leaderUid = document.getElementById('regLeaderUid').value.trim();
+            const leaderContact = document.getElementById('regLeaderContact').value.trim();
+
+            if (!teamName || !leaderIgn || !leaderUid) {
+                alert("Please fill in all required team and leader details!");
+                return;
+            }
+
+            const registrationData = {
+                teamName,
+                slotNum,
+                server,
+                leaderIgn,
+                leaderUid,
+                leaderContact,
+                p1Ign: document.getElementById('regP1Ign').value.trim(),
+                p1Uid: document.getElementById('regP1Uid').value.trim(),
+                p2Ign: document.getElementById('regP2Ign').value.trim(),
+                p2Uid: document.getElementById('regP2Uid').value.trim(),
+                p3Ign: document.getElementById('regP3Ign').value.trim(),
+                p3Uid: document.getElementById('regP3Uid').value.trim(),
+                p4Ign: document.getElementById('regP4Ign').value.trim(),
+                p4Uid: document.getElementById('regP4Uid').value.trim(),
+                sub1Ign: document.getElementById('regSub1Ign').value.trim(),
+                sub1Uid: document.getElementById('regSub1Uid').value.trim(),
+                sub2Ign: document.getElementById('regSub2Ign').value.trim(),
+                sub2Uid: document.getElementById('regSub2Uid').value.trim(),
+                winner: false,
+                disqualified: false,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            const slotsRef = db.collection('tournaments').doc(activeTournamentId).collection('slots');
+            
+            slotsRef.where('slotNum', '==', slotNum).get().then(snapshot => {
+                if (!snapshot.empty) {
+                    alert(`Slot #${slotNum} is already booked! Please choose another slot.`);
+                    return;
+                }
+
+                const logoFile = document.getElementById('regLogoFile').files[0];
+                if (logoFile) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        registrationData.logoUrl = e.target.result;
+                        saveSlotToFirestore(slotsRef, registrationData);
+                    };
+                    reader.readAsDataURL(logoFile);
+                } else {
+                    saveSlotToFirestore(slotsRef, registrationData);
+                }
+            });
+        }
+
+        function saveSlotToFirestore(slotsRef, data) {
+            slotsRef.add(data).then(() => {
+                alert("Team Registered Successfully!");
+                switchTab('standings');
+                document.getElementById('regTeamName').value = '';
+                document.getElementById('regLeaderIgn').value = '';
+                document.getElementById('regLeaderUid').value = '';
+                document.getElementById('regLeaderContact').value = '';
+                ['P1', 'P2', 'P3', 'P4', 'Sub1', 'Sub2'].forEach(p => {
+                    const ignEl = document.getElementById(`reg${p}Ign`);
+                    const uidEl = document.getElementById(`reg${p}Uid`);
+                    if(ignEl) ignEl.value = '';
+                    if(uidEl) uidEl.value = '';
+                });
+            }).catch(err => {
+                console.error(err);
+                alert("Registration failed. Check console.");
             });
         }
     </script>
