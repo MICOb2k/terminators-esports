@@ -722,14 +722,16 @@ if (configSnap.exists()) {
     if (activeSec) activeSec.classList.remove('hidden');
     if (activeBtn) activeBtn.className = "py-2.5 rounded-xl bg-accent text-dark font-bold transition";
 };
-        
 
-        function showErrorToast(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toastMsg').innerText = msg;
-            toast.classList.remove('hidden');
-            setTimeout(() => toast.classList.add('hidden'), 3500);
-        }
+    
+
+function showErrorToast(msg) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toastMsg').innerText = msg;
+    toast.classList.remove('hidden');
+    setTimeout(() => toast.classList.add('hidden'), 3000);
+}
+        
 
         function escapeHtml(str) {
             return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
