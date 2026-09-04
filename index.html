@@ -262,6 +262,18 @@
                     </div>
                     <button onclick="updateRoomCredentials()" class="w-full bg-accent text-dark font-extrabold py-2.5 rounded-xl">Save Room Credentials</button>
                 </div>
+                <div class="space-y-2 pt-3 border-t border-gray-800">
+    <p class="text-xs text-gray-400 font-bold uppercase tracking-wider">Social Media Links</p>
+    <input type="text" id="adminWhatsapp" placeholder="WhatsApp Group Link" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
+    <input type="text" id="adminDiscord" placeholder="Discord Link" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
+    <input type="text" id="adminTelegram" placeholder="Telegram Link" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
+    <input type="text" id="adminYoutube" placeholder="YouTube Link" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
+    <input type="text" id="adminInstagram" placeholder="Instagram Link" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
+    <input type="text" id="adminTiktok" placeholder="TikTok Link" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
+    <input type="text" id="adminX" placeholder="X (Twitter) Link" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
+    <button onclick="saveSocialLinks()" class="w-full bg-accent text-dark font-extrabold py-2 rounded-xl text-xs transition">Save Social Links</button>
+                </div>
+                
 
                 <!-- Team Management List -->
                 <div class="bg-card border border-gray-800 p-4 rounded-2xl space-y-3 text-xs shadow-lg">
@@ -569,7 +581,25 @@ const sub2 = sub2NameInput ? `${sub2NameInput} (UID: ${sub2UidInput})` : '';
         };
 
         // Admin Auth & Management Functions
+        window.saveSocialLinks = async function() {
+    try {
+        await setDoc(doc(db, 'settings', 'config'), {
+            whatsapp: document.getElementById('adminWhatsapp').value.trim(),
+            discord: document.getElementById('adminDiscord').value.trim(),
+            telegram: document.getElementById('adminTelegram').value.trim(),
+            youtube: document.getElementById('adminYoutube').value.trim(),
+            instagram: document.getElementById('adminInstagram').value.trim(),
+            tiktok: document.getElementById('adminTiktok').value.trim(),
+            x: document.getElementById('adminX').value.trim()
+        }, { merge: true });
+        showErrorToast("Social links updated successfully!");
+    } catch (err) {
+        showErrorToast(err.message);
+    }
+};
+        
         window.verifyAdminLogin = async function() {
+            
             const pass = document.getElementById('adminPassInput').value.trim();
             if (pass === "2060") {
                 document.getElementById('adminLoginBox').classList.add('hidden');
@@ -586,7 +616,18 @@ const sub2 = sub2NameInput ? `${sub2NameInput} (UID: ${sub2UidInput})` : '';
                     if (roomSnap.exists()) {
                         document.getElementById('adminRoomId').value = roomSnap.data().roomId || "";
                         document.getElementById('adminRoomPass').value = roomSnap.data().roomPass || "";
-                    }
+                    }const configSnap = await getDoc(doc(db, 'settings', 'config'));
+if (configSnap.exists()) {
+    const cData = configSnap.data();
+    document.getElementById('adminWhatsapp').value = cData.whatsapp || "";
+    document.getElementById('adminDiscord').value = cData.discord || "";
+    document.getElementById('adminTelegram').value = cData.telegram || "";
+    document.getElementById('adminYoutube').value = cData.youtube || "";
+    document.getElementById('adminInstagram').value = cData.instagram || "";
+    document.getElementById('adminTiktok').value = cData.tiktok || "";
+    document.getElementById('adminX').value = cData.x || "";
+}
+                    
                 } catch(e) {}
 
                 showErrorToast("Admin access authorized!");
@@ -675,6 +716,34 @@ const sub2 = sub2NameInput ? `${sub2NameInput} (UID: ${sub2UidInput})` : '';
         function escapeHtml(str) {
             return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
+        <footer class="py-6 text-center text-xs text-gray-500 border-t border-gray-800 space-y-3">
+    <p>© 2026 Terminators Esports. All rights reserved.</p>
+    <div id="footerSocials" class="flex flex-wrap justify-center items-center gap-4 text-gray-400">
+        <!-- Dynamically rendered via settings listener -->
+    </div>
+</footer>
+        (async () => {
+    try {
+        const socialsContainer = document.getElementById('footerSocials');
+        const configSnap = await getDoc(doc(db, 'settings', 'config'));
+        if (socialsContainer && configSnap.exists()) {
+            const data = configSnap.data();
+            let html = '';
+            if (data.whatsapp) html += `<a href="${data.whatsapp}" target="_blank" class="hover:text-accent transition"><i class="fa-brands fa-whatsapp mr-1"></i> WhatsApp</a>`;
+            if (data.discord) html += `<a href="${data.discord}" target="_blank" class="hover:text-accent transition"><i class="fa-brands fa-discord mr-1"></i> Discord</a>`;
+            if (data.telegram) html += `<a href="${data.telegram}" target="_blank" class="hover:text-accent transition"><i class="fa-brands fa-telegram mr-1"></i> Telegram</a>`;
+            if (data.youtube) html += `<a href="${data.youtube}" target="_blank" class="hover:text-accent transition"><i class="fa-brands fa-youtube mr-1"></i> YouTube</a>`;
+            if (data.instagram) html += `<a href="${data.instagram}" target="_blank" class="hover:text-accent transition"><i class="fa-brands fa-instagram mr-1"></i> Instagram</a>`;
+            if (data.tiktok) html += `<a href="${data.tiktok}" target="_blank" class="hover:text-accent transition"><i class="fa-brands fa-tiktok mr-1"></i> TikTok</a>`;
+            if (data.x) html += `<a href="${data.x}" target="_blank" class="hover:text-accent transition"><i class="fa-brands fa-x-twitter mr-1"></i> X</a>`;
+            socialsContainer.innerHTML = html;
+        }
+    } catch (e) {
+        console.error("Error loading social links:", e);
+    }
+})();
+        
+        
     </script>
 </body>
 </html>
