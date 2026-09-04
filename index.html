@@ -697,14 +697,21 @@ if (configSnap.exists()) {
             }
         };
 
+        
         window.switchTab = function(tab) {
-            ['arenas', 'squads', 'rooms', 'admin'].forEach(t => {
-                document.getElementById(`section-${t}`).classList.add('hidden');
-                document.getElementById(`tab-${t}`).className = "py-2.5 rounded-xl text-gray-400 hover:text-white transition-all";
-            });
-            document.getElementById(`section-${tab}`).classList.remove('hidden');
-            document.getElementById(`tab-${tab}`).className = "py-2.5 rounded-xl bg-accent text-dark font-bold transition-all";
-        };
+    ['arenas', 'squads', 'rooms', 'admin'].forEach(t => {
+        const sec = document.getElementById('section-' + t);
+        const btn = document.getElementById('tab-' + t);
+        if (sec) sec.classList.add('hidden');
+        if (btn) btn.className = "py-2.5 rounded-xl text-gray-400 hover:text-white transition";
+    });
+    
+    const activeSec = document.getElementById('section-' + tab);
+    const activeBtn = document.getElementById('tab-' + tab);
+    if (activeSec) activeSec.classList.remove('hidden');
+    if (activeBtn) activeBtn.className = "py-2.5 rounded-xl bg-accent text-dark font-bold transition";
+};
+        
 
         function showErrorToast(msg) {
             const toast = document.getElementById('toast');
