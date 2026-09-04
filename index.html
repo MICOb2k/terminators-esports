@@ -1,289 +1,278 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terminators Esports Hub</title>
-        <script>
+    <title>Terminators Esports | Tournaments</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        dark: '#07090e',
-                        card: 'rgba(17, 24, 39, 0.75)',
+                        dark: '#0a0f1d',
+                        card: '#111827',
                         accent: '#00ff66'
                     }
                 }
             }
         }
     </script>
-    <style>
-        body {
-            background-color: #07090e;
-            background-image: 
-                radial-gradient(circle at 15% 20%, rgba(0, 243, 255, 0.12) 0%, transparent 40%),
-                radial-gradient(circle at 85% 80%, rgba(255, 102, 0, 0.1) 0%, transparent 40%),
-                linear-gradient(to bottom, rgba(7, 9, 14, 0.95), rgba(4, 5, 8, 0.98));
-            background-attachment: fixed;
-        }
-    </style>
 </head>
-<body class="bg-dark text-gray-100 font-sans min-h-screen pb-24">
+<body class="bg-dark text-white font-sans antialiased min-h-screen pb-12">
 
-    <!-- Header Status Bar -->
-    <header class="bg-card border-b border-gray-800 p-4 sticky top-0 z-50 flex justify-between items-center shadow-md">
-        <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-lg bg-accent/20 border border-accent/40 flex items-center justify-center text-accent font-bold">
-                <i class="fa-solid fa-gamepad"></i>
-            </div>
+    <!-- Header Navigation Bar -->
+    <header class="border-b border-gray-800 bg-dark/80 backdrop-blur-md sticky top-0 z-40">
+        <div class="max-w-md mx-auto px-4 py-3 flex justify-between items-center">
             <div>
-                <h1 class="font-extrabold text-white text-sm tracking-wide">TERMINATORS</h1>
-                <p class="text-[9px] text-gray-400 tracking-wider">FOUNDED BY M I C O</p>
+                <h1 class="font-extrabold text-white text-base tracking-wider">TERMINATORS</h1>
+                <p class="text-[10px] text-gray-400 uppercase tracking-widest">Founded by Mico</p>
             </div>
-        </div>
-        <div id="cloudStatus" class="flex items-center gap-2 bg-dark px-3 py-1.5 rounded-full border border-gray-800 text-xs font-bold text-amber-400">
-            <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-            <span id="statusText">Connecting...</span>
+            <div id="cloudStatus" class="flex items-center gap-2 bg-dark px-3 py-1.5 rounded-full border border-gray-800 text-xs font-bold text-gray-400">
+                <span class="w-2 h-2 rounded-full bg-gray-500 animate-pulse"></span>
+                <span id="statusText">Connecting...</span>
+            </div>
         </div>
     </header>
 
-    <!-- Main Content Container -->
-    <main class="max-w-md mx-auto p-4 space-y-6">
-
-        <!-- Tab Navigation -->
-        <div class="grid grid-cols-4 gap-1.5 bg-card p-1.5 rounded-2xl border border-gray-800 text-[11px] font-bold text-center">
-            <button onclick="switchTab('arenas')" id="tab-arenas" class="py-2.5 rounded-xl bg-accent text-dark transition-all">Arenas</button>
-            <button onclick="switchTab('squads')" id="tab-squads" class="py-2.5 rounded-xl text-gray-400 hover:text-white transition-all">Squads</button>
-            <button onclick="switchTab('rooms')" id="tab-rooms" class="py-2.5 rounded-xl text-gray-400 hover:text-white transition-all">Rooms 🔒</button>
-            <button onclick="switchTab('admin')" id="tab-admin" class="py-2.5 rounded-xl text-gray-400 hover:text-white transition-all">Admin</button>
+    <!-- Navigation Tabs -->
+    <nav class="max-w-md mx-auto px-4 mt-4">
+        <div class="grid grid-cols-4 gap-1 bg-card p-1 rounded-2xl border border-gray-800 text-xs font-bold text-center">
+            <button onclick="switchTab('arenas')" id="tab-arenas" class="py-2.5 rounded-xl bg-accent text-dark transition">Arenas</button>
+            <button onclick="switchTab('squads')" id="tab-squads" class="py-2.5 rounded-xl text-gray-400 hover:text-white transition">Squads</button>
+            <button onclick="switchTab('rooms')" id="tab-rooms" class="py-2.5 rounded-xl text-gray-400 hover:text-white transition">Rooms 🔒</button>
+            <button onclick="switchTab('admin')" id="tab-admin" class="py-2.5 rounded-xl text-gray-400 hover:text-white transition">Admin</button>
         </div>
+    </nav>
 
-        <!-- TAB 1: ARENAS & TOURNAMENT -->
-        <section id="section-arenas" class="space-y-4">
-            <div id="activeTournamentContainer" class="space-y-4">
-                <!-- Dynamically populated based on Firebase publication status -->
+    <!-- Main Container -->
+    <main class="max-w-md mx-auto px-4 mt-5 space-y-6">
+
+        <!-- SECTION: ARENAS -->
+        <section id="section-arenas" class="space-y-6">
+            <div id="activeTournamentContainer">
+                <div class="bg-card border border-gray-800 p-8 rounded-2xl text-center space-y-3 shadow-xl">
+                    <div class="w-12 h-12 rounded-2xl bg-dark border border-gray-800 flex items-center justify-center text-gray-500 mx-auto text-lg">
+                        <i class="fa-solid fa-flag-checkered"></i>
+                    </div>
+                    <h2 class="font-extrabold text-white text-sm uppercase tracking-wide">No Active Tournament</h2>
+                    <p class="text-xs text-gray-400">Check back later or wait for administrators to publish a new championship arena.</p>
+                </div>
             </div>
 
-            <!-- Live Stream Section -->
+            <!-- Live Stream Box -->
             <div id="liveStreamContainer" class="bg-card border border-gray-800 p-4 rounded-2xl shadow-xl space-y-3 hidden">
-                <div class="flex items-center justify-between border-b border-gray-800 pb-2">
-                    <span class="text-xs font-extrabold text-white flex items-center gap-2"><i class="fa-solid fa-tower-broadcast text-red-500 animate-pulse"></i> LIVE STREAM</span>
-                    <span class="bg-red-500/20 text-red-400 text-[10px] px-2 py-0.5 rounded font-bold">ON AIR</span>
+                <div class="flex items-center justify-between">
+                    <span class="flex items-center gap-2 text-xs font-bold text-red-400">
+                        <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span> Live Stream on Air
+                    </span>
                 </div>
-                <div id="streamEmbedBox" class="aspect-video w-full bg-dark rounded-xl overflow-hidden border border-gray-800 flex items-center justify-center">
-                    <!-- Embedded iframe -->
-                </div>
+                <div id="streamEmbedBox" class="w-full aspect-video rounded-xl overflow-hidden bg-dark border border-gray-800"></div>
             </div>
 
-            <!-- Slot Registration Form -->
+            <!-- Registration Form Card -->
             <div class="bg-card border border-gray-800 p-5 rounded-2xl shadow-xl space-y-4">
-                <div class="border-b border-gray-800 pb-3">
-                    <h2 class="font-extrabold text-white text-xs uppercase tracking-wider text-accent">Slot Registration</h2>
+                <div>
+                    <h2 class="font-extrabold text-white text-sm uppercase tracking-wide">Slot Registration</h2>
                     <p class="text-xs text-gray-400">Book your squad slot for the active tournament.</p>
                 </div>
 
                 <form id="registrationForm" onsubmit="handleRegistration(event)" class="space-y-3 text-xs">
                     <div>
-                        <label class="text-gray-400 font-bold block mb-1">Squad Name *</label>
-                        <input type="text" id="regTeamName" required placeholder="e.g. Terminators Elite" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-accent">
+                        <label class="font-bold block mb-1 text-gray-300">Squad Name *</label>
+                        <input type="text" id="regTeamName" required placeholder="e.g. Terminators Elite" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
                     </div>
-                    
-                    <div> 
-                        <label class="text-gray-400 font-bold block mb-1">Upload Team Logo Image</label>
-                        <div class="relative w-full bg-dark border border-dashed border-accent/40 rounded-xl p-3 text-center cursor-pointer hover:border-accent transition-all">
-                            <input type="file" id="squadLogoFile" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer">
-                            <div class="text-gray-300 font-semibold" id="fileChosenText">📂 Tap to choose logo from gallery</div>
+
+                    <div>
+                        <label class="font-bold block mb-1 text-gray-300">Upload Team Logo Image</label>
+                        <div class="flex items-center gap-2 bg-dark border border-gray-800 rounded-xl px-3 py-2">
+                            <input type="file" id="squadLogoFile" accept="image/*" class="w-full text-xs text-gray-400 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-accent file:text-dark hover:file:bg-emerald-400 cursor-pointer">
                         </div>
+                        <p id="fileChosenText" class="text-[10px] text-gray-400 mt-1">📂 Tap to choose logo from gallery</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-2">
                         <div>
-                            <label class="text-gray-400 font-bold block mb-1">Leader In-Game Name *</label>
-                            <input type="text" id="regLeaderName" required placeholder="Leader Name" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-accent">
+                            <label class="font-bold block mb-1 text-gray-300">Leader In-Game Name *</label>
+                            <input type="text" id="regLeaderName" required placeholder="Leader Name" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
                         </div>
                         <div>
-                            <label class="text-gray-400 font-bold block mb-1">WhatsApp / Phone *</label>
-                            <input type="text" id="regLeaderContact" required placeholder="+234..." class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-accent">
+                            <label class="font-bold block mb-1 text-gray-300">WhatsApp Phone *</label>
+                            <input type="tel" id="regLeaderContact" required placeholder="+234..." class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
                         </div>
                     </div>
+
                     <div>
-                        <label class="text-gray-400 font-bold block mb-1">Game Server Region *</label>
-                        <select id="regServer" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-accent">
+                        <label class="font-bold block mb-1 text-gray-300">Region/Server Selection *</label>
+                        <select id="regServer" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
                             <option value="Africa Server">Africa Server</option>
                             <option value="Europe Server">Europe Server</option>
-                            <option value="Global Server">Global Server</option>
+                            <option value="Middle East">Middle East</option>
+                            <option value="South Asia">South Asia</option>
                         </select>
                     </div>
 
-                    <div class="space-y-2 pt-2 border-t border-gray-800">
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Main Roster (IGN & UID)</p>
+                    <div class="border-t border-gray-800 pt-3 space-y-2">
+                        <p class="font-bold text-gray-300">Main Roster (4 Players + 2 Subs)</p>
                         <div class="grid grid-cols-2 gap-2">
-                            <input type="text" id="p1Name" placeholder="P1 IGN" required class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
-                            <input type="text" id="p1Uid" placeholder="P1 UID" required class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
-                        </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <input type="text" id="p2Name" placeholder="P2 IGN" required class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
-                            <input type="text" id="p2Uid" placeholder="P2 UID" required class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
-                        </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <input type="text" id="p3Name" placeholder="P3 IGN" required class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
-                            <input type="text" id="p3Uid" placeholder="P3 UID" required class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
-                        </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <input type="text" id="p4Name" placeholder="P4 IGN" required class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
-                            <input type="text" id="p4Uid" placeholder="P4 UID" required class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
+                            <input type="text" id="p1Name" required placeholder="P1 IGN" class="bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
+                            <input type="text" id="p1Uid" required placeholder="P1 UID" class="bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
+                            <input type="text" id="p2Name" required placeholder="P2 IGN" class="bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
+                            <input type="text" id="p2Uid" required placeholder="P2 UID" class="bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
+                            <input type="text" id="p3Name" required placeholder="P3 IGN" class="bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
+                            <input type="text" id="p3Uid" required placeholder="P3 UID" class="bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
+                            <input type="text" id="p4Name" required placeholder="P4 IGN" class="bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
+                            <input type="text" id="p4Uid" required placeholder="P4 UID" class="bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
                         </div>
                     </div>
-                    <div class="space-y-2 pt-2 border-t border-gray-800">
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Substitutes (Optional)</p>
-                        <div class="grid grid-cols-2 gap-2">
-                            <input type="text" id="sub1Name" placeholder="Sub 1 IGN" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
-                            <input type="text" id="sub1Uid" placeholder="Sub 1 UID" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
-                        </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <input type="text" id="sub2Name" placeholder="Sub 2 IGN" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
-                            <input type="text" id="sub2Uid" placeholder="Sub 2 UID" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
-                        </div>
+
+                    <div class="grid grid-cols-2 gap-2 pt-1">
+                        <input type="text" id="sub1Name" placeholder="Sub 1 IGN (Optional)" class="bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
+                        <input type="text" id="sub1Uid" placeholder="Sub 1 UID" class="bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
+                        <input type="text" id="sub2Name" placeholder="Sub 2 IGN (Optional)" class="bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
+                        <input type="text" id="sub2Uid" placeholder="Sub 2 UID" class="bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
                     </div>
-                    
-                    <button type="submit" id="submitBtn" class="w-full bg-accent text-dark font-extrabold py-3 rounded-xl transition-transform active:scale-95 shadow-lg mt-2">
+
+                    <button type="submit" id="submitBtn" class="w-full bg-accent text-dark font-extrabold py-3 rounded-xl transition shadow-lg mt-2">
                         <i class="fa-solid fa-cloud-arrow-up mr-2"></i> Register Squad & Claim Slot
                     </button>
                 </form>
             </div>
         </section>
 
-        <!-- TAB 2: SQUADS DIRECTORY -->
+        <!-- SECTION: SQUADS -->
         <section id="section-squads" class="space-y-4 hidden">
             <div class="flex justify-between items-center px-1">
-                <h2 class="font-extrabold text-xs text-white uppercase tracking-wider">Registered Squads Directory</h2>
+                <h2 class="font-extrabold text-white text-sm uppercase tracking-wider">Registered Squads Directory</h2>
                 <span id="slotCountInfo" class="text-xs text-accent font-bold">0 Squads Listed</span>
             </div>
-            <div class="bg-card border border-gray-800 p-3 rounded-xl text-[11px] text-gray-400">
-                <i class="fa-solid fa-shield-halved text-accent mr-1"></i> Team leader contacts and private credentials are strictly protected behind admin authorization.
-            </div>
             <div id="squadsContainer" class="space-y-3">
-                <!-- Populated via Firebase -->
+                <div class="p-6 rounded-2xl border bg-card border-gray-800 text-center text-xs text-gray-500">Loading squads...</div>
             </div>
         </section>
 
-        <!-- TAB 3: ROOMS & LOCKER -->
+        <!-- SECTION: ROOMS -->
         <section id="section-rooms" class="space-y-4 hidden">
-            <div class="bg-card border border-gray-800 p-4 rounded-2xl shadow-xl text-center space-y-2">
-                <p class="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Match Kickoff Countdown</p>
-                <div id="countdownTimer" class="font-mono text-2xl font-extrabold text-accent">00:14:59</div>
-                <p class="text-[10px] text-gray-500">Credentials unlock automatically or via leader verification.</p>
-            </div>
-
             <div class="bg-card border border-gray-800 p-5 rounded-2xl shadow-xl space-y-4">
-                <div class="border-b border-gray-800 pb-3 flex justify-between items-center">
-                    <div>
-                        <h2 class="font-extrabold text-white text-xs">Verify Squad Leader Access</h2>
-                        <p class="text-[11px] text-gray-400">Enter your exact registered leader name to unlock.</p>
-                    </div>
-                    <span id="lockStatusBadge" class="bg-red-950 text-red-400 border border-red-500/40 px-2 py-0.5 rounded text-[9px] uppercase font-bold">🔒 Locked</span>
-                </div>
-
-                <div class="space-y-3 text-xs">
-                    <div>
-                        <label class="text-gray-400 font-bold block mb-1">Team Leader Name</label>
-                        <div class="flex gap-2">
-                            <input type="text" id="verifyLeaderName" placeholder="Enter Team Leader Name" class="flex-1 bg-dark border border-gray-800 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-accent">
-                            <button onclick="verifyAndUnlockRoom()" class="bg-accent text-dark px-4 py-2.5 rounded-xl font-bold">Unlock</button>
-                        </div>
-                    </div>
-
-                    <div id="roomCredentialsBox" class="opacity-50 pointer-events-none transition-all space-y-3 bg-dark border border-gray-800 p-4 rounded-xl mt-4">
-                        <div class="flex justify-between items-center text-xs">
-                            <span class="text-gray-400">Room ID:</span>
-                            <span id="roomIdText" class="font-mono font-bold text-gray-500 select-all">••••••••</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs">
-                            <span class="text-gray-400">Password:</span>
-                            <span id="roomPassText" class="font-mono font-bold text-gray-500 select-all">••••••••</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 4: ADMIN PANEL -->
-        <section id="section-admin" class="space-y-4 hidden">
-            <!-- Login Gate -->
-            <div id="adminLoginBox" class="bg-card border border-gray-800 p-5 rounded-2xl shadow-xl space-y-4">
-                <div class="border-b border-gray-800 pb-3">
-                    <h2 class="font-extrabold text-white text-xs uppercase tracking-wider text-accent">Admin Authentication</h2>
-                    <p class="text-xs text-gray-400">Enter passcode to manage tournaments and team statuses.</p>
+                <div>
+                    <h2 class="font-extrabold text-white text-sm uppercase tracking-wide">Custom Room Access</h2>
+                    <p class="text-xs text-gray-400">Room ID and password are strictly private for verified team leaders.</p>
                 </div>
                 <div class="space-y-3 text-xs">
                     <div>
-                        <label class="text-gray-400 font-bold block mb-1">Admin Passcode</label>
-                        <input type="password" id="adminPassInput" placeholder="Enter passcode" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-accent">
+                        <label class="font-bold block mb-1 text-gray-300">Enter Your Registered Team Leader Name</label>
+                        <input type="text" id="verifyLeaderName" placeholder="e.g. Mico" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
                     </div>
-                    <button onclick="verifyAdminLogin()" class="w-full bg-accent text-dark font-extrabold py-3 rounded-xl transition-transform active:scale-95 shadow-lg">
-                        <i class="fa-solid fa-lock-open mr-2"></i> Access Admin Console
+                    <button onclick="verifyAndUnlockRoom()" class="w-full bg-accent text-dark font-extrabold py-3 rounded-xl transition">
+                        <i class="fa-solid fa-key mr-2"></i> Verify & Unlock Room Credentials
                     </button>
                 </div>
             </div>
 
-            <!-- Full Admin Controls -->
-            <div id="adminDashboardBox" class="space-y-4 hidden">
+            <div id="roomCredentialsBox" class="bg-card border border-gray-800 p-5 rounded-2xl shadow-xl space-y-4 opacity-50 pointer-events-none transition-all">
+                <div class="flex justify-between items-center border-b border-gray-800 pb-3">
+                    <h3 class="font-extrabold text-white text-sm">Match Credentials</h3>
+                    <span id="lockStatusBadge" class="bg-red-950 text-red-400 border border-red-500/40 px-2 py-0.5 rounded text-[9px] uppercase font-bold">🔒 Locked</span>
+                </div>
+                <div class="space-y-3 text-xs">
+                    <div class="bg-dark p-3 rounded-xl border border-gray-800 flex justify-between items-center">
+                        <span class="text-gray-400">Room ID:</span>
+                        <span id="roomIdText" class="font-mono text-gray-500 font-bold">Locked By Verification</span>
+                    </div>
+                    <div class="bg-dark p-3 rounded-xl border border-gray-800 flex justify-between items-center">
+                        <span class="text-gray-400">Room Password:</span>
+                        <span id="roomPassText" class="font-mono text-gray-500 font-bold">Locked By Verification</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: ADMIN -->
+        <section id="section-admin" class="space-y-4 hidden">
+            <div id="adminLoginBox" class="bg-card border border-gray-800 p-6 rounded-2xl shadow-xl space-y-4 text-xs">
+                <div class="text-center space-y-1">
+                    <div class="w-10 h-10 rounded-xl bg-dark border border-gray-800 flex items-center justify-center text-accent mx-auto">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <h2 class="font-extrabold text-white text-sm uppercase tracking-wider">Admin Portal</h2>
+                    <p class="text-gray-400">Enter secure passcode to manage tournament controls.</p>
+                </div>
+                <div>
+                    <label class="font-bold block mb-1 text-gray-300">Admin Passcode</label>
+                    <input type="password" id="adminPassInput" placeholder="Enter passcode" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
+                </div>
+                <button onclick="verifyAdminLogin()" class="w-full bg-accent text-dark font-extrabold py-3 rounded-xl transition">
+                    <i class="fa-solid fa-lock-open mr-2"></i> Access Admin Console
+                </button>
+            </div>
+
+            <div id="adminDashboardBox" class="space-y-4 hidden text-xs">
                 <div class="bg-card border border-gray-800 p-4 rounded-2xl flex justify-between items-center shadow-lg">
                     <div>
-                        <h2 class="font-extrabold text-white text-xs uppercase tracking-wider text-accent">Admin Console Active</h2>
+                        <h2 class="font-extrabold text-white text-xs uppercase tracking-wider">Admin Console Active</h2>
                         <p class="text-[10px] text-emerald-400 font-bold">🔓 Password Verified (2060)</p>
                     </div>
-                    <button onclick="lockAdminPanel()" class="bg-red-950 text-red-400 border border-red-500/40 text-xs px-3 py-1.5 rounded-xl font-bold">Lock Out</button>
+                    <button onclick="lockAdminPanel()" class="bg-red-950 text-red-400 border border-red-500/40 px-3 py-1.5 rounded-xl font-bold transition">Lock Panel</button>
                 </div>
 
                 <!-- Tournament Publishing -->
-                <div class="bg-card border border-gray-800 p-4 rounded-2xl space-y-3 text-xs shadow-lg">
+                <div class="bg-card border border-gray-800 p-4 rounded-2xl space-y-3 shadow-lg">
                     <h3 class="font-extrabold text-white border-b border-gray-800 pb-2">Tournament Publishing</h3>
-                    <div>
-                        <label class="text-gray-400 font-bold block mb-1">Tournament Title</label>
-                        <input type="text" id="adminTourneyTitle" placeholder="e.g. Free Fire Max Championship Season 1" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-accent">
-                    </div>
-                    <div>
-                        <label class="text-gray-400 font-bold block mb-1">Prize Pool</label>
-                        <input type="text" id="adminTourneyPrize" placeholder="e.g. 50,000 Diamonds / Cash" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-accent">
-                    </div>
-                    <div>
-                        <label class="text-gray-400 font-bold block mb-1">Live Stream URL</label>
-                        <input type="text" id="adminStreamUrl" placeholder="https://youtube.com/embed/..." class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-accent">
-                    </div>
-                    <div class="flex gap-2 pt-2">
-                        <button onclick="publishTournament(true)" class="flex-1 bg-accent text-dark font-extrabold py-2.5 rounded-xl">Publish Tournament</button>
-                        <button onclick="publishTournament(false)" class="bg-red-950 text-red-400 border border-red-500/40 px-4 py-2.5 rounded-xl font-bold">Unpublish / Hide</button>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="font-bold block mb-1 text-gray-300">Tournament Title</label>
+                            <input type="text" id="adminTourneyTitle" placeholder="e.g. Free Fire Max Championship Season 1" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
+                        </div>
+                        <div>
+                            <label class="font-bold block mb-1 text-gray-300">Prize Pool</label>
+                            <input type="text" id="adminTourneyPrize" placeholder="e.g. 50,000 Diamonds / Cash" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
+                        </div>
+                        <div>
+                            <label class="font-bold block mb-1 text-gray-300">Live Stream URL</label>
+                            <input type="text" id="adminStreamUrl" placeholder="https://youtube.com/embed/..." class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
+                        </div>
+                        <div class="flex gap-2 pt-2">
+                            <button onclick="publishTournament(true)" class="flex-1 bg-accent text-dark font-extrabold py-2.5 rounded-xl transition">Publish Live</button>
+                            <button onclick="publishTournament(false)" class="bg-red-950 text-red-400 border border-red-500/40 px-4 py-2.5 rounded-xl font-bold transition">Unpublish</button>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Room Credentials -->
-                <div class="bg-card border border-gray-800 p-4 rounded-2xl space-y-3 text-xs shadow-lg">
+                <div class="bg-card border border-gray-800 p-4 rounded-2xl space-y-3 shadow-lg">
                     <h3 class="font-extrabold text-white border-b border-gray-800 pb-2">Custom Room Credentials</h3>
-                    <div>
-                        <label class="text-gray-400 font-bold block mb-1">Room ID</label>
-                        <input type="text" id="adminRoomId" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-accent">
+                    <div class="space-y-3">
+                        <div>
+                            <label class="font-bold block mb-1 text-gray-300">Room ID</label>
+                            <input type="text" id="adminRoomId" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white font-mono">
+                        </div>
+                        <div>
+                            <label class="font-bold block mb-1 text-gray-300">Room Password</label>
+                            <input type="text" id="adminRoomPass" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white font-mono">
+                        </div>
+                        <button onclick="updateRoomCredentials()" class="w-full bg-accent text-dark font-extrabold py-2.5 rounded-xl transition">Save Room Credentials</button>
                     </div>
-                    <div>
-                        <label class="text-gray-400 font-bold block mb-1">Room Password</label>
-                        <input type="text" id="adminRoomPass" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-accent">
-                    </div>
-                    <button onclick="updateRoomCredentials()" class="w-full bg-accent text-dark font-extrabold py-2.5 rounded-xl">Save Room Credentials</button>
                 </div>
 
                 <!-- Social Links -->
-                <div class="space-y-2 pt-3 border-t border-gray-800">
-                    <p class="text-xs text-gray-400 font-bold uppercase tracking-wider">Social Media Links</p>
-                    <input type="text" id="adminWhatsapp" placeholder="WhatsApp Group Link" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
-                    <input type="text" id="adminDiscord" placeholder="Discord Link" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
-                    <input type="text" id="adminTelegram" placeholder="Telegram Link" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
-                    <input type="text" id="adminYoutube" placeholder="YouTube Link" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
-                                        <input type="text" id="adminX" placeholder="X (Twitter) Link" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
-                    <button onclick="saveSocialLinks()" class="w-full bg-accent text-dark font-extrabold py-2 rounded-xl text-xs transition">Save Social Links</button>
+                <div class="bg-card border border-gray-800 p-4 rounded-2xl space-y-3 shadow-lg">
+                    <h3 class="font-extrabold text-white border-b border-gray-800 pb-2">Social Media Links</h3>
+                    <div class="space-y-2">
+                        <input type="text" id="adminWhatsapp" placeholder="WhatsApp Group Link" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
+                        <input type="text" id="adminDiscord" placeholder="Discord Link" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
+                        <input type="text" id="adminTelegram" placeholder="Telegram Link" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
+                        <input type="text" id="adminYoutube" placeholder="YouTube Link" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
+                        <input type="text" id="adminInstagram" placeholder="Instagram Link" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
+                        <input type="text" id="adminTiktok" placeholder="TikTok Link" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
+                        <input type="text" id="adminX" placeholder="X (Twitter) Link" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
+                        <button onclick="saveSocialLinks()" class="w-full bg-accent text-dark font-extrabold py-2.5 rounded-xl transition mt-1">Save Social Links</button>
+                    </div>
                 </div>
 
                 <!-- Team Status Manager -->
-                <div class="bg-card border border-gray-800 p-4 rounded-2xl space-y-3 text-xs shadow-lg">
+                <div class="bg-card border border-gray-800 p-4 rounded-2xl space-y-3 shadow-lg">
                     <h3 class="font-extrabold text-white border-b border-gray-800 pb-2">Team Status Manager</h3>
                     <div id="adminTeamList" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
                 </div>
@@ -293,430 +282,427 @@
     </main>
 
     <!-- Footer -->
-    <footer class="py-6 text-center text-xs text-gray-500 border-t border-gray-800 space-y-3 max-w-md mx-auto">
+    <footer class="py-6 text-center text-xs text-gray-500 border-t border-gray-800 space-y-3 max-w-md mx-auto mt-8">
         <p>© 2026 Terminators Esports. All rights reserved.</p>
-        <div id="footerSocials" class="flex flex-wrap justify-center items-center gap-4 text-gray-400"></div>
-    </footer>
+                            <div id="footerSocials" class="flex flex-wrap justify-center items-center gap-4 text-gray-400"></div>
+                </footer>
 
-    <!-- Error Toast Notification -->
-    <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-gray-900 border border-gray-700 text-white text-xs px-4 py-3 rounded-xl shadow-2xl hidden z-50 max-w-xs text-center">
-        <span id="toastMsg">Notification message</span>
-    </div>
+                <!-- Error Toast Notification -->
+                <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-gray-900 border border-gray-700 text-white text-xs px-4 py-3 rounded-xl shadow-2xl hidden z-50 max-w-xs text-center">
+                    <span id="toastMsg">Notification message</span>
+                </div>
 
-    <!-- Firebase SDKs (Modular v10) -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, getDoc, setDoc, deleteDoc, updateDoc, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+                <!-- Firebase SDKs & App Logic -->
+                <script type="module">
+                    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+                    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, getDoc, setDoc, deleteDoc, updateDoc, where, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyB4nLlRgIbYL6vxmyw5V8D1F3_Fixtfc5w",
-            authDomain: "terminators-esports.firebaseapp.com",
-            projectId: "terminators-esports",
-            storageBucket: "terminators-esports.firebasestorage.app",
-            messagingSenderId: "737418872311",
-            appId: "1:737418872311:web:bf1be1b7932b271fb91af2"
-        };
+                    const firebaseConfig = {
+                        apiKey: "AIzaSyB4nLlRgIbYL6vxmyw5V8D1F3_Fixtfc5w",
+                        authDomain: "terminators-esports.firebaseapp.com",
+                        projectId: "terminators-esports",
+                        storageBucket: "terminators-esports.firebasestorage.app",
+                        messagingSenderId: "737418872311",
+                        appId: "1:737418872311:web:bf1be1b7932b271fb91af2"
+                    };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+                    const app = initializeApp(firebaseConfig);
+                    const db = getFirestore(app);
 
-        document.getElementById('cloudStatus').className = "flex items-center gap-2 bg-dark px-3 py-1.5 rounded-full border border-emerald-500/30 text-xs font-bold text-emerald-400";
-        document.getElementById('statusText').innerText = "Live Database Active";
+                    document.getElementById('cloudStatus').className = "flex items-center gap-2 bg-dark px-3 py-1.5 rounded-full border border-emerald-500/30 text-xs font-bold text-emerald-400";
+                    document.getElementById('statusText').innerText = "Live Database Active";
 
-        document.getElementById('squadLogoFile').addEventListener('change', function(e) {
-            const fileNameText = document.getElementById('fileChosenText');
-            if (e.target.files && e.target.files[0]) {
-                fileNameText.textContent = "✔ Selected: " + e.target.files[0].name;
-                fileNameText.style.color = "#00ff66";
-            } else {
-                fileNameText.textContent = "📂 Tap to choose logo from gallery";
-                fileNameText.style.color = "#d1d5db";
-            }
-        });
-
-        onSnapshot(doc(db, "settings", "tournament"), (tourneySnap) => {
-            const activeContainer = document.getElementById('activeTournamentContainer');
-            const streamBox = document.getElementById('liveStreamContainer');
-            const embedBox = document.getElementById('streamEmbedBox');
-
-            if (!tourneySnap.exists() || !tourneySnap.data().isPublished) {
-                activeContainer.innerHTML = `
-                    <div class="bg-card border border-gray-800 p-8 rounded-2xl text-center space-y-3 shadow-xl">
-                        <div class="w-12 h-12 rounded-2xl bg-dark border border-gray-800 flex items-center justify-center text-gray-500 mx-auto text-lg">
-                            <i class="fa-solid fa-flag-checkered"></i>
-                        </div>
-                        <h2 class="font-extrabold text-white text-sm uppercase tracking-wide">No Active Tournament</h2>
-                        <p class="text-xs text-gray-400">Check back later or wait for administrators to publish a new championship arena.</p>
-                    </div>`;
-                streamBox.classList.add('hidden');
-                return;
-            }
-
-            const data = tourneySnap.data();
-            activeContainer.innerHTML = `
-                <div class="bg-card border border-gray-800 p-5 rounded-2xl shadow-xl space-y-2">
-                    <div class="flex justify-between items-center">
-                        <span class="bg-accent/20 text-accent text-[10px] px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">Active Arena</span>
-                        <span class="text-[11px] text-gray-400">${new Date().getFullYear()} Season</span>
-                    </div>
-                    <h2 class="font-extrabold text-white text-base">${escapeHtml(data.title)}</h2>
-                    <p class="text-xs text-gray-400">Prize Pool: <b class="text-accent">${escapeHtml(data.prizePool)}</b></p>
-                </div>`;
-
-            if (data.streamUrl) {
-                streamBox.classList.remove('hidden');
-                embedBox.innerHTML = `<iframe src="${escapeHtml(data.streamUrl)}" class="w-full h-full border-0" allowfullscreen></iframe>`;
-            } else {
-                streamBox.classList.add('hidden');
-            }
-        });
-
-        const qTeams = query(collection(db, "registeredTeams"), orderBy("timestamp", "asc"));
-        onSnapshot(qTeams, (snapshot) => {
-            const squadsContainer = document.getElementById('squadsContainer');
-            const adminTeamList = document.getElementById('adminTeamList');
-            squadsContainer.innerHTML = '';
-            adminTeamList.innerHTML = '';
-
-            if (snapshot.empty) {
-                squadsContainer.innerHTML = `<div class="p-6 rounded-2xl border bg-card border-gray-800 text-center text-xs text-gray-500">No squads registered yet.</div>`;
-                adminTeamList.innerHTML = `<div class="text-gray-500 text-center py-4">No registered squads found.</div>`;
-                document.getElementById('slotCountInfo').innerText = '0 Squads Listed';
-                return;
-            }
-
-            let index = 1;
-            snapshot.forEach((documentSnap) => {
-                const data = documentSnap.data();
-                const docId = documentSnap.id;
-                const isChampion = data.badge === 'champion';
-                const isDisqualified = data.status === 'disqualified';
-
-                const badgeHtml = isChampion ? `<span class="bg-amber-500/20 text-amber-400 border border-amber-500/40 text-[9px] px-2 py-0.5 rounded font-bold ml-2">👑 Grand Champion</span>` : '';
-                const statusStyle = isDisqualified ? 'opacity-40 border-red-900/50' : 'border-gray-800';
-                const logoSrc = data.logo || 'https://images.unsplash.com/photo-1566378246526-d1408d9da45e?w=100&auto=format&fit=crop&q=60';
-
-                const squadHTML = `
-                <div class="p-4 rounded-2xl border bg-card ${statusStyle} shadow-lg space-y-2">
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-dark border border-gray-700 overflow-hidden flex items-center justify-center text-accent font-bold">
-                                <img src="${escapeHtml(logoSrc)}" alt="Logo" class="w-full h-full object-cover">
-                            </div>
-                            <div>
-                                <p class="font-extrabold text-white text-sm flex items-center">${escapeHtml(data.teamName)} ${badgeHtml}</p>
-                                <p class="text-xs text-gray-400">Slot #${index} • Server: <span class="text-accent font-semibold">${escapeHtml(data.server)}</span></p>
-                            </div>
-                        </div>
-                        <span class="text-xs font-bold ${isDisqualified ? 'text-red-400' : 'text-emerald-400'}">${isDisqualified ? 'Disqualified' : 'Verified'}</span>
-                    </div>
-                    <div class="pt-2 border-t border-gray-800 text-xs grid grid-cols-2 gap-1 text-gray-400">
-                        <div>1. ${escapeHtml(data.p1)} (Leader)</div>
-                        <div>2. ${escapeHtml(data.p2 || '-')}</div>
-                        <div>3. ${escapeHtml(data.p3 || '-')}</div>
-                        <div>4. ${escapeHtml(data.p4 || '-')}</div>
-                        ${data.sub1 ? `<div class="col-span-2 text-[10px] text-amber-300">Subs: ${escapeHtml(data.sub1)} ${data.sub2 ? '| ' + escapeHtml(data.sub2) : ''}</div>` : ''}
-                    </div>
-                </div>`;
-                squadsContainer.insertAdjacentHTML('beforeend', squadHTML);
-
-                const adminRow = `
-                <div class="bg-dark p-3 rounded-xl border border-gray-800 flex items-center justify-between gap-2">
-                    <div>
-                        <p class="font-bold text-white">${escapeHtml(data.teamName)}</p>
-                        <p class="text-[10px] text-gray-400">Leader: ${escapeHtml(data.leaderName)} | WhatsApp: ${escapeHtml(data.leaderContact)}</p>
-                    </div>
-                    <div class="flex items-center gap-1.5">
-                        <button onclick="setTeamBadge('${docId}', '${isChampion ? 'none' : 'champion'}')" class="px-2 py-1 rounded text-[10px] font-bold ${isChampion ? 'bg-amber-500 text-dark' : 'bg-gray-800 text-gray-300'}">Crown</button>
-                        <button onclick="setTeamStatus('${docId}', '${isDisqualified ? 'active' : 'disqualified'}')" class="px-2 py-1 rounded text-[10px] font-bold ${isDisqualified ? 'bg-emerald-600 text-white' : 'bg-red-950 text-red-400'}">${isDisqualified ? 'Restore' : 'Disqualify'}</button>
-                        <button onclick="deleteTeam('${docId}')" class="bg-gray-800 text-gray-400 hover:text-red-400 px-2 py-1 rounded text-[10px]"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                </div>`;
-                adminTeamList.insertAdjacentHTML('beforeend', adminRow);
-
-                index++;
-            });
-
-            document.getElementById('slotCountInfo').innerText = `${snapshot.size} Squads Listed`;
-        });
-
-        window.handleRegistration = async function(e) {
-            e.preventDefault();
-            const submitBtn = document.getElementById('submitBtn');
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin mr-2"></i> Registering...`;
-
-            try {
-                const teamName = document.getElementById('regTeamName').value.trim();
-                const leaderName = document.getElementById('regLeaderName').value.trim();
-                const leaderContact = document.getElementById('regLeaderContact').value.trim();
-                const server = document.getElementById('regServer').value;
-                const p1 = `${document.getElementById('p1Name').value.trim()} (UID: ${document.getElementById('p1Uid').value.trim()})`;
-                const p2 = `${document.getElementById('p2Name').value.trim()} (UID: ${document.getElementById('p2Uid').value.trim()})`;
-                const p3 = `${document.getElementById('p3Name').value.trim()} (UID: ${document.getElementById('p3Uid').value.trim()})`;
-                const p4 = `${document.getElementById('p4Name').value.trim()} (UID: ${document.getElementById('p4Uid').value.trim()})`;
-
-                const sub1NameInput = document.getElementById('sub1Name').value.trim();
-                const sub1UidInput = document.getElementById('sub1Uid').value.trim();
-                const sub1 = sub1NameInput ? `${sub1NameInput} (UID: ${sub1UidInput})` : '';
-
-                const sub2NameInput = document.getElementById('sub2Name').value.trim();
-                const sub2UidInput = document.getElementById('sub2Uid').value.trim();
-                const sub2 = sub2NameInput ? `${sub2NameInput} (UID: ${sub2UidInput})` : '';
-                
-                const fileInput = document.getElementById('squadLogoFile');
-
-                const processAndSave = async (logoData = '') => {
-                    await addDoc(collection(db, "registeredTeams"), {
-                        teamName, leaderName, leaderContact, server, logo: logoData,
-                        p1, p2, p3, p4, sub1, sub2,
-                        status: "active", badge: "none", timestamp: serverTimestamp()
+                    document.getElementById('squadLogoFile').addEventListener('change', function(e) {
+                        const fileNameText = document.getElementById('fileChosenText');
+                        if (e.target.files && e.target.files[0]) {
+                            fileNameText.textContent = "✔ Selected: " + e.target.files[0].name;
+                            fileNameText.style.color = "#00ff66";
+                        } else {
+                            fileNameText.textContent = "📂 Tap to choose logo from gallery";
+                            fileNameText.style.color = "#d1d5db";
+                        }
                     });
 
-                    document.getElementById('registrationForm').reset();
-                    document.getElementById('fileChosenText').textContent = "📂 Tap to choose logo from gallery";
-                    document.getElementById('fileChosenText').style.color = "#d1d5db";
-                    showErrorToast(`Success! ${teamName} registered successfully.`);
-                    switchTab('squads');
-                };
+                    onSnapshot(doc(db, "settings", "tournament"), (tourneySnap) => {
+                        const activeContainer = document.getElementById('activeTournamentContainer');
+                        const streamBox = document.getElementById('liveStreamContainer');
+                        const embedBox = document.getElementById('streamEmbedBox');
 
-                if (fileInput.files && fileInput.files[0]) {
-                    const reader = new FileReader();
-                    reader.onload = function(uploadEvent) {
-                        const img = new Image();
-                        img.onload = async function() {
-                            const canvas = document.createElement('canvas');
-                            const MAX_WIDTH = 150;
-                            const MAX_HEIGHT = 150;
-                            let width = img.width;
-                            let height = img.height;
+                        if (!tourneySnap.exists() || !tourneySnap.data().isPublished) {
+                            activeContainer.innerHTML = `
+                                <div class="bg-card border border-gray-800 p-8 rounded-2xl text-center space-y-3 shadow-xl">
+                                    <div class="w-12 h-12 rounded-2xl bg-dark border border-gray-800 flex items-center justify-center text-gray-500 mx-auto text-lg">
+                                        <i class="fa-solid fa-flag-checkered"></i>
+                                    </div>
+                                    <h2 class="font-extrabold text-white text-sm uppercase tracking-wide">No Active Tournament</h2>
+                                    <p class="text-xs text-gray-400">Check back later or wait for administrators to publish a new championship arena.</p>
+                                </div>`;
+                            streamBox.classList.add('hidden');
+                            return;
+                        }
 
-                            if (width > height) {
-                                if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                        const data = tourneySnap.data();
+                        activeContainer.innerHTML = `
+                            <div class="bg-card border border-gray-800 p-5 rounded-2xl shadow-xl space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <span class="bg-accent/20 text-accent text-[10px] px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">Active Arena</span>
+                                    <span class="text-[11px] text-gray-400">${new Date().getFullYear()} Season</span>
+                                </div>
+                                <h2 class="font-extrabold text-white text-base">${escapeHtml(data.title)}</h2>
+                                <p class="text-xs text-gray-400">Prize Pool: <b class="text-accent">${escapeHtml(data.prizePool)}</b></p>
+                            </div>`;
+
+                        if (data.streamUrl) {
+                            streamBox.classList.remove('hidden');
+                            embedBox.innerHTML = `<iframe src="${escapeHtml(data.streamUrl)}" class="w-full h-full border-0" allowfullscreen></iframe>`;
+                        } else {
+                            streamBox.classList.add('hidden');
+                        }
+                    });
+
+                    const qTeams = query(collection(db, "registeredTeams"), orderBy("timestamp", "asc"));
+                    onSnapshot(qTeams, (snapshot) => {
+                        const squadsContainer = document.getElementById('squadsContainer');
+                        const adminTeamList = document.getElementById('adminTeamList');
+                        squadsContainer.innerHTML = '';
+                        adminTeamList.innerHTML = '';
+
+                        if (snapshot.empty) {
+                            squadsContainer.innerHTML = `<div class="p-6 rounded-2xl border bg-card border-gray-800 text-center text-xs text-gray-500">No squads registered yet.</div>`;
+                            adminTeamList.innerHTML = `<div class="text-gray-500 text-center py-4">No registered squads found.</div>`;
+                            document.getElementById('slotCountInfo').innerText = '0 Squads Listed';
+                            return;
+                        }
+
+                        let index = 1;
+                        snapshot.forEach((documentSnap) => {
+                            const data = documentSnap.data();
+                            const docId = documentSnap.id;
+                            const isChampion = data.badge === 'champion';
+                            const isDisqualified = data.status === 'disqualified';
+
+                            const badgeHtml = isChampion ? `<span class="bg-amber-500/20 text-amber-400 border border-amber-500/40 text-[9px] px-2 py-0.5 rounded font-bold ml-2">👑 Grand Champion</span>` : '';
+                            const statusStyle = isDisqualified ? 'opacity-40 border-red-900/50' : 'border-gray-800';
+                            const logoSrc = data.logo || 'https://images.unsplash.com/photo-1566378246526-d1408d9da45e?w=100&auto=format&fit=crop&q=60';
+
+                            const squadHTML = `
+                            <div class="p-4 rounded-2xl border bg-card ${statusStyle} shadow-lg space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-xl bg-dark border border-gray-700 overflow-hidden flex items-center justify-center text-accent font-bold">
+                                            <img src="${escapeHtml(logoSrc)}" alt="Logo" class="w-full h-full object-cover">
+                                        </div>
+                                        <div>
+                                            <p class="font-extrabold text-white text-sm flex items-center">${escapeHtml(data.teamName)} ${badgeHtml}</p>
+                                            <p class="text-xs text-gray-400">Slot #${index} • Server: <span class="text-accent font-semibold">${escapeHtml(data.server)}</span></p>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs font-bold ${isDisqualified ? 'text-red-400' : 'text-emerald-400'}">${isDisqualified ? 'Disqualified' : 'Verified'}</span>
+                                </div>
+                                <div class="pt-2 border-t border-gray-800 text-xs grid grid-cols-2 gap-1 text-gray-400">
+                                    <div>1. ${escapeHtml(data.p1)} (Leader)</div>
+                                    <div>2. ${escapeHtml(data.p2 || '-')}</div>
+                                    <div>3. ${escapeHtml(data.p3 || '-')}</div>
+                                    <div>4. ${escapeHtml(data.p4 || '-')}</div>
+                                    ${data.sub1 ? `<div class="col-span-2 text-[10px] text-amber-300">Subs: ${escapeHtml(data.sub1)} ${data.sub2 ? '| ' + escapeHtml(data.sub2) : ''}</div>` : ''}
+                                </div>
+                            </div>`;
+                            squadsContainer.insertAdjacentHTML('beforeend', squadHTML);
+
+                            const adminRow = `
+                            <div class="bg-dark p-3 rounded-xl border border-gray-800 flex items-center justify-between gap-2">
+                                <div>
+                                    <p class="font-bold text-white">${escapeHtml(data.teamName)}</p>
+                                    <p class="text-[10px] text-gray-400">Leader: ${escapeHtml(data.leaderName)} | WhatsApp: ${escapeHtml(data.leaderContact)}</p>
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    <button onclick="setTeamBadge('${docId}', '${isChampion ? 'none' : 'champion'}')" class="px-2 py-1 rounded text-[10px] font-bold ${isChampion ? 'bg-amber-500 text-dark' : 'bg-gray-800 text-gray-300'}">Crown</button>
+                                    <button onclick="setTeamStatus('${docId}', '${isDisqualified ? 'active' : 'disqualified'}')" class="px-2 py-1 rounded text-[10px] font-bold ${isDisqualified ? 'bg-emerald-600 text-white' : 'bg-red-950 text-red-400'}">${isDisqualified ? 'Restore' : 'Disqualify'}</button>
+                                    <button onclick="deleteTeam('${docId}')" class="bg-gray-800 text-gray-400 hover:text-red-400 px-2 py-1 rounded text-[10px]"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </div>`;
+                            adminTeamList.insertAdjacentHTML('beforeend', adminRow);
+
+                            index++;
+                        });
+
+                        document.getElementById('slotCountInfo').innerText = `${snapshot.size} Squads Listed`;
+                    });
+
+                    window.handleRegistration = async function(e) {
+                        e.preventDefault();
+                        const submitBtn = document.getElementById('submitBtn');
+                        submitBtn.disabled = true;
+                        submitBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin mr-2"></i> Registering...`;
+
+                        try {
+                            const teamName = document.getElementById('regTeamName').value.trim();
+                            const leaderName = document.getElementById('regLeaderName').value.trim();
+                            const leaderContact = document.getElementById('regLeaderContact').value.trim();
+                            const server = document.getElementById('regServer').value;
+                            const p1 = `${document.getElementById('p1Name').value.trim()} (UID: ${document.getElementById('p1Uid').value.trim()})`;
+                            const p2 = `${document.getElementById('p2Name').value.trim()} (UID: ${document.getElementById('p2Uid').value.trim()})`;
+                            const p3 = `${document.getElementById('p3Name').value.trim()} (UID: ${document.getElementById('p3Uid').value.trim()})`;
+                            const p4 = `${document.getElementById('p4Name').value.trim()} (UID: ${document.getElementById('p4Uid').value.trim()})`;
+
+                            const sub1NameInput = document.getElementById('sub1Name').value.trim();
+                            const sub1UidInput = document.getElementById('sub1Uid').value.trim();
+                            const sub1 = sub1NameInput ? `${sub1NameInput} (UID: ${sub1UidInput})` : '';
+
+                            const sub2NameInput = document.getElementById('sub2Name').value.trim();
+                            const sub2UidInput = document.getElementById('sub2Uid').value.trim();
+                            const sub2 = sub2NameInput ? `${sub2NameInput} (UID: ${sub2UidInput})` : '';
+                            
+                            const fileInput = document.getElementById('squadLogoFile');
+
+                            const processAndSave = async (logoData = '') => {
+                                await addDoc(collection(db, "registeredTeams"), {
+                                    teamName, leaderName, leaderContact, server, logo: logoData,
+                                    p1, p2, p3, p4, sub1, sub2,
+                                    status: "active", badge: "none", timestamp: serverTimestamp()
+                                });
+
+                                document.getElementById('registrationForm').reset();
+                                document.getElementById('fileChosenText').textContent = "📂 Tap to choose logo from gallery";
+                                document.getElementById('fileChosenText').style.color = "#d1d5db";
+                                showErrorToast(`Success! ${teamName} registered successfully.`);
+                                switchTab('squads');
+                            };
+
+                            if (fileInput.files && fileInput.files[0]) {
+                                const reader = new FileReader();
+                                reader.onload = function(uploadEvent) {
+                                    const img = new Image();
+                                    img.onload = async function() {
+                                        const canvas = document.createElement('canvas');
+                                        const MAX_WIDTH = 150;
+                                        const MAX_HEIGHT = 150;
+                                        let width = img.width;
+                                        let height = img.height;
+
+                                        if (width > height) {
+                                            if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                                        } else {
+                                            if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+                                        }
+
+                                        canvas.width = width;
+                                        canvas.height = height;
+                                        const ctx = canvas.getContext('2d');
+                                        ctx.drawImage(img, 0, 0, width, height);
+                                        
+                                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                                        await processAndSave(compressedBase64);
+                                    };
+                                    img.src = uploadEvent.target.result;
+                                };
+                                reader.readAsDataURL(fileInput.files[0]);
                             } else {
-                                if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+                                await processAndSave('');
                             }
 
-                            canvas.width = width;
-                            canvas.height = height;
-                            const ctx = canvas.getContext('2d');
-                            ctx.drawImage(img, 0, 0, width, height);
-                            
-                            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
-                            await processAndSave(compressedBase64);
-                        };
-                        img.src = uploadEvent.target.result;
+                        } catch (err) {
+                            showErrorToast(err.message);
+                        } finally {
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up mr-2"></i> Register Squad & Claim Slot`;
+                        }
                     };
-                    reader.readAsDataURL(fileInput.files[0]);
-                } else {
-                    await processAndSave('');
-                }
 
-            } catch (err) {
-                showErrorToast(err.message);
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up mr-2"></i> Register Squad & Claim Slot`;
-            } finally {
-                if (!document.getElementById('registrationForm').checkValidity()) {
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up mr-2"></i> Register Squad & Claim Slot`;
-                }
-            }
-        };
+                    window.verifyAndUnlockRoom = async function() {
+                        try {
+                            const leaderInput = document.getElementById('verifyLeaderName').value.trim();
+                            if (!leaderInput) throw new Error("Please enter your registered Leader name.");
 
-        window.verifyAndUnlockRoom = async function() {
-            try {
-                const leaderInput = document.getElementById('verifyLeaderName').value.trim();
-                if (!leaderInput) throw new Error("Please enter your registered Leader name.");
+                            const qCheck = query(collection(db, "registeredTeams"), where("leaderName", "==", leaderInput));
+                            const querySnapshot = await getDocs(qCheck);
 
-                const qCheck = query(collection(db, "registeredTeams"), where("leaderName", "==", leaderInput));
-                const querySnapshot = await getDocs(qCheck);
+                            if (querySnapshot.empty) {
+                                throw new Error(`Leader name "${leaderInput}" not found in registered rosters.`);
+                            }
 
-                if (querySnapshot.empty) {
-                    throw new Error(`Leader name "${leaderInput}" not found in registered rosters.`);
-                }
+                            const roomSnap = await getDoc(doc(db, "settings", "roomInfo"));
+                            let roomId = "Not Set By Admin";
+                            let roomPass = "Not Set By Admin";
 
-                const roomSnap = await getDoc(doc(db, "settings", "roomInfo"));
-                let roomId = "Not Set By Admin";
-                let roomPass = "Not Set By Admin";
+                            if (roomSnap.exists()) {
+                                roomId = roomSnap.data().roomId || roomId;
+                                roomPass = roomSnap.data().roomPass || roomPass;
+                            }
 
-                if (roomSnap.exists()) {
-                    roomId = roomSnap.data().roomId || roomId;
-                    roomPass = roomSnap.data().roomPass || roomPass;
-                }
+                            const credBox = document.getElementById('roomCredentialsBox');
+                            const badge = document.getElementById('lockStatusBadge');
+                            
+                            credBox.classList.remove('opacity-50', 'pointer-events-none');
+                            badge.className = "bg-emerald-950 text-emerald-400 border border-emerald-500/40 px-2 py-0.5 rounded text-[9px] uppercase font-bold";
+                            badge.innerText = "🔓 Unlocked";
+                            
+                            document.getElementById('roomIdText').innerText = roomId;
+                            document.getElementById('roomPassText').innerText = roomPass;
+                            document.getElementById('roomIdText').className = "font-mono font-bold text-accent select-all";
+                            document.getElementById('roomPassText').className = "font-mono font-bold text-accent select-all";
 
-                const credBox = document.getElementById('roomCredentialsBox');
-                const badge = document.getElementById('lockStatusBadge');
-                
-                credBox.classList.remove('opacity-50', 'pointer-events-none');
-                badge.className = "bg-emerald-950 text-emerald-400 border border-emerald-500/40 px-2 py-0.5 rounded text-[9px] uppercase font-bold";
-                badge.innerText = "🔓 Unlocked";
-                
-                document.getElementById('roomIdText').innerText = roomId;
-                document.getElementById('roomPassText').innerText = roomPass;
-                document.getElementById('roomIdText').className = "font-mono font-bold text-accent select-all";
-                document.getElementById('roomPassText').className = "font-mono font-bold text-accent select-all";
+                            showErrorToast(`Access granted for leader ${leaderInput}!`);
+                        } catch (err) {
+                            showErrorToast(err.message);
+                        }
+                    };
 
-                showErrorToast(`Access granted for leader ${leaderInput}!`);
-            } catch (err) {
-                showErrorToast(err.message);
-            }
-        };
+                    window.saveSocialLinks = async function() {
+                        try {
+                            await setDoc(doc(db, 'settings', 'config'), {
+                                whatsapp: document.getElementById('adminWhatsapp').value.trim(),
+                                discord: document.getElementById('adminDiscord').value.trim(),
+                                telegram: document.getElementById('adminTelegram').value.trim(),
+                                youtube: document.getElementById('adminYoutube').value.trim(),
+                                instagram: document.getElementById('adminInstagram').value.trim(),
+                                tiktok: document.getElementById('adminTiktok').value.trim(),
+                                x: document.getElementById('adminX').value.trim()
+                            }, { merge: true });
+                            showErrorToast("Social links updated successfully!");
+                        } catch (err) {
+                            showErrorToast(err.message);
+                        }
+                    };
+                    
+                                        window.verifyAdminLogin = async function() {
+                        const pass = document.getElementById('adminPassInput').value.trim();
+                        if (pass === "2060") {
+                            document.getElementById('adminLoginBox').classList.add('hidden');
+                            document.getElementById('adminDashboardBox').classList.remove('hidden');
+                            
+                            try {
+                                const tourneySnap = await getDoc(doc(db, "settings", "tournament"));
+                                if (tourneySnap.exists()) {
+                                    document.getElementById('adminTourneyTitle').value = tourneySnap.data().title || "";
+                                    document.getElementById('adminTourneyPrize').value = tourneySnap.data().prizePool || "";
+                                    document.getElementById('adminStreamUrl').value = tourneySnap.data().streamUrl || "";
+                                }
+                                const roomSnap = await getDoc(doc(db, "settings", "roomInfo"));
+                                if (roomSnap.exists()) {
+                                    document.getElementById('adminRoomId').value = roomSnap.data().roomId || "";
+                                    document.getElementById('adminRoomPass').value = roomSnap.data().roomPass || "";
+                                }
+                                const configSnap = await getDoc(doc(db, 'settings', 'config'));
+                                if (configSnap.exists()) {
+                                    const cData = configSnap.data();
+                                    document.getElementById('adminWhatsapp').value = cData.whatsapp || "";
+                                    document.getElementById('adminDiscord').value = cData.discord || "";
+                                    document.getElementById('adminTelegram').value = cData.telegram || "";
+                                    document.getElementById('adminYoutube').value = cData.youtube || "";
+                                    document.getElementById('adminInstagram').value = cData.instagram || "";
+                                    document.getElementById('adminTiktok').value = cData.tiktok || "";
+                                    document.getElementById('adminX').value = cData.x || "";
+                                }
+                            } catch(e) {}
 
-        window.saveSocialLinks = async function() {
-            try {
-                await setDoc(doc(db, 'settings', 'config'), {
-                    whatsapp: document.getElementById('adminWhatsapp').value.trim(),
-                    discord: document.getElementById('adminDiscord').value.trim(),
-                    telegram: document.getElementById('adminTelegram').value.trim(),
-                    youtube: document.getElementById('adminYoutube').value.trim(),
-                    instagram: document.getElementById('adminInstagram').value.trim(),
-                    tiktok: document.getElementById('adminTiktok').value.trim(),
-                    x: document.getElementById('adminX').value.trim()
-                }, { merge: true });
-                showErrorToast("Social links updated successfully!");
-            } catch (err) {
-                showErrorToast(err.message);
-            }
-        };
-        
-        window.verifyAdminLogin = async function() {
-            const pass = document.getElementById('adminPassInput').value.trim();
-            if (pass === "2060") {
-                document.getElementById('adminLoginBox').classList.add('hidden');
-                document.getElementById('adminDashboardBox').classList.remove('hidden');
-                
-                try {
-                    const tourneySnap = await getDoc(doc(db, "settings", "tournament"));
-                    if (tourneySnap.exists()) {
-                        document.getElementById('adminTourneyTitle').value = tourneySnap.data().title || "";
-                        document.getElementById('adminTourneyPrize').value = tourneySnap.data().prizePool || "";
-                        document.getElementById('adminStreamUrl').value = tourneySnap.data().streamUrl || "";
+                            showErrorToast("Admin access authorized!");
+                        } else {
+                            showErrorToast("Incorrect passcode. Admin key is 2060.");
+                        }
+                    };
+
+                    window.lockAdminPanel = function() {
+                        document.getElementById('adminPassInput').value = "";
+                        document.getElementById('adminDashboardBox').classList.add('hidden');
+                        document.getElementById('adminLoginBox').classList.remove('hidden');
+                        showErrorToast("Admin panel locked.");
+                    };
+
+                    window.publishTournament = async function(isPublished) {
+                        try {
+                            const title = document.getElementById('adminTourneyTitle').value.trim();
+                            const prizePool = document.getElementById('adminTourneyPrize').value.trim();
+                            const streamUrl = document.getElementById('adminStreamUrl').value.trim();
+
+                            await setDoc(doc(db, "settings", "tournament"), { isPublished, title, prizePool, streamUrl });
+                            showErrorToast(isPublished ? "Tournament published live!" : "Tournament unpublished.");
+                        } catch (err) {
+                            showErrorToast("Error: " + err.message);
+                        }
+                    };
+
+                    window.updateRoomCredentials = async function() {
+                        try {
+                            const roomId = document.getElementById('adminRoomId').value.trim();
+                            const roomPass = document.getElementById('adminRoomPass').value.trim();
+
+                            await setDoc(doc(db, "settings", "roomInfo"), { roomId, roomPass });
+                            showErrorToast("Room credentials saved!");
+                        } catch (err) {
+                            showErrorToast("Error: " + err.message);
+                        }
+                    };
+
+                    window.setTeamBadge = async function(docId, badge) {
+                        try {
+                            await updateDoc(doc(db, "registeredTeams", docId), { badge });
+                            showErrorToast("Team badge updated!");
+                        } catch(e) { showErrorToast(e.message); }
+                    };
+
+                    window.setTeamStatus = async function(docId, status) {
+                        try {
+                            await updateDoc(doc(db, "registeredTeams", docId), { status });
+                            showErrorToast("Team status updated!");
+                        } catch(e) { showErrorToast(e.message); }
+                    };
+
+                    window.deleteTeam = async function(docId) {
+                        if (confirm("Remove this squad from tournament records?")) {
+                            try {
+                                await deleteDoc(doc(db, "registeredTeams", docId));
+                                showErrorToast("Squad deleted.");
+                            } catch(e) { showErrorToast(e.message); }
+                        }
+                    };
+
+                    window.switchTab = function(tab) {
+                        ['arenas', 'squads', 'rooms', 'admin'].forEach(t => {
+                            const sec = document.getElementById('section-' + t);
+                            const btn = document.getElementById('tab-' + t);
+                            if (sec) sec.classList.add('hidden');
+                            if (btn) btn.className = "py-2.5 rounded-xl text-gray-400 hover:text-white transition";
+                        });
+                        
+                        const activeSec = document.getElementById('section-' + tab);
+                        const activeBtn = document.getElementById('tab-' + tab);
+                        if (activeSec) activeSec.classList.remove('hidden');
+                        if (activeBtn) activeBtn.className = "py-2.5 rounded-xl bg-accent text-dark font-bold transition";
+                    };
+
+                    function showErrorToast(msg) {
+                        const toast = document.getElementById('toast');
+                        document.getElementById('toastMsg').innerText = msg;
+                        toast.classList.remove('hidden');
+                        setTimeout(() => toast.classList.add('hidden'), 3000);
                     }
-                    const roomSnap = await getDoc(doc(db, "settings", "roomInfo"));
-                    if (roomSnap.exists()) {
-                        document.getElementById('adminRoomId').value = roomSnap.data().roomId || "";
-                        document.getElementById('adminRoomPass').value = roomSnap.data().roomPass || "";
+
+                    function escapeHtml(str) {
+                        return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
                     }
-                    const configSnap = await getDoc(doc(db, 'settings', 'config'));
-                    if (configSnap.exists()) {
-                        const cData = configSnap.data();
-                        document.getElementById('adminWhatsapp').value = cData.whatsapp || "";
-                        document.getElementById('adminDiscord').value = cData.discord || "";
-                        document.getElementById('adminTelegram').value = cData.telegram || "";
-                        document.getElementById('adminYoutube').value = cData.youtube || "";
-                                            document.getElementById('adminInstagram').value = cData.instagram || "";
-                    document.getElementById('adminTiktok').value = cData.tiktok || "";
-                    document.getElementById('adminX').value = cData.x || "";
-                }
-            } catch(e) {}
 
-            showErrorToast("Admin access authorized!");
-        } else {
-            showErrorToast("Incorrect passcode. Admin key is 2060.");
-        }
-    };
-
-    window.lockAdminPanel = function() {
-        document.getElementById('adminPassInput').value = "";
-        document.getElementById('adminDashboardBox').classList.add('hidden');
-        document.getElementById('adminLoginBox').classList.remove('hidden');
-        showErrorToast("Admin panel locked.");
-    };
-
-    window.publishTournament = async function(isPublished) {
-        try {
-            const title = document.getElementById('adminTourneyTitle').value.trim();
-            const prizePool = document.getElementById('adminTourneyPrize').value.trim();
-            const streamUrl = document.getElementById('adminStreamUrl').value.trim();
-
-            await setDoc(doc(db, "settings", "tournament"), { isPublished, title, prizePool, streamUrl });
-            showErrorToast(isPublished ? "Tournament published live!" : "Tournament unpublished.");
-        } catch (err) {
-            showErrorToast("Error: " + err.message);
-        }
-    };
-
-    window.updateRoomCredentials = async function() {
-        try {
-            const roomId = document.getElementById('adminRoomId').value.trim();
-            const roomPass = document.getElementById('adminRoomPass').value.trim();
-
-            await setDoc(doc(db, "settings", "roomInfo"), { roomId, roomPass });
-            showErrorToast("Room credentials saved!");
-        } catch (err) {
-            showErrorToast("Error: " + err.message);
-        }
-    };
-
-    window.setTeamBadge = async function(docId, badge) {
-        try {
-            await updateDoc(doc(db, "registeredTeams", docId), { badge });
-            showErrorToast("Team badge updated!");
-        } catch(e) { showErrorToast(e.message); }
-    };
-
-    window.setTeamStatus = async function(docId, status) {
-        try {
-            await updateDoc(doc(db, "registeredTeams", docId), { status });
-            showErrorToast("Team status updated!");
-        } catch(e) { showErrorToast(e.message); }
-    };
-
-    window.deleteTeam = async function(docId) {
-        if (confirm("Remove this squad from tournament records?")) {
-            try {
-                await deleteDoc(doc(db, "registeredTeams", docId));
-                showErrorToast("Squad deleted.");
-            } catch(e) { showErrorToast(e.message); }
-        }
-    };
-
-    window.switchTab = function(tab) {
-        ['arenas', 'squads', 'rooms', 'admin'].forEach(t => {
-            const sec = document.getElementById('section-' + t);
-            const btn = document.getElementById('tab-' + t);
-            if (sec) sec.classList.add('hidden');
-            if (btn) btn.className = "py-2.5 rounded-xl text-gray-400 hover:text-white transition";
-        });
-        
-        const activeSec = document.getElementById('section-' + tab);
-        const activeBtn = document.getElementById('tab-' + tab);
-        if (activeSec) activeSec.classList.remove('hidden');
-        if (activeBtn) activeBtn.className = "py-2.5 rounded-xl bg-accent text-dark font-bold transition";
-    };
-
-    function showErrorToast(msg) {
-        const toast = document.getElementById('toast');
-        document.getElementById('toastMsg').innerText = msg;
-        toast.classList.remove('hidden');
-        setTimeout(() => toast.classList.add('hidden'), 3000);
-    }
-
-    function escapeHtml(str) {
-        return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-    }
-
-    (async () => {
-        try {
-            const socialsContainer = document.getElementById('footerSocials');
-            const configSnap = await getDoc(doc(db, 'settings', 'config'));
-            if (socialsContainer && configSnap.exists()) {
-                const data = configSnap.data();
-                let html = '';
-                if (data.whatsapp) html += `<a href="${data.whatsapp}" target="_blank" class="hover:text-accent transition"><i class="fa-brands fa-whatsapp mr-1"></i> WhatsApp</a>`;
-                if (data.discord) html += `<a href="${data.discord}" target="_blank" class="hover:text-accent transition"><i class="fa-brands fa-discord mr-1"></i> Discord</a>`;
-                if (data.telegram) html += `<a href="${data.telegram}" target="_blank" class="hover:text-accent transition"><i class="fa-brands fa-telegram mr-1"></i> Telegram</a>`;
-                if (data.youtube) html += `<a href="${data.youtube}" target="_blank" class="hover:text-accent transition"><i class="fa-brands fa-youtube mr-1"></i> YouTube</a>`;
-                if (data.instagram) html += `<a href="${data.instagram}" target="_blank" class="hover:text-accent transition"><i class="fa-brands fa-instagram mr-1"></i> Instagram</a>`;
-                if (data.tiktok) html += `<a href="${data.tiktok}" target="_blank" class="hover:text-accent transition"><i class="fa-brands fa-tiktok mr-1"></i> TikTok</a>`;
-                if (data.x) html += `<a href="${data.x}" target="_blank" class="hover:text-accent transition"><i class="fa-brands fa-x-twitter mr-1"></i> X</a>`;
-                socialsContainer.innerHTML = html;
-            }
-        } catch (e) {
-            console.error("Error loading social links:", e);
-        }
-    })();
-</script>
-</body>
-</html>
+                    (async () => {
+                        try {
+                            const socialsContainer = document.getElementById('footerSocials');
+                            const configSnap = await getDoc(doc(db, 'settings', 'config'));
+                            if (socialsContainer && configSnap.exists()) {
+                                const data = configSnap.data();
+                                let html = '';
+                                if (data.whatsapp) html += `<a href="${data.whatsapp}" target="_blank" class="hover:text-accent transition"><i class="fa-brands fa-whatsapp mr-1"></i> WhatsApp</a>`;
+                                if (data.discord) html += `<a href="${data.discord}" target="_blank" class="hover:text-accent transition"><i class="fa-brands fa-discord mr-1"></i> Discord</a>`;
+                                if (data.telegram) html += `<a href="${data.telegram}" target="_blank" class="hover:text-accent transition"><i class="fa-brands fa-telegram mr-1"></i> Telegram</a>`;
+                                if (data.youtube) html += `<a href="${data.youtube}" target="_blank" class="hover:text-accent transition"><i class="fa-brands fa-youtube mr-1"></i> YouTube</a>`;
+                                if (data.instagram) html += `<a href="${data.instagram}" target="_blank" class="hover:text-accent transition"><i class="fa-brands fa-instagram mr-1"></i> Instagram</a>`;
+                                if (data.tiktok) html += `<a href="${data.tiktok}" target="_blank" class="hover:text-accent transition"><i class="fa-brands fa-tiktok mr-1"></i> TikTok</a>`;
+                                if (data.x) html += `<a href="${data.x}" target="_blank" class="hover:text-accent transition"><i class="fa-brands fa-x-twitter mr-1"></i> X</a>`;
+                                socialsContainer.innerHTML = html;
+                            }
+                        } catch (e) {
+                            console.error("Error loading social links:", e);
+                        }
+                    })();
+                </script>
+            </body>
+            </html>
+            
