@@ -459,7 +459,89 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, query, where, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+  // ==========================================
+  // 1. TAB NAVIGATION ENGINE
+  // ==========================================
+  window.switchPage = function(pageId) {
+    const pages = {
+      tournaments: document.getElementById('pageTournaments'),
+      vault: document.getElementById('pageVault'),
+      standings: document.getElementById('pageStandings'),
+      admin: document.getElementById('pageAdmin')
+    };
 
+    const navBtns = {
+      tournaments: document.getElementById('navTournaments'),
+      vault: document.getElementById('navVault'),
+      standings: document.getElementById('navStandings'),
+      admin: document.getElementById('navAdmin')
+    };
+
+    const activeStyles = "px-4 py-2.5 rounded-xl bg-blue-600 text-white text-xs font-bold transition flex items-center gap-2 shadow-lg shadow-blue-600/30";
+    const inactiveStyles = "px-4 py-2.5 rounded-xl hover:text-slate-200 text-slate-400 text-xs font-bold transition flex items-center gap-2";
+
+    Object.keys(pages).forEach(key => {
+      if (pages[key]) {
+        if (key === pageId) {
+          pages[key].classList.remove('hidden');
+        } else {
+          pages[key].classList.add('hidden');
+        }
+      }
+
+      if (navBtns[key]) {
+        if (key === pageId) {
+          navBtns[key].className = activeStyles;
+        } else {
+          navBtns[key].className = inactiveStyles;
+        }
+      }
+    });
+  };
+
+  // ==========================================
+  // 2. SOCIAL LINKS SAVER (Header Sync)
+  // ==========================================
+  window.saveSocialLinks = async function() {
+    const discord = document.getElementById('adminDiscordURL')?.value.trim();
+    const youtube = document.getElementById('adminYoutubeURL')?.value.trim();
+    const tiktok = document.getElementById('adminTiktokURL')?.value.trim();
+    const whatsapp = document.getElementById('adminWhatsappURL')?.value.trim();
+
+    try {
+      const { doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js");
+      await setDoc(doc(db, "settings", "social_links"), {
+        discord: discord || '#',
+        youtube: youtube || '#',
+        tiktok: tiktok || 'https://tiktok.com/@tmt_esports',
+        whatsapp: whatsapp || '#'
+      }, { merge: true });
+
+      alert("✅ Social Media links updated live on header!");
+    } catch (err) {
+      console.error("Error saving social links:", err);
+      alert("❌ Failed to save social links.");
+    }
+  };
+
+  async function loadSocialLinks() {
+    try {
+      const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js");
+      const snap = await getDoc(doc(db, "settings", "social_links"));
+      if (snap.exists()) {
+        const data = snap.data();
+        if (data.discord && document.getElementById('headerDiscordLink')) document.getElementById('headerDiscordLink').href = data.discord;
+        if (data.youtube && document.getElementById('headerYoutubeLink')) document.getElementById('headerYoutubeLink').href = data.youtube;
+        if (data.tiktok && document.getElementById('headerTiktokLink')) document.getElementById('headerTiktokLink').href = data.tiktok;
+        if (data.whatsapp && document.getElementById('headerWhatsappLink')) document.getElementById('headerWhatsappLink').href = data.whatsapp;
+      }
+    } catch (e) {
+      console.log("Using default header links.");
+    }
+  }
+
+  loadSocialLinks();
+    
     // Firebase Configuration for terminators-e-sports-v2
     const firebaseConfig = {
       apiKey: "AIzaSyD6SkL8wMpZchonFbDJ10eT58Bx4dng",
