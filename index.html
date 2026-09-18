@@ -83,113 +83,13 @@
       </a>
     </section>
 
-    <!-- Main Workspace Container -->
+                <!-- Main Workspace Container -->
     <main id="appCore" class="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <!-- Left Column: Registration Form & Live Standings -->
+      
+      <!-- LEFT COLUMN: Registration Engine & Live Standings -->
       <div class="lg:col-span-2 space-y-6">
         
-        <!-- Registration Engine -->
-        <div class="glass-card rounded-2xl p-6 border border-slate-800">
-          <div class="flex items-center justify-between mb-4">
-            <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
-              <i class="fa-solid fa-file-pen text-blue-500"></i> Registration Engine
-            </h2>
-            <span class="bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-bold px-3 py-1 rounded-full">Open</span>
-          </div>
-
-          <form id="registrationForm" class="space-y-4">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-semibold text-slate-400 mb-1">Squad / Player Name *</label>
-                <input type="text" id="regSquadName" required placeholder="e.g., Terminators Elite" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500 transition">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-400 mb-1">Captain In-Game Name (IGN) *</label>
-                <input type="text" id="regCaptainIGN" required placeholder="e.g., TMT_MICO" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500 transition">
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-semibold text-slate-400 mb-1">Free Fire UID *</label>
-                <input type="number" id="regFFUID" required placeholder="e.g., 1234567890" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500 transition">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-400 mb-1">WhatsApp Phone Number *</label>
-                <input type="tel" id="regPhone" required placeholder="e.g., +234..." class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500 transition">
-              </div>
-            </div>
-
-            <!-- Captain PIN Setup -->
-            <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800 space-y-2">
-              <label class="block text-xs font-bold text-amber-400 flex items-center gap-1.5">
-                <i class="fa-solid fa-lock"></i> Set Captain Security PIN (4 Digits) *
-              </label>
-              <input type="password" id="regCaptainPIN" maxlength="4" pattern="\d{4}" required placeholder="****" class="w-28 bg-slate-950 border border-amber-500/30 text-center tracking-widest font-mono text-lg text-amber-400 rounded-xl py-2 focus:outline-none focus:border-amber-400 transition">
-              <p class="text-[11px] text-slate-500">This PIN unlocks your match room passcode and squad settings in the vault.</p>
-            </div>
-
-            <button type="submit" id="submitRegBtn" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-3 rounded-xl shadow-lg glow-blue transition flex items-center justify-center gap-2">
-              <i class="fa-solid fa-paper-plane"></i> Submit Registration
-            </button>
-          </form>
-          <div id="regStatusMsg" class="mt-3 text-xs text-center font-bold"></div>
-        </div>
-
-        <!-- Real-Time Live Standings & Leaderboard -->
-        <div class="glass-card rounded-2xl p-6 border border-slate-800">
-          <div class="flex items-center justify-between mb-4">
-            <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
-              <i class="fa-solid fa-trophy text-amber-400"></i> Live Standings & Rankings
-            </h2>
-            <span class="text-xs text-slate-400 flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> Live Firestore Sync
-            </span>
-          </div>
-
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs text-slate-300">
-              <thead class="bg-slate-900/80 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
-                <tr>
-                  <th class="p-3">Rank</th>
-                  <th class="p-3">Squad / Player</th>
-                  <th class="p-3 text-center">Kills</th>
-                  <th class="p-3 text-center">Pts</th>
-                  <th class="p-3 text-right">Status</th>
-                </tr>
-              </thead>
-              <tbody id="leaderboardBody" class="divide-y divide-slate-800/50 font-medium">
-                <tr>
-                  <td colspan="5" class="p-4 text-center text-slate-500 animate-pulse">
-                    Connecting to live scoreboard feed...
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Right Column: Vault & Security -->
-      <div class="space-y-6">
-        
-        <!-- Captain Passcode Vault -->
-        <div class="glass-card rounded-2xl p-6 border border-slate-800">
-          <h2 class="text-sm font-bold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-2">
-            <i class="fa-solid fa-vault text-amber-500"></i> Captain Room Passcode Vault
-          </h2>
-          <div class="space-y-3">
-            <p class="text-xs text-slate-400">Enter your registered Free Fire UID and 4-Digit Security PIN to reveal room credentials.</p>
-            <input type="number" id="vaultUID" placeholder="Enter FF UID" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500">
-            <input type="password" id="vaultPIN" maxlength="4" placeholder="4-Digit PIN" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500">
-            <button id="unlockVaultBtn" class="w-full bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold py-2.5 rounded-xl transition flex items-center justify-center gap-2">
-              <i class="fa-solid fa-key"></i> Access Room Passcode
-            </button>
-      <!-- Left Column: Registration Engine & Live Standings -->
-      <div class="lg:col-span-2 space-y-6">
-        
-        <!-- Registration Engine -->
+        <!-- Full Squad Registration Engine -->
         <div class="glass-card rounded-2xl p-6 border border-slate-800">
           <div class="flex items-center justify-between mb-4">
             <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
@@ -199,7 +99,6 @@
           </div>
 
           <form id="registrationForm" class="space-y-4">
-            
             <!-- Squad Info & Logo -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -297,7 +196,87 @@
           </div>
         </div>
 
-                  </div>
+      </div>
+
+      <!-- RIGHT COLUMN: Vault, 4v4 Slot Allocator, & Tournament Bracket -->
+      <div class="space-y-6">
+        
+        <!-- Captain Passcode Vault -->
+        <div class="glass-card rounded-2xl p-6 border border-slate-800">
+          <h2 class="text-sm font-bold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-vault text-amber-500"></i> Captain Room Passcode Vault
+          </h2>
+          <div class="space-y-3">
+            <p class="text-xs text-slate-400">Enter your registered Free Fire UID and 4-Digit Security PIN to reveal room credentials.</p>
+            <input type="number" id="vaultUID" placeholder="Enter FF UID" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500">
+            <input type="password" id="vaultPIN" maxlength="4" placeholder="4-Digit PIN" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500">
+            <button id="unlockVaultBtn" class="w-full bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold py-2.5 rounded-xl transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-key"></i> Access Room Passcode
+            </button>
+            <div id="vaultOutput" class="mt-3 text-xs hidden p-3 bg-slate-950 rounded-xl border border-slate-800"></div>
+          </div>
+        </div>
+
+        <!-- 4v4 Custom Room Slot Allocator (Batch 2) -->
+        <div class="glass-card rounded-2xl p-6 border border-slate-800">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
+              <i class="fa-solid fa-users-viewfinder text-indigo-400"></i> 4v4 Slot Allocator
+            </h2>
+            <span class="text-[10px] bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 font-bold px-2.5 py-1 rounded-full">Custom Room</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 text-xs">
+            <div class="p-3 bg-red-950/30 border border-red-500/30 rounded-xl space-y-2">
+              <div class="font-bold text-red-400 flex items-center justify-between border-b border-red-500/20 pb-1">
+                <span>TEAM ALPHA</span>
+                <span class="text-[10px] text-red-300/70">SLOT 1-4</span>
+              </div>
+              <div id="slotAlphaList" class="space-y-1 font-mono text-[11px] text-slate-300">
+                <div class="p-1 bg-slate-900/60 rounded">1. Slot Open</div>
+                <div class="p-1 bg-slate-900/60 rounded">2. Slot Open</div>
+                <div class="p-1 bg-slate-900/60 rounded">3. Slot Open</div>
+                <div class="p-1 bg-slate-900/60 rounded">4. Slot Open</div>
+              </div>
+            </div>
+
+            <div class="p-3 bg-blue-950/30 border border-blue-500/30 rounded-xl space-y-2">
+              <div class="font-bold text-blue-400 flex items-center justify-between border-b border-blue-500/20 pb-1">
+                <span>TEAM BRAVO</span>
+                <span class="text-[10px] text-blue-300/70">SLOT 5-8</span>
+              </div>
+              <div id="slotBravoList" class="space-y-1 font-mono text-[11px] text-slate-300">
+                <div class="p-1 bg-slate-900/60 rounded">5. Slot Open</div>
+                <div class="p-1 bg-slate-900/60 rounded">6. Slot Open</div>
+                <div class="p-1 bg-slate-900/60 rounded">7. Slot Open</div>
+                <div class="p-1 bg-slate-900/60 rounded">8. Slot Open</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Automated Tournament Bracket Tree (Batch 2) -->
+        <div class="glass-card rounded-2xl p-6 border border-slate-800">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
+              <i class="fa-solid fa-sitemap text-amber-400"></i> Tournament Bracket
+            </h2>
+            <button id="generateBracketBtn" class="text-xs bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-400 font-bold px-3 py-1 rounded-xl transition">
+              ⚡ Auto-Seed
+            </button>
+          </div>
+
+          <div class="overflow-x-auto pb-2">
+            <div id="bracketDisplay" class="min-w-[280px] flex items-center justify-around gap-4 text-xs font-mono">
+              <p class="text-slate-500 text-center py-4">Click "Auto-Seed" to generate match brackets from registered teams.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+                </main>
+  
             
           <!-- Footer -->
     <footer class="mt-8 text-center text-xs text-slate-500 py-4 border-t border-slate-900">
