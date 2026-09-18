@@ -228,7 +228,7 @@
             <i class="fa-solid fa-shield-halved"></i>
           </div>
           <h2 class="text-lg font-bold text-slate-100">Admin Control Portal</h2>
-          <p class="text-xs text-slate-400">Enter Master Code (<span class="font-mono text-amber-400">2060</span>) or assigned Temporary Access Passcode.</p>
+          <p class="text-xs text-slate-400">Enter Master Passcode to access admin controls.</p>
 
           <input type="password" id="adminPasscodeInput" placeholder="Enter Access Code" class="w-full bg-slate-900 border border-slate-800 text-center font-mono text-lg tracking-widest text-slate-100 rounded-xl py-2.5 focus:border-red-500">
           
@@ -498,6 +498,33 @@
       }
     });
   };
+      // ==========================================
+  // 3. ADMIN AUTHENTICATION ENGINE
+  // ==========================================
+  window.authenticateAdmin = function() {
+    const input = document.getElementById('adminPasscodeInput')?.value.trim();
+    const authBox = document.getElementById('adminAuthBox');
+    const dashboard = document.getElementById('adminDashboard');
+    const authMsg = document.getElementById('adminAuthMsg');
+
+    if (input === '2060') {
+      if (authBox) authBox.classList.add('hidden');
+      if (dashboard) dashboard.classList.remove('hidden');
+      if (authMsg) authMsg.innerHTML = '';
+    } else {
+      if (authMsg) authMsg.innerHTML = '<span class="text-red-400">❌ Invalid Passcode</span>';
+    }
+  };
+
+  window.logoutAdmin = function() {
+    const authBox = document.getElementById('adminAuthBox');
+    const dashboard = document.getElementById('adminDashboard');
+    if (authBox) authBox.classList.remove('hidden');
+    if (dashboard) dashboard.classList.add('hidden');
+    const input = document.getElementById('adminPasscodeInput');
+    if (input) input.value = '';
+  };
+    
 
   // ==========================================
   // 2. SOCIAL LINKS SAVER (Header Sync)
