@@ -186,23 +186,119 @@
             <button id="unlockVaultBtn" class="w-full bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold py-2.5 rounded-xl transition flex items-center justify-center gap-2">
               <i class="fa-solid fa-key"></i> Access Room Passcode
             </button>
-            <div id="vaultOutput" class="p-3 bg-slate-950 rounded-xl border border-slate-800 hidden text-xs"></div>
+      <!-- Left Column: Registration Engine & Live Standings -->
+      <div class="lg:col-span-2 space-y-6">
+        
+        <!-- Registration Engine -->
+        <div class="glass-card rounded-2xl p-6 border border-slate-800">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
+              <i class="fa-solid fa-file-pen text-blue-500"></i> Full Squad Registration
+            </h2>
+            <span class="bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-bold px-3 py-1 rounded-full">4v4 + 2 Subs</span>
+          </div>
+
+          <form id="registrationForm" class="space-y-4">
+            
+            <!-- Squad Info & Logo -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-400 mb-1">Squad Name *</label>
+                <input type="text" id="regSquadName" required placeholder="e.g., Terminators Elite" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-blue-500">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-400 mb-1">Squad Logo (Auto-Compressed) *</label>
+                <input type="file" id="regLogoInput" accept="image/*" required class="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500">
+              </div>
+            </div>
+
+            <!-- Captain Details -->
+            <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800/80 space-y-3">
+              <span class="text-xs font-bold text-blue-400 uppercase tracking-wider block">👑 Player 1 (Captain)</span>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <input type="text" id="regCaptainIGN" required placeholder="Captain IGN *" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:border-blue-500">
+                <input type="number" id="regFFUID" required placeholder="Captain FF UID *" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:border-blue-500">
+                <input type="tel" id="regPhone" required placeholder="WhatsApp Number *" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:border-blue-500">
+              </div>
+            </div>
+
+            <!-- Starting Lineup (Players 2, 3, 4) -->
+            <div class="p-3 bg-slate-900/40 rounded-xl border border-slate-800/60 space-y-3">
+              <span class="text-xs font-bold text-slate-300 uppercase tracking-wider block">⚔️ Starting Lineup (Players 2-4)</span>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <input type="text" id="p2IGN" required placeholder="Player 2 IGN *" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200">
+                <input type="number" id="p2UID" required placeholder="Player 2 UID *" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200">
+                <input type="text" id="p3IGN" required placeholder="Player 3 IGN *" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200">
+                <input type="number" id="p3UID" required placeholder="Player 3 UID *" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200">
+                <input type="text" id="p4IGN" required placeholder="Player 4 IGN *" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200">
+                <input type="number" id="p4UID" required placeholder="Player 4 UID *" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200">
+              </div>
+            </div>
+
+            <!-- Substitutes (Optional) -->
+            <div class="p-3 bg-slate-900/20 rounded-xl border border-slate-800/40 space-y-3">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">🔄 Substitutes (Optional)</span>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <input type="text" id="sub1IGN" placeholder="Sub 1 IGN" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200">
+                <input type="number" id="sub1UID" placeholder="Sub 1 UID" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200">
+                <input type="text" id="sub2IGN" placeholder="Sub 2 IGN" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200">
+                <input type="number" id="sub2UID" placeholder="Sub 2 UID" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200">
+              </div>
+            </div>
+
+            <!-- Captain PIN Setup -->
+            <div class="p-3 bg-slate-900/90 rounded-xl border border-amber-500/20 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <label class="block text-xs font-bold text-amber-400 flex items-center gap-1.5">
+                  <i class="fa-solid fa-lock"></i> Captain PIN (4 Digits) *
+                </label>
+                <p class="text-[10px] text-slate-500">Unlocks room credentials in the vault.</p>
+              </div>
+              <input type="password" id="regCaptainPIN" maxlength="4" pattern="\d{4}" required placeholder="****" class="w-24 bg-slate-950 border border-amber-500/40 text-center font-mono text-base text-amber-400 rounded-xl py-1.5 focus:outline-none">
+            </div>
+
+            <button type="submit" id="submitRegBtn" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-3 rounded-xl shadow-lg transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-paper-plane"></i> Register Squad Lineup
+            </button>
+          </form>
+          <div id="regStatusMsg" class="mt-3 text-xs text-center font-bold"></div>
+        </div>
+
+        <!-- Real-Time Live Standings Table -->
+        <div class="glass-card rounded-2xl p-6 border border-slate-800">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
+              <i class="fa-solid fa-trophy text-amber-400"></i> Live Standings
+            </h2>
+            <span class="text-xs text-slate-400 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> Live Sync
+            </span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-slate-300">
+              <thead class="bg-slate-900/80 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
+                <tr>
+                  <th class="p-3">Rank</th>
+                  <th class="p-3">Squad</th>
+                  <th class="p-3 text-center">Kills</th>
+                  <th class="p-3 text-center">Pts</th>
+                  <th class="p-3 text-right">Status</th>
+                </tr>
+              </thead>
+              <tbody id="leaderboardBody" class="divide-y divide-slate-800/50 font-medium">
+                <tr>
+                  <td colspan="5" class="p-4 text-center text-slate-500 animate-pulse">
+                    Connecting to live scoreboard feed...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
-        <!-- Anti-Cheat Guard -->
-        <div class="glass-card rounded-2xl p-6 border border-slate-800">
-          <h2 class="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2">
-            <i class="fa-solid fa-shield-cat text-red-500"></i> Anti-Cheat Interceptor
-          </h2>
-          <p class="text-xs text-slate-400 leading-relaxed">
-            Automated UID Guard active. Banned UIDs and duplicate entries are intercepted automatically prior to database commitment.
-          </p>
-        </div>
-
-      </div>
-
-    </main>
+                  </div>
+            
           <!-- Footer -->
     <footer class="mt-8 text-center text-xs text-slate-500 py-4 border-t border-slate-900">
       <p>&copy; 2026 TERMINATORS E-SPORTS. Built & Maintained by <span class="text-slate-300 font-semibold">M I C O</span>.</p>
@@ -293,23 +389,56 @@
       eventSelector.addEventListener('change', (e) => attachLiveLeaderboardListener(e.target.value));
     }
 
-    // Registration Form Handler
+      // Helper: Canvas Image Compressor
+    function compressImage(file, maxWidth = 120, maxHeight = 120, quality = 0.7) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+          const img = new Image();
+          img.src = event.target.result;
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+            if (width > height) {
+              if (width > maxWidth) { height = Math.round((height * maxWidth) / width); width = maxWidth; }
+            } else {
+              if (height > maxHeight) { width = Math.round((width * maxHeight) / height); height = maxHeight; }
+            }
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            resolve(canvas.toDataURL('image/jpeg', quality));
+          };
+        };
+        reader.onerror = (err) => reject(err);
+      });
+    }
+
+    // Registration Form Handler (Full Roster + Compressed Logo)
     if (regForm) {
       regForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+        const submitBtn = document.getElementById('submitRegBtn');
+        submitBtn.disabled = true;
+        
         statusMsg.className = "mt-3 text-xs text-center font-bold text-blue-400 animate-pulse";
-        statusMsg.textContent = "Verifying registration credentials...";
+        statusMsg.textContent = "Compressing logo & registering full roster...";
 
         const squadName = document.getElementById('regSquadName').value.trim();
         const captainIGN = document.getElementById('regCaptainIGN').value.trim();
         const ffUID = document.getElementById('regFFUID').value.trim();
         const phone = document.getElementById('regPhone').value.trim();
         const pin = document.getElementById('regCaptainPIN').value.trim();
+        const logoFile = document.getElementById('regLogoInput').files[0];
         const eventId = eventSelector ? eventSelector.value : "tmt-cup-s1";
 
         if (BANNED_UIDS.includes(ffUID)) {
           statusMsg.className = "mt-3 text-xs text-center font-bold text-red-500";
-          statusMsg.textContent = "❌ Access Denied: Free Fire UID is blacklisted.";
+          statusMsg.textContent = "❌ Access Denied: Captain UID is blacklisted.";
+          submitBtn.disabled = false;
           return;
         }
 
@@ -320,15 +449,32 @@
           if (!snapshot.empty) {
             statusMsg.className = "mt-3 text-xs text-center font-bold text-amber-500";
             statusMsg.textContent = "⚠️ Free Fire UID is already registered for this event.";
+            submitBtn.disabled = false;
             return;
           }
 
+          let compressedLogo = "";
+          if (logoFile) {
+            compressedLogo = await compressImage(logoFile);
+          }
+
+          const roster = [
+            { role: "Captain", ign: captainIGN, uid: ffUID },
+            { role: "Player 2", ign: document.getElementById('p2IGN').value.trim(), uid: document.getElementById('p2UID').value.trim() },
+            { role: "Player 3", ign: document.getElementById('p3IGN').value.trim(), uid: document.getElementById('p3UID').value.trim() },
+            { role: "Player 4", ign: document.getElementById('p4IGN').value.trim(), uid: document.getElementById('p4UID').value.trim() },
+            { role: "Sub 1", ign: document.getElementById('sub1IGN').value.trim(), uid: document.getElementById('sub1UID').value.trim() },
+            { role: "Sub 2", ign: document.getElementById('sub2IGN').value.trim(), uid: document.getElementById('sub2UID').value.trim() }
+          ];
+
           await addDoc(collection(db, "registrations"), {
             squadName,
+            squadLogo: compressedLogo,
             captainIGN,
             ffUID,
             phone,
             captainPIN: pin,
+            roster,
             eventId,
             kills: 0,
             points: 0,
@@ -337,14 +483,17 @@
           });
 
           statusMsg.className = "mt-3 text-xs text-center font-bold text-emerald-400";
-          statusMsg.textContent = "✅ Registration Successful! Save your Captain PIN to unlock match room credentials.";
+          statusMsg.textContent = "✅ Squad & Roster Successfully Registered!";
           regForm.reset();
         } catch (err) {
           statusMsg.className = "mt-3 text-xs text-center font-bold text-red-500";
-          statusMsg.textContent = "❌ Database error: " + err.message;
+          statusMsg.textContent = "❌ Error: " + err.message;
+        } finally {
+          submitBtn.disabled = false;
         }
       });
     }
+    
 
     // Captain Vault Unlock Handler
     const vaultBtn = document.getElementById('unlockVaultBtn');
