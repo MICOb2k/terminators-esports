@@ -1,651 +1,409 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terminators Esports | Tournaments</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        :root { --accent: #00ff66; --accent-glow: rgba(0,255,102,0.3); }
-        .theme-red { --accent: #ff3333; --accent-glow: rgba(255,51,51,0.3); }
-        .theme-blue { --accent: #3399ff; --accent-glow: rgba(51,153,255,0.3); }
-        .theme-purple { --accent: #b84dff; --accent-glow: rgba(184,77,255,0.3); }
-        .bg-custom-accent { background-color: var(--accent); }
-        .text-custom-accent { color: var(--accent); }
-        .border-custom-accent { border-color: var(--accent); }
-        .shadow-custom-accent { box-shadow: 0 0 15px var(--accent-glow); }
-        
-        /* Custom Scrollbar & Animations */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
-        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-        .animate-marquee { display: inline-block; white-space: nowrap; animation: marquee 15s linear infinite; }
-        .loader-bg { background: #0a0f1d; }
-    </style>
-    <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { dark: '#0a0f1d', card: '#111827' } } } }
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TERMINATORS E-SPORTS | Official Platform</title>
+  
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- Tailwind CSS & Font Awesome -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #090d16; }
+    ::-webkit-scrollbar-thumb { background: #2563eb; border-radius: 4px; }
+    .glow-blue { box-shadow: 0 0 20px rgba(37, 99, 235, 0.35); }
+    .glass-card { background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+  </style>
 </head>
-<body class="bg-dark text-white font-sans antialiased min-h-screen pb-12 selection:bg-custom-accent selection:text-dark">
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen relative overflow-x-hidden">
 
-    <!-- Feature 6: Animated Esports Loader -->
-    <div id="loader" class="fixed inset-0 z-50 loader-bg flex flex-col justify-center items-center transition-opacity duration-500">
-        <i class="fa-solid fa-crosshairs text-custom-accent text-5xl animate-spin mb-4"></i>
-        <h1 class="font-extrabold tracking-widest text-lg">T M T <span class="text-custom-accent">ESPORTS</span></h1>
-    </div>
+  <!-- Background Video Engine -->
+  <div class="fixed inset-0 w-full h-full z-0 overflow-hidden pointer-events-none">
+    <video id="bgVideo" autoplay loop muted playsinline class="w-full h-full object-cover opacity-20">
+      <source src="https://assets.mixkit.co/videos/preview/mixkit-game-animation-of-a-futuristic-robot-42934-large.mp4" type="video/mp4">
+    </video>
+    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-slate-950/40"></div>
+  </div>
 
-    <!-- Header & Feature 7: Dynamic News Ticker -->
-    <header class="border-b border-gray-800 bg-dark/90 backdrop-blur-md sticky top-0 z-40">
-        <div class="bg-custom-accent text-dark text-[10px] font-bold overflow-hidden py-1">
-            <span id="newsTicker" class="animate-marquee">Welcome to Terminators Esports • Prepare for the ultimate battle • Ensure your loadouts are ready</span>
+  <!-- Main App Shell -->
+  <div class="relative z-10 max-w-7xl mx-auto px-4 py-3 flex flex-col min-h-screen">
+
+    <!-- Header Navigation -->
+    <header class="glass-card rounded-2xl p-4 mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-blue-500/30 glow-blue">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center font-black text-xl text-white shadow-lg">
+          TMT
         </div>
-        <div class="max-w-md mx-auto px-4 py-3 flex justify-between items-center">
-            <div>
-                <h1 class="font-extrabold text-white text-base tracking-wider">TERMINATORS</h1>
-                <p class="text-[10px] text-gray-400 uppercase tracking-widest">Founded by M I C O</p>
-            </div>
-            <div class="flex gap-2 items-center">
-                <!-- Feature 10: Custom Accent Themes -->
-                <div class="flex gap-1 border border-gray-800 p-1 rounded-lg">
-                    <button onclick="setTheme('')" class="w-3 h-3 rounded-full bg-[#00ff66]"></button>
-                    <button onclick="setTheme('theme-red')" class="w-3 h-3 rounded-full bg-[#ff3333]"></button>
-                    <button onclick="setTheme('theme-blue')" class="w-3 h-3 rounded-full bg-[#3399ff]"></button>
-                </div>
-                <div id="cloudStatus" class="flex items-center gap-1.5 bg-dark px-2 py-1 rounded-full border border-gray-800 text-[10px] font-bold text-gray-400">
-                    <span class="w-1.5 h-1.5 rounded-full bg-gray-500 animate-pulse"></span> DB
-                </div>
-            </div>
+        <div>
+          <h1 class="text-xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 uppercase">
+            Terminators Esports
+          </h1>
+          <p class="text-xs text-slate-400 font-medium">Founder: <span class="text-blue-400 font-semibold tracking-widest">M I C O</span></p>
         </div>
+      </div>
+
+      <!-- Event Selector -->
+      <div class="flex items-center gap-3">
+        <label for="eventSelector" class="hidden sm:block text-xs font-semibold uppercase tracking-wider text-slate-400">Select Event:</label>
+        <select id="eventSelector" class="bg-slate-900 border border-slate-700 text-blue-400 text-sm rounded-xl px-4 py-2 font-bold focus:outline-none focus:border-blue-500 glow-blue transition">
+          <option value="tmt-cup-s1">🏆 TMT Championship Season 1 (4v4)</option>
+          <option value="lone-wolf-1v1">⚔️ Lone Wolf Speed Series (1v1)</option>
+        </select>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-2">
+        <button id="pwaInstallBtn" class="hidden bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-xs font-bold px-3 py-2 rounded-xl flex items-center gap-2 shadow-lg transition">
+          <i class="fa-solid fa-download"></i> Install App
+        </button>
+        <button onclick="window.location.reload()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 p-2.5 rounded-xl border border-slate-700 transition">
+          <i class="fa-solid fa-rotate-right"></i>
+        </button>
+      </div>
     </header>
 
-    <!-- Navigation Tabs -->
-    <nav class="max-w-md mx-auto px-4 mt-4">
-        <div class="grid grid-cols-5 gap-1 bg-card p-1 rounded-2xl border border-gray-800 text-[10px] font-bold text-center">
-            <button onclick="switchTab('arenas')" id="tab-arenas" class="py-2.5 rounded-xl bg-custom-accent text-dark transition">Arena</button>
-            <button onclick="switchTab('squads')" id="tab-squads" class="py-2.5 rounded-xl text-gray-400 hover:text-white transition">Squads</button>
-            <button onclick="switchTab('chat')" id="tab-chat" class="py-2.5 rounded-xl text-gray-400 hover:text-white transition">Hype</button>
-            <button onclick="switchTab('rooms')" id="tab-rooms" class="py-2.5 rounded-xl text-gray-400 hover:text-white transition">Rooms 🔒</button>
-            <button onclick="switchTab('admin')" id="tab-admin" class="py-2.5 rounded-xl text-gray-400 hover:text-white transition">Admin</button>
+    <!-- Social Connect Bar -->
+    <section class="glass-card rounded-2xl p-3 mb-6 flex flex-wrap items-center justify-around gap-3 border border-slate-800">
+      <a href="https://tiktok.com/@tmt_esports" target="_blank" class="flex items-center gap-2 text-xs font-bold text-slate-300 hover:text-pink-400 transition">
+        <i class="fa-brands fa-tiktok text-base text-pink-500"></i> @tmt_esports
+      </a>
+      <a href="#" class="flex items-center gap-2 text-xs font-bold text-slate-300 hover:text-emerald-400 transition">
+        <i class="fa-brands fa-whatsapp text-base text-emerald-500"></i> WhatsApp Group
+      </a>
+      <a href="#" class="flex items-center gap-2 text-xs font-bold text-slate-300 hover:text-red-400 transition">
+        <i class="fa-brands fa-youtube text-base text-red-500"></i> Live Streams
+      </a>
+    </section>
+
+    <!-- Main Workspace Container -->
+    <main id="appCore" class="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <!-- Left Column: Registration Form & Live Standings -->
+      <div class="lg:col-span-2 space-y-6">
+        
+        <!-- Registration Engine -->
+        <div class="glass-card rounded-2xl p-6 border border-slate-800">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
+              <i class="fa-solid fa-file-pen text-blue-500"></i> Registration Engine
+            </h2>
+            <span class="bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-bold px-3 py-1 rounded-full">Open</span>
+          </div>
+
+          <form id="registrationForm" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-400 mb-1">Squad / Player Name *</label>
+                <input type="text" id="regSquadName" required placeholder="e.g., Terminators Elite" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500 transition">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-400 mb-1">Captain In-Game Name (IGN) *</label>
+                <input type="text" id="regCaptainIGN" required placeholder="e.g., TMT_MICO" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500 transition">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-400 mb-1">Free Fire UID *</label>
+                <input type="number" id="regFFUID" required placeholder="e.g., 1234567890" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500 transition">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-400 mb-1">WhatsApp Phone Number *</label>
+                <input type="tel" id="regPhone" required placeholder="e.g., +234..." class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500 transition">
+              </div>
+            </div>
+
+            <!-- Captain PIN Setup -->
+            <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800 space-y-2">
+              <label class="block text-xs font-bold text-amber-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-lock"></i> Set Captain Security PIN (4 Digits) *
+              </label>
+              <input type="password" id="regCaptainPIN" maxlength="4" pattern="\d{4}" required placeholder="****" class="w-28 bg-slate-950 border border-amber-500/30 text-center tracking-widest font-mono text-lg text-amber-400 rounded-xl py-2 focus:outline-none focus:border-amber-400 transition">
+              <p class="text-[11px] text-slate-500">This PIN unlocks your match room passcode and squad settings in the vault.</p>
+            </div>
+
+            <button type="submit" id="submitRegBtn" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-3 rounded-xl shadow-lg glow-blue transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-paper-plane"></i> Submit Registration
+            </button>
+          </form>
+          <div id="regStatusMsg" class="mt-3 text-xs text-center font-bold"></div>
         </div>
-    </nav>
 
-    <!-- Main Container -->
-    <main class="max-w-md mx-auto px-4 mt-5 space-y-6 relative">
+        <!-- Real-Time Live Standings & Leaderboard -->
+        <div class="glass-card rounded-2xl p-6 border border-slate-800">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
+              <i class="fa-solid fa-trophy text-amber-400"></i> Live Standings & Rankings
+            </h2>
+            <span class="text-xs text-slate-400 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> Live Firestore Sync
+            </span>
+          </div>
 
-        <!-- SECTION: ARENAS -->
-        <section id="section-arenas" class="space-y-5">
-            
-            <!-- Feature 11: Live Match Countdown -->
-            <div id="countdownBox" class="bg-card border border-gray-800 p-4 rounded-2xl shadow-xl text-center hidden">
-                <p class="text-[10px] text-gray-400 uppercase font-bold mb-2">Next Match Starts In</p>
-                <div class="flex justify-center gap-3 font-mono text-2xl font-extrabold text-custom-accent" id="timerDisplay">
-                    00 : 00 : 00
-                </div>
-            </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-slate-300">
+              <thead class="bg-slate-900/80 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
+                <tr>
+                  <th class="p-3">Rank</th>
+                  <th class="p-3">Squad / Player</th>
+                  <th class="p-3 text-center">Kills</th>
+                  <th class="p-3 text-center">Pts</th>
+                  <th class="p-3 text-right">Status</th>
+                </tr>
+              </thead>
+              <tbody id="leaderboardBody" class="divide-y divide-slate-800/50 font-medium">
+                <tr>
+                  <td colspan="5" class="p-4 text-center text-slate-500 animate-pulse">
+                    Connecting to live scoreboard feed...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-            <!-- Feature 12 & 13: Hall of Fame (MVP) & Past Champions -->
-            <div class="grid grid-cols-2 gap-3">
-                <div class="bg-card border border-gray-800 p-3 rounded-xl text-center shadow-custom-accent transition">
-                    <i class="fa-solid fa-star text-custom-accent text-xl mb-1"></i>
-                    <h3 class="text-[10px] text-gray-400 font-bold uppercase">Weekly MVP</h3>
-                    <p id="mvpName" class="text-xs font-extrabold text-white truncate mt-1">Pending...</p>
-                </div>
-                <div class="bg-card border border-gray-800 p-3 rounded-xl text-center cursor-pointer hover:bg-gray-800 transition" onclick="alert('Past Champions Archive coming next season!')">
-                    <i class="fa-solid fa-trophy text-amber-400 text-xl mb-1"></i>
-                    <h3 class="text-[10px] text-gray-400 font-bold uppercase">Hall of Fame</h3>
-                    <p class="text-xs font-extrabold text-white mt-1">View Archive</p>
-                </div>
-            </div>
+      </div>
 
-            <!-- Active Tournament Box -->
-            <div id="activeTournamentContainer"></div>
+      <!-- Right Column: Vault & Security -->
+      <div class="space-y-6">
+        
+        <!-- Captain Passcode Vault -->
+        <div class="glass-card rounded-2xl p-6 border border-slate-800">
+          <h2 class="text-sm font-bold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-vault text-amber-500"></i> Captain Room Passcode Vault
+          </h2>
+          <div class="space-y-3">
+            <p class="text-xs text-slate-400">Enter your registered Free Fire UID and 4-Digit Security PIN to reveal room credentials.</p>
+            <input type="number" id="vaultUID" placeholder="Enter FF UID" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500">
+            <input type="password" id="vaultPIN" maxlength="4" placeholder="4-Digit PIN" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500">
+            <button id="unlockVaultBtn" class="w-full bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold py-2.5 rounded-xl transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-key"></i> Access Room Passcode
+            </button>
+            <div id="vaultOutput" class="p-3 bg-slate-950 rounded-xl border border-slate-800 hidden text-xs"></div>
+          </div>
+        </div>
 
-            <!-- Feature 17 & 18: Map Pool & Game Settings -->
-            <div id="gameSettingsBox" class="bg-card border border-gray-800 p-4 rounded-2xl shadow-xl space-y-3 hidden">
-                <h3 class="font-extrabold text-white text-xs uppercase border-b border-gray-800 pb-2">Arena Configurations</h3>
-                <div class="flex flex-wrap gap-2 text-[10px] font-bold">
-                    <span id="mapPoolTag" class="bg-dark border border-gray-700 px-2 py-1 rounded">🗺️ Maps: TBD</span>
-                    <span id="skillTag" class="bg-dark border border-gray-700 px-2 py-1 rounded">⚡ Skills: TBD</span>
-                    <span id="gunPropTag" class="bg-dark border border-gray-700 px-2 py-1 rounded">🔫 Gun Props: TBD</span>
-                </div>
-            </div>
+        <!-- Anti-Cheat Guard -->
+        <div class="glass-card rounded-2xl p-6 border border-slate-800">
+          <h2 class="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-shield-cat text-red-500"></i> Anti-Cheat Interceptor
+          </h2>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Automated UID Guard active. Banned UIDs and duplicate entries are intercepted automatically prior to database commitment.
+          </p>
+        </div>
 
-            <!-- Clash Squad Match Tracker -->
-            <div id="csTrackerSection" class="bg-card border border-gray-800 p-4 rounded-2xl shadow-xl space-y-4 hidden">
-                <div class="flex justify-between items-center border-b border-gray-800 pb-2">
-                    <h2 class="font-extrabold text-white text-sm uppercase">Live Bracket</h2>
-                    <span class="bg-custom-accent/20 text-custom-accent text-[9px] px-2 py-0.5 rounded font-bold uppercase">CS Mode</span>
-                </div>
-                <div id="csMatchesContainer" class="space-y-2"></div>
-            </div>
-
-            <!-- Live Stream Box -->
-            <div id="liveStreamContainer" class="bg-card border border-gray-800 p-3 rounded-2xl shadow-xl hidden">
-                <div class="flex items-center gap-2 text-xs font-bold text-red-400 mb-2">
-                    <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span> Live Broadcast
-                </div>
-                <div id="streamEmbedBox" class="w-full aspect-video rounded-xl overflow-hidden bg-dark"></div>
-            </div>
-
-            <!-- Registration Form Card -->
-            <div class="bg-card border border-gray-800 p-5 rounded-2xl shadow-xl space-y-4">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h2 class="font-extrabold text-white text-sm uppercase tracking-wide">Slot Registration</h2>
-                        <p class="text-xs text-gray-400">Book your slot. UIDs are verified.</p>
-                    </div>
-                    <!-- Feature 1: Kill-Switch Indicator -->
-                    <span id="regStatusBadge" class="bg-emerald-950 text-emerald-400 border border-emerald-500/40 px-2 py-1 rounded text-[9px] font-bold uppercase">Open</span>
-                </div>
-
-                <form id="registrationForm" onsubmit="handleRegistration(event)" class="space-y-3 text-xs">
-                    <input type="text" id="regTeamName" required placeholder="Team Name *" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
-                    <div class="flex items-center gap-2 bg-dark border border-gray-800 rounded-xl px-3 py-2">
-                        <input type="file" id="squadLogoFile" accept="image/*" class="w-full text-[10px] text-gray-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:bg-gray-800 file:text-white cursor-pointer">
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-2">
-                        <input type="text" id="regLeaderName" required placeholder="Leader IGN *" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
-                        <input type="tel" id="regLeaderContact" required placeholder="WhatsApp *" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
-                    </div>
-
-                    <div class="border-t border-gray-800 pt-3 space-y-2">
-                        <p class="font-bold text-gray-300">Roster (Requires unique UIDs)</p>
-                        <div class="grid grid-cols-2 gap-2">
-                            <input type="text" id="p1Name" required placeholder="P1 IGN" class="bg-dark border border-gray-800 rounded-lg px-2 py-1.5">
-                            <input type="number" id="p1Uid" required placeholder="P1 UID" class="bg-dark border border-gray-800 rounded-lg px-2 py-1.5">
-                            <input type="text" id="p2Name" placeholder="P2 IGN" class="bg-dark border border-gray-800 rounded-lg px-2 py-1.5">
-                            <input type="number" id="p2Uid" placeholder="P2 UID" class="bg-dark border border-gray-800 rounded-lg px-2 py-1.5">
-                            <input type="text" id="p3Name" placeholder="P3 IGN" class="bg-dark border border-gray-800 rounded-lg px-2 py-1.5">
-                            <input type="number" id="p3Uid" placeholder="P3 UID" class="bg-dark border border-gray-800 rounded-lg px-2 py-1.5">
-                            <input type="text" id="p4Name" placeholder="P4 IGN" class="bg-dark border border-gray-800 rounded-lg px-2 py-1.5">
-                            <input type="number" id="p4Uid" placeholder="P4 UID" class="bg-dark border border-gray-800 rounded-lg px-2 py-1.5">
-                        </div>
-                    </div>
-                    <button type="submit" id="submitBtn" class="w-full bg-custom-accent text-dark font-extrabold py-3 rounded-xl transition shadow-custom-accent mt-2">
-                        Register Slot
-                    </button>
-                </form>
-            </div>
-
-            <!-- Feature 15: Expandable Rulebook -->
-            <div class="bg-card border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
-                <button onclick="document.getElementById('rulesContent').classList.toggle('hidden')" class="w-full p-4 flex justify-between items-center font-extrabold text-sm uppercase">
-                    <span>Arena Guidelines</span> <i class="fa-solid fa-chevron-down text-gray-400"></i>
-                </button>
-                <div id="rulesContent" class="hidden p-4 pt-0 text-xs text-gray-400 space-y-2 border-t border-gray-800">
-                    <p>• Exploits (e.g., glitching inside objects) lead to instant disqualification.</p>
-                    <p>• Emulators are strictly prohibited unless stated by Admin.</p>
-                    <p>• Disrespect towards organizers in Hype chat will result in bans.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION: SQUADS -->
-        <section id="section-squads" class="space-y-4 hidden">
-            <!-- Feature 9: Roster Search -->
-            <div class="bg-card border border-gray-800 p-2 rounded-xl flex items-center gap-2 shadow-lg">
-                <i class="fa-solid fa-search text-gray-500 ml-2"></i>
-                <input type="text" id="searchInput" onkeyup="filterSquads()" placeholder="Search teams or players..." class="w-full bg-transparent border-none text-sm text-white focus:outline-none py-1">
-            </div>
-            
-            <div class="flex justify-between items-center px-1">
-                <h2 class="font-extrabold text-white text-sm uppercase tracking-wider">Verified Rosters</h2>
-                <span id="slotCountInfo" class="text-xs text-custom-accent font-bold">0 Listed</span>
-            </div>
-            <div id="squadsContainer" class="space-y-3"></div>
-        </section>
-
-        <!-- Feature 14: Global Hype Chat -->
-        <section id="section-chat" class="hidden h-[70vh] flex flex-col">
-            <div class="flex-1 bg-card border border-gray-800 rounded-t-2xl shadow-xl p-3 overflow-y-auto space-y-3" id="chatBox">
-                <!-- Chat messages load here -->
-            </div>
-            <form onsubmit="sendChatMessage(event)" class="bg-dark border border-gray-800 p-2 rounded-b-2xl flex gap-2">
-                <input type="text" id="chatName" placeholder="IGN" required class="w-1/3 bg-card border border-gray-700 rounded-lg px-2 text-xs text-white">
-                <input type="text" id="chatMsg" placeholder="Talk trash..." required class="flex-1 bg-card border border-gray-700 rounded-lg px-2 text-xs text-white">
-                <button type="submit" class="bg-custom-accent text-dark px-3 rounded-lg font-bold"><i class="fa-solid fa-paper-plane"></i></button>
-            </form>
-        </section>
-
-        <!-- SECTION: ROOMS -->
-        <section id="section-rooms" class="space-y-4 hidden">
-            <div class="bg-card border border-gray-800 p-5 rounded-2xl shadow-xl space-y-4">
-                <h2 class="font-extrabold text-white text-sm uppercase tracking-wide">Secure Credentials</h2>
-                <!-- Feature 20: Security PIN included in verification -->
-                <div class="space-y-3 text-xs">
-                    <input type="text" id="verifyLeaderName" placeholder="Registered Leader IGN" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
-                    <input type="password" id="verifyPin" placeholder="4-Digit Security PIN" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white">
-                    <button onclick="verifyAndUnlockRoom()" class="w-full bg-custom-accent text-dark font-extrabold py-3 rounded-xl">Unlock Credentials</button>
-                </div>
-            </div>
-
-            <div id="roomCredentialsBox" class="bg-card border border-gray-800 p-5 rounded-2xl shadow-xl space-y-4 opacity-50 pointer-events-none transition-all">
-                <h3 class="font-extrabold text-white text-sm flex justify-between">Match Room <span id="lockStatusBadge">🔒 Locked</span></h3>
-                <!-- Feature 8: 1-Click Copy -->
-                <div class="space-y-2 text-xs">
-                    <div class="bg-dark p-3 rounded-xl border border-gray-800 flex justify-between items-center cursor-pointer hover:border-custom-accent" onclick="copyText('roomIdText')">
-                        <span class="text-gray-400">Room ID:</span>
-                        <span id="roomIdText" class="font-mono font-bold">Locked</span>
-                        <i class="fa-regular fa-copy text-gray-600"></i>
-                    </div>
-                    <div class="bg-dark p-3 rounded-xl border border-gray-800 flex justify-between items-center cursor-pointer hover:border-custom-accent" onclick="copyText('roomPassText')">
-                        <span class="text-gray-400">Password:</span>
-                        <span id="roomPassText" class="font-mono font-bold">Locked</span>
-                        <i class="fa-regular fa-copy text-gray-600"></i>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION: ADMIN -->
-        <section id="section-admin" class="space-y-4 hidden">
-            <div id="adminLoginBox" class="bg-card border border-gray-800 p-6 rounded-2xl text-xs space-y-4 text-center">
-                <i class="fa-solid fa-shield-halved text-custom-accent text-3xl mb-2"></i>
-                <input type="password" id="adminPassInput" placeholder="Passcode (2060)" class="w-full bg-dark border border-gray-800 rounded-xl px-3 py-2 text-white text-center">
-                <button onclick="verifyAdminLogin()" class="w-full bg-custom-accent text-dark font-extrabold py-3 rounded-xl">Login</button>
-            </div>
-
-            <div id="adminDashboardBox" class="space-y-4 hidden text-xs">
-                <div class="flex gap-2">
-                    <!-- Feature 2 & 1: Admin tools -->
-                    <button onclick="exportToCSV()" class="flex-1 bg-blue-600 text-white font-bold py-2 rounded-xl"><i class="fa-solid fa-download"></i> Export CSV</button>
-                    <button onclick="toggleRegistration()" id="adminRegToggleBtn" class="flex-1 bg-emerald-600 text-white font-bold py-2 rounded-xl">Lock Reg</button>
-                    <button onclick="lockAdminPanel()" class="bg-red-900 text-red-300 px-3 py-2 rounded-xl font-bold"><i class="fa-solid fa-power-off"></i></button>
-                </div>
-
-                <!-- Settings, Ban List, MVP, Timer logic included in Firebase syncs below -->
-                <div class="bg-card border border-gray-800 p-4 rounded-2xl space-y-3">
-                    <h3 class="font-extrabold border-b border-gray-800 pb-2">Tournament Control</h3>
-                    <input type="text" id="adminTourneyTitle" placeholder="Title" class="w-full bg-dark border border-gray-800 rounded-xl px-2 py-1.5 text-white">
-                    <div class="grid grid-cols-2 gap-2">
-                        <input type="text" id="adminMapPool" placeholder="Maps (e.g. Bermuda, Alpine)" class="w-full bg-dark border border-gray-800 rounded-xl px-2 py-1.5 text-white">
-                        <input type="text" id="adminSkills" placeholder="Skills (ON/OFF)" class="w-full bg-dark border border-gray-800 rounded-xl px-2 py-1.5 text-white">
-                    </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <input type="datetime-local" id="adminCountdown" class="w-full bg-dark border border-gray-800 rounded-xl px-2 py-1.5 text-white">
-                        <input type="text" id="adminMvp" placeholder="Set MVP Name" class="w-full bg-dark border border-gray-800 rounded-xl px-2 py-1.5 text-white">
-                    </div>
-                    <button onclick="saveAdminSettings()" class="w-full bg-custom-accent text-dark font-bold py-2 rounded-xl mt-2">Save Global Settings</button>
-                </div>
-
-                <!-- Feature 4: Ban List System -->
-                                <div class="bg-card border border-gray-800 p-4 rounded-2xl space-y-2">
-                    <h3 class="font-extrabold border-b border-gray-800 pb-2 text-red-400">Ban Manager</h3>
-                    <div class="flex gap-2">
-                        <input type="number" id="banUidInput" placeholder="Enter UID to Ban" class="flex-1 bg-dark border border-gray-800 rounded-xl px-2 text-white">
-                        <button onclick="banPlayer()" class="bg-red-900 text-red-300 font-bold px-3 py-1.5 rounded-xl">Ban</button>
-                    </div>
-                </div>
-
-                <!-- Feature 5: Admin Action Logs (Simplified display) -->
-                <div class="bg-dark border border-gray-800 p-3 rounded-xl h-24 overflow-y-auto text-[9px] text-gray-500 font-mono" id="adminLogBox">
-                    System initialized...
-                </div>
-
-                <!-- Existing Team Manager (Simplified for space) -->
-                <div class="bg-card border border-gray-800 p-4 rounded-2xl shadow-lg">
-                    <h3 class="font-extrabold text-white border-b border-gray-800 pb-2 mb-2">Participant Roster</h3>
-                    <div id="adminTeamList" class="space-y-2 max-h-48 overflow-y-auto pr-1"></div>
-                </div>
-            </div>
-        </section>
+      </div>
 
     </main>
-
-    <!-- Feature 16 & 19: Team Profile Modal (Hidden by default) -->
-    <div id="teamModal" class="fixed inset-0 z-50 bg-black/80 hidden flex justify-center items-center p-4 backdrop-blur-sm">
-        <div class="bg-card border border-gray-800 rounded-2xl w-full max-w-sm overflow-hidden transform scale-95 transition-transform" id="teamModalContent">
-            <!-- Populated via JS -->
-        </div>
-    </div>
-
-    <!-- Feature 19 Sponsor Carousel in Footer -->
-    <footer class="py-6 text-center text-xs text-gray-500 border-t border-gray-800 mt-8">
-        <div class="flex justify-center gap-4 opacity-50 mb-4 animate-pulse">
-            <span>🤝 SPONSORS:</span> <b>FREE FIRE</b> <b>DISCORD</b> <b>GITHUB</b>
-        </div>
-        <p>© 2026 Terminators Esports. Founded by M I C O.</p>
+          <!-- Footer -->
+    <footer class="mt-8 text-center text-xs text-slate-500 py-4 border-t border-slate-900">
+      <p>&copy; 2026 TERMINATORS E-SPORTS. Built & Maintained by <span class="text-slate-300 font-semibold">M I C O</span>.</p>
     </footer>
 
-    <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-4 py-3 rounded-xl shadow-2xl hidden z-50">
-        <span id="toastMsg"></span>
+  </div>
+
+  <!-- OBS Broadcast Stream Overlay (Hidden by default) -->
+  <div id="obsOverlayContainer" class="fixed inset-0 bg-slate-950/95 z-50 hidden flex-col justify-between p-8 pointer-events-none">
+    <div class="flex justify-between items-center border-b border-purple-500/40 pb-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-blue-600 font-black text-lg flex items-center justify-center">TMT</div>
+        <h1 class="text-2xl font-black text-white tracking-widest uppercase">TERMINATORS ESPORTS LIVE BROADCAST</h1>
+      </div>
+      <span class="bg-red-600 text-white font-bold text-xs px-3 py-1 rounded-full animate-pulse">● LIVE STREAM OVERLAY</span>
     </div>
+    <div id="obsLeaderboardContent" class="max-w-2xl mx-auto w-full glass-card p-6 rounded-2xl border border-purple-500/30"></div>
+    <div class="text-center text-xs text-slate-500">Press ESC to exit broadcast view</div>
+  </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, getDoc, setDoc, deleteDoc, updateDoc, where, getDocs, serverTimestamp, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  <!-- Firebase v10 Engine & Application Logic Script -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, query, where, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
-        const app = initializeApp({
-            apiKey: "AIzaSyB4nLlRgIbYL6vxmyw5V8D1F3_Fixtfc5w",
-            projectId: "terminators-esports",
-            appId: "1:737418872311:web:bf1be1b7932b271fb91af2"
-        });
-        const db = getFirestore(app);
+    // Firebase Configuration for terminators-e-sports-v2
+    const firebaseConfig = {
+      apiKey: "AIzaSyD6SkL8wMpZchonFbDJ10eT58Bx4dng",
+      authDomain: "terminators-e-sports-v2.firebaseapp.com",
+      projectId: "terminators-e-sports-v2",
+      storageBucket: "terminators-e-sports-v2.firebasestorage.app",
+      messagingSenderId: "396254096224",
+      appId: "1:396254096224:web:21f3d514f6884ab8380c85",
+      measurementId: "G-VX614JFVTB"
+    };
 
-        // Feature 6: Loader Remove
-        window.addEventListener('load', () => {
-            setTimeout(() => { document.getElementById('loader').style.opacity = '0'; setTimeout(() => document.getElementById('loader').remove(), 500); }, 1500);
-        });
+    // Initialize Firebase Engine
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-        // Feature 10: Theme Switcher
-        window.setTheme = function(themeClass) {
-            document.documentElement.className = `dark ${themeClass}`;
-        };
+    // Blacklisted UIDs
+    const BANNED_UIDS = ["11111111", "99999999"];
 
-        // Feature 8: 1-Click Copy
-        window.copyText = function(elementId) {
-            const text = document.getElementById(elementId).innerText;
-            if(text !== 'Locked' && text !== 'Not Set By Admin') {
-                navigator.clipboard.writeText(text);
-                showToast("Copied to clipboard!");
-            }
-        };
+    // UI Elements
+    const regForm = document.getElementById('registrationForm');
+    const statusMsg = document.getElementById('regStatusMsg');
+    const leaderboardBody = document.getElementById('leaderboardBody');
+    const eventSelector = document.getElementById('eventSelector');
 
-        let globalRegOpen = true;
-        let globalBannedUids = [];
-        let allTeamsData = [];
+    // Live Real-time Leaderboard Sync
+    function attachLiveLeaderboardListener(eventId) {
+      if (!leaderboardBody) return;
+      leaderboardBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-500 animate-pulse">Syncing ${eventId} standings...</td></tr>`;
+      const q = query(collection(db, "registrations"), where("eventId", "==", eventId));
 
-        // Core Global Syncs
-        onSnapshot(doc(db, "settings", "global"), (snap) => {
-            if(snap.exists()) {
-                const data = snap.data();
-                
-                // Banner & Settings
-                if(data.ticker) document.getElementById('newsTicker').innerText = data.ticker;
-                document.getElementById('mapPoolTag').innerText = `🗺️ ${data.maps || 'TBD'}`;
-                document.getElementById('skillTag').innerText = `⚡ ${data.skills || 'TBD'}`;
-                document.getElementById('mvpName').innerText = data.mvp || 'Pending...';
-                document.getElementById('gameSettingsBox').classList.remove('hidden');
-
-                // Kill Switch
-                globalRegOpen = data.regOpen !== false;
-                const badge = document.getElementById('regStatusBadge');
-                badge.innerText = globalRegOpen ? "Open" : "Closed";
-                badge.className = globalRegOpen ? "bg-emerald-950 text-emerald-400 border border-emerald-500/40 px-2 py-1 rounded text-[9px] font-bold uppercase" : "bg-red-950 text-red-400 border border-red-500/40 px-2 py-1 rounded text-[9px] font-bold uppercase";
-                document.getElementById('submitBtn').disabled = !globalRegOpen;
-
-                // Ban List
-                globalBannedUids = data.bannedUids || [];
-
-                // Countdown
-                if(data.countdownTime) {
-                    document.getElementById('countdownBox').classList.remove('hidden');
-                    startCountdown(data.countdownTime);
-                } else {
-                    document.getElementById('countdownBox').classList.add('hidden');
-                }
-            }
-        });
-
-        // Feature 11: Timer Logic
-        let countdownInterval;
-        function startCountdown(targetISO) {
-            clearInterval(countdownInterval);
-            const target = new Date(targetISO).getTime();
-            countdownInterval = setInterval(() => {
-                const now = new Date().getTime();
-                const distance = target - now;
-                if (distance < 0) {
-                    clearInterval(countdownInterval);
-                    document.getElementById("timerDisplay").innerHTML = "MATCH LIVE";
-                    return;
-                }
-                const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const s = Math.floor((distance % (1000 * 60)) / 1000);
-                document.getElementById("timerDisplay").innerHTML = `${h.toString().padStart(2, '0')} : ${m.toString().padStart(2, '0')} : ${s.toString().padStart(2, '0')}`;
-            }, 1000);
+      onSnapshot(q, (snapshot) => {
+        if (snapshot.empty) {
+          leaderboardBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-500">No teams registered for this event yet. Be the first!</td></tr>`;
+          return;
         }
 
-        // Teams Sync & Search
-        onSnapshot(query(collection(db, "registeredTeams"), orderBy("timestamp", "asc")), (snapshot) => {
-            allTeamsData = [];
-            document.getElementById('adminTeamList').innerHTML = '';
-            
-            snapshot.forEach((docSnap) => {
-                const data = docSnap.data();
-                data.id = docSnap.id;
-                allTeamsData.push(data);
+        let html = '';
+        let rank = 1;
 
-                // Admin View Render
-                document.getElementById('adminTeamList').insertAdjacentHTML('beforeend', `
-                <div class="bg-dark p-2 rounded border border-gray-800 flex justify-between">
-                    <div><b>${data.teamName}</b> <span class="text-[10px] text-gray-500">PIN: ${data.pin}</span></div>
-                    <button onclick="deleteDoc(doc(db, 'registeredTeams', '${data.id}'))" class="text-red-500 text-[10px]"><i class="fa fa-trash"></i></button>
-                </div>`);
-            });
-            document.getElementById('slotCountInfo').innerText = `${allTeamsData.length} Listed`;
-            renderSquads(allTeamsData);
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          html += `
+            <tr class="hover:bg-slate-900/40 transition">
+              <td class="p-3 font-bold text-amber-400">#${rank++}</td>
+              <td class="p-3 font-bold text-slate-200">${data.squadName}<div class="text-[10px] text-slate-500 font-normal">Cap: ${data.captainIGN}</div></td>
+              <td class="p-3 text-center text-slate-300 font-mono">${data.kills || 0}</td>
+              <td class="p-3 text-center font-bold text-blue-400 font-mono">${data.points || 0}</td>
+              <td class="p-3 text-right"><span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase">${data.status || 'Confirmed'}</span></td>
+            </tr>
+          `;
         });
 
-        // Feature 9: Search Filter
-        window.filterSquads = function() {
-            const term = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = allTeamsData.filter(t => t.teamName.toLowerCase().includes(term) || (t.p1Uid && t.p1Uid.includes(term)));
-            renderSquads(filtered);
-        };
+        leaderboardBody.innerHTML = html;
+        const obsContent = document.getElementById('obsLeaderboardContent');
+        if (obsContent) obsContent.innerHTML = html;
+      }, (err) => {
+        leaderboardBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-red-400">Error: ${err.message}</td></tr>`;
+      });
+    }
 
-        function renderSquads(dataArray) {
-            const container = document.getElementById('squadsContainer');
-            container.innerHTML = dataArray.length ? '' : '<p class="text-center text-xs text-gray-500 py-4">No rosters found.</p>';
-            
-            dataArray.forEach((data, index) => {
-                container.insertAdjacentHTML('beforeend', `
-                <div onclick='openTeamModal(${JSON.stringify(data).replace(/'/g, "&apos;")})' class="p-3 rounded-xl border border-gray-800 bg-card cursor-pointer hover:border-custom-accent transition flex justify-between items-center shadow-lg">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-dark overflow-hidden flex items-center justify-center text-custom-accent font-bold text-[10px] border border-gray-700">
-                            ${data.logo ? `<img src="${data.logo}" class="w-full h-full object-cover">` : 'TMT'}
-                        </div>
-                        <div>
-                            <p class="font-extrabold text-sm">${data.teamName}</p>
-                            <p class="text-[10px] text-gray-400">Leader: ${data.p1Name}</p>
-                        </div>
-                    </div>
-                    <i class="fa-solid fa-chevron-right text-gray-600"></i>
-                </div>`);
-            });
+    if (eventSelector) {
+      attachLiveLeaderboardListener(eventSelector.value);
+      eventSelector.addEventListener('change', (e) => attachLiveLeaderboardListener(e.target.value));
+    }
+
+    // Registration Form Handler
+    if (regForm) {
+      regForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        statusMsg.className = "mt-3 text-xs text-center font-bold text-blue-400 animate-pulse";
+        statusMsg.textContent = "Verifying registration credentials...";
+
+        const squadName = document.getElementById('regSquadName').value.trim();
+        const captainIGN = document.getElementById('regCaptainIGN').value.trim();
+        const ffUID = document.getElementById('regFFUID').value.trim();
+        const phone = document.getElementById('regPhone').value.trim();
+        const pin = document.getElementById('regCaptainPIN').value.trim();
+        const eventId = eventSelector ? eventSelector.value : "tmt-cup-s1";
+
+        if (BANNED_UIDS.includes(ffUID)) {
+          statusMsg.className = "mt-3 text-xs text-center font-bold text-red-500";
+          statusMsg.textContent = "❌ Access Denied: Free Fire UID is blacklisted.";
+          return;
         }
 
-        // Feature 16: Profile Modal
-        window.openTeamModal = function(data) {
-            document.getElementById('teamModalContent').innerHTML = `
-                <div class="bg-dark p-6 text-center border-b border-custom-accent/30 relative">
-                    <button onclick="document.getElementById('teamModal').classList.add('hidden')" class="absolute top-3 right-4 text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
-                    <div class="w-16 h-16 rounded-xl bg-card border-2 border-custom-accent mx-auto mb-3 overflow-hidden">
-                        ${data.logo ? `<img src="${data.logo}" class="w-full h-full object-cover">` : '<i class="fa-solid fa-shield text-2xl mt-4"></i>'}
-                    </div>
-                    <h2 class="font-extrabold text-lg">${data.teamName}</h2>
-                </div>
-                <div class="p-4 text-xs space-y-2 bg-card">
-                    <div class="grid grid-cols-2 gap-2 text-gray-300">
-                        <div class="bg-dark p-2 rounded border border-gray-800"><b>LDR:</b> ${data.p1Name} <br><span class="text-[9px] text-custom-accent">${data.p1Uid}</span></div>
-                        <div class="bg-dark p-2 rounded border border-gray-800"><b>P2:</b> ${data.p2Name || '-'} <br><span class="text-[9px] text-custom-accent">${data.p2Uid || '-'}</span></div>
-                        <div class="bg-dark p-2 rounded border border-gray-800"><b>P3:</b> ${data.p3Name || '-'} <br><span class="text-[9px] text-custom-accent">${data.p3Uid || '-'}</span></div>
-                        <div class="bg-dark p-2 rounded border border-gray-800"><b>P4:</b> ${data.p4Name || '-'} <br><span class="text-[9px] text-custom-accent">${data.p4Uid || '-'}</span></div>
-                    </div>
-                </div>
+        try {
+          const q = query(collection(db, "registrations"), where("ffUID", "==", ffUID), where("eventId", "==", eventId));
+          const snapshot = await getDocs(q);
+
+          if (!snapshot.empty) {
+            statusMsg.className = "mt-3 text-xs text-center font-bold text-amber-500";
+            statusMsg.textContent = "⚠️ Free Fire UID is already registered for this event.";
+            return;
+          }
+
+          await addDoc(collection(db, "registrations"), {
+            squadName,
+            captainIGN,
+            ffUID,
+            phone,
+            captainPIN: pin,
+            eventId,
+            kills: 0,
+            points: 0,
+            status: "confirmed",
+            createdAt: serverTimestamp()
+          });
+
+          statusMsg.className = "mt-3 text-xs text-center font-bold text-emerald-400";
+          statusMsg.textContent = "✅ Registration Successful! Save your Captain PIN to unlock match room credentials.";
+          regForm.reset();
+        } catch (err) {
+          statusMsg.className = "mt-3 text-xs text-center font-bold text-red-500";
+          statusMsg.textContent = "❌ Database error: " + err.message;
+        }
+      });
+    }
+
+    // Captain Vault Unlock Handler
+    const vaultBtn = document.getElementById('unlockVaultBtn');
+    if (vaultBtn) {
+      vaultBtn.addEventListener('click', async () => {
+        const uid = document.getElementById('vaultUID').value.trim();
+        const pin = document.getElementById('vaultPIN').value.trim();
+        const output = document.getElementById('vaultOutput');
+
+        if (!uid || !pin) {
+          alert("Please enter both UID and 4-Digit Captain PIN.");
+          return;
+        }
+
+        output.classList.remove('hidden');
+        output.innerHTML = "<span class='text-amber-400 animate-pulse'>Searching vault records...</span>";
+
+        try {
+          const q = query(collection(db, "registrations"), where("ffUID", "==", uid), where("captainPIN", "==", pin));
+          const snapshot = await getDocs(q);
+
+          if (snapshot.empty) {
+            output.innerHTML = "<span class='text-red-400'>❌ Invalid UID or Captain PIN credential.</span>";
+          } else {
+            const data = snapshot.docs[0].data();
+            output.innerHTML = `
+              <div class="space-y-1 text-slate-200">
+                <p class="text-emerald-400 font-bold">🔓 Captain Authenticated</p>
+                <p><b>Squad:</b> ${data.squadName}</p>
+                <p><b>Room ID:</b> <span class="font-mono text-amber-400">TMT-8842</span></p>
+                <p><b>Passcode:</b> <span class="font-mono text-amber-400">7701</span></p>
+              </div>
             `;
-            document.getElementById('teamModal').classList.remove('hidden');
-        };
-
-        // Feature 3: UID Duplication & Ban Check during Registration
-        window.handleRegistration = async function(e) {
-            e.preventDefault();
-            if(!globalRegOpen) return showToast("Registration is closed!");
-            
-            const btn = document.getElementById('submitBtn');
-            btn.disabled = true; btn.innerText = "Processing...";
-
-            try {
-                const uids = [
-                    document.getElementById('p1Uid').value,
-                    document.getElementById('p2Uid').value,
-                    document.getElementById('p3Uid').value,
-                    document.getElementById('p4Uid').value
-                ].filter(Boolean);
-
-                // Check Ban List
-                if (uids.some(uid => globalBannedUids.includes(uid))) {
-                    throw new Error("Registration Denied: A provided UID is on the Ban List.");
-                }
-
-                // Check Duplicates across existing teams
-                const duplicate = allTeamsData.find(t => 
-                    [t.p1Uid, t.p2Uid, t.p3Uid, t.p4Uid].some(existing => uids.includes(existing))
-                );
-                if (duplicate) throw new Error("UID already registered in another squad.");
-
-                // Feature 20: Security PIN
-                const pin = Math.floor(1000 + Math.random() * 9000).toString();
-
-                let logoData = '';
-                const file = document.getElementById('squadLogoFile').files[0];
-                if (file) {
-                    logoData = await new Promise((resolve) => {
-                        const r = new FileReader();
-                        r.onload = (ev) => {
-                            const img = new Image();
-                            img.onload = () => {
-                                const canvas = document.createElement('canvas');
-                                canvas.width = 100; canvas.height = 100;
-                                canvas.getContext('2d').drawImage(img, 0, 0, 100, 100);
-                                resolve(canvas.toDataURL('image/jpeg', 0.6));
-                            };
-                            img.src = ev.target.result;
-                        };
-                        r.readAsDataURL(file);
-                    });
-                }
-
-                await addDoc(collection(db, "registeredTeams"), {
-                    teamName: document.getElementById('regTeamName').value,
-                    leaderName: document.getElementById('regLeaderName').value,
-                    contact: document.getElementById('regLeaderContact').value,
-                    p1Name: document.getElementById('p1Name').value, p1Uid: document.getElementById('p1Uid').value,
-                    p2Name: document.getElementById('p2Name').value, p2Uid: document.getElementById('p2Uid').value,
-                    p3Name: document.getElementById('p3Name').value, p3Uid: document.getElementById('p3Uid').value,
-                    p4Name: document.getElementById('p4Name').value, p4Uid: document.getElementById('p4Uid').value,
-                    logo: logoData, pin: pin, timestamp: serverTimestamp()
-                });
-
-                e.target.reset();
-                alert(`Success! Your Security PIN is: ${pin}\nSave this. You need it to unlock room credentials.`);
-                switchTab('squads');
-            } catch (err) {
-                showToast(err.message);
-            } finally {
-                btn.disabled = false; btn.innerText = "Register Slot";
-            }
-        };
-
-        // Feature 14: Chat Logic
-        onSnapshot(query(collection(db, "hypeChat"), orderBy("timestamp", "desc")), (snap) => {
-            const box = document.getElementById('chatBox');
-            box.innerHTML = '';
-            snap.forEach(doc => {
-                const d = doc.data();
-                box.insertAdjacentHTML('beforeend', `<div class="text-[10px] border-b border-gray-800 pb-1"><b class="text-custom-accent">${d.name}:</b> <span class="text-gray-300">${d.msg}</span></div>`);
-            });
-        });
-
-        window.sendChatMessage = async function(e) {
-            e.preventDefault();
-            await addDoc(collection(db, "hypeChat"), {
-                name: document.getElementById('chatName').value,
-                msg: document.getElementById('chatMsg').value,
-                timestamp: serverTimestamp()
-            });
-            document.getElementById('chatMsg').value = '';
-        };
-
-        // Feature 20 applied to Room Unlock
-        window.verifyAndUnlockRoom = async function() {
-            const name = document.getElementById('verifyLeaderName').value;
-            const pin = document.getElementById('verifyPin').value;
-            const team = allTeamsData.find(t => t.leaderName === name && t.pin === pin);
-            
-            if(team) {
-                const rSnap = await getDoc(doc(db, "settings", "roomInfo"));
-                document.getElementById('roomIdText').innerText = rSnap.exists() ? rSnap.data().id : 'Not Set';
-                document.getElementById('roomPassText').innerText = rSnap.exists() ? rSnap.data().pass : 'Not Set';
-                document.getElementById('roomCredentialsBox').classList.remove('opacity-50', 'pointer-events-none');
-                document.getElementById('lockStatusBadge').innerText = "🔓 Unlocked";
-                showToast("Credentials Verified.");
-            } else {
-                showToast("Invalid Leader IGN or PIN.");
-            }
-        };
-
-        // Feature 2: CSV Export
-        window.exportToCSV = function() {
-            let csv = "Team Name,Leader,Contact,P1 UID,P2 UID,P3 UID,P4 UID\n";
-            allTeamsData.forEach(t => {
-                csv += `${t.teamName},${t.leaderName},${t.contact},${t.p1Uid},${t.p2Uid||''},${t.p3Uid||''},${t.p4Uid||''}\n`;
-            });
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.setAttribute('href', url);
-            a.setAttribute('download', 'TMT_Rosters.csv');
-            a.click();
-            logAdminAction("Exported CSV data");
-        };
-
-        window.toggleRegistration = async function() {
-            await setDoc(doc(db, "settings", "global"), { regOpen: !globalRegOpen }, { merge: true });
-            logAdminAction(`Registration ${!globalRegOpen ? 'Opened' : 'Closed'}`);
-        };
-
-        window.banPlayer = async function() {
-            const uid = document.getElementById('banUidInput').value;
-            if(uid) {
-                await setDoc(doc(db, "settings", "global"), { bannedUids: arrayUnion(uid) }, { merge: true });
-                showToast("UID Banned");
-                logAdminAction(`Banned UID: ${uid}`);
-                document.getElementById('banUidInput').value = '';
-            }
-        };
-
-        window.saveAdminSettings = async function() {
-            await setDoc(doc(db, "settings", "global"), {
-                maps: document.getElementById('adminMapPool').value,
-                skills: document.getElementById('adminSkills').value,
-                mvp: document.getElementById('adminMvp').value,
-                countdownTime: document.getElementById('adminCountdown').value
-            }, { merge: true });
-            showToast("Settings Saved");
-        };
-
-        function logAdminAction(action) {
-            const box = document.getElementById('adminLogBox');
-            const time = new Date().toLocaleTimeString();
-            box.innerHTML = `<div>[${time}] ${action}</div>` + box.innerHTML;
+          }
+        } catch (err) {
+          output.innerHTML = `<span class='text-red-400'>Error: ${err.message}</span>`;
         }
+      });
+    }
 
-        window.verifyAdminLogin = function() {
-            if(document.getElementById('adminPassInput').value === "2060") {
-                document.getElementById('adminLoginBox').classList.add('hidden');
-                document.getElementById('adminDashboardBox').classList.remove('hidden');
-            } else showToast("Invalid passcode");
-        };
-
-        window.switchTab = function(tab) {
-            ['arenas', 'squads', 'chat', 'rooms', 'admin'].forEach(t => {
-                document.getElementById('section-' + t)?.classList.add('hidden');
-                document.getElementById('tab-' + t).className = "py-2.5 rounded-xl text-gray-400 hover:text-white transition";
-            });
-            document.getElementById('section-' + tab)?.classList.remove('hidden');
-            document.getElementById('tab-' + tab).className = "py-2.5 rounded-xl bg-custom-accent text-dark font-bold transition";
-        };
-
-        function showToast(msg) {
-            const t = document.getElementById('toast');
-                    document.getElementById('toastMsg').innerText = msg;
-            t.classList.remove('hidden');
-            setTimeout(() => t.classList.add('hidden'), 3000);
+    // PWA Deferred Install Prompt Listener
+    let deferredPrompt;
+    const pwaBtn = document.getElementById('pwaInstallBtn');
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      if (pwaBtn) pwaBtn.classList.remove('hidden');
+    });
+    if (pwaBtn) {
+      pwaBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          deferredPrompt = null;
+          pwaBtn.classList.add('hidden');
         }
-    </script>
+      });
+    }
+  </script>
 </body>
 </html>
+
+    
