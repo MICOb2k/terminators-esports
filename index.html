@@ -643,6 +643,121 @@
     navigator.clipboard.writeText(msg);
     alert("📋 WhatsApp announcement copied to clipboard!");
   };
+      // ==========================================
+  // 5. SCOREBOARD & POINT CALCULATOR
+  // ==========================================
+  window.calculateScore = function() {
+    const rankPts = parseInt(document.getElementById('rankPointsSelect')?.value || "0");
+    const kills = parseInt(document.getElementById('killCountInput')?.value || "0");
+    const killVal = parseInt(document.getElementById('killValueInput')?.value || "1");
+    const total = rankPts + (kills * killVal);
+    
+    const display = document.getElementById('totalPointsDisplay');
+    if (display) display.innerText = total + " Pts";
+  };
+
+  // ==========================================
+  // 6. TEAM REGISTRATION ENGINE
+  // ==========================================
+  window.handleRegistration = async function(event) {
+    if (event) event.preventDefault();
+    const teamName = document.getElementById('regTeamName')?.value.trim();
+    const captainName = document.getElementById('regCaptainName')?.value.trim();
+    const whatsapp = document.getElementById('regWhatsapp')?.value.trim();
+    const entryKey = document.getElementById('regEntryKey')?.value.trim();
+    const eventId = document.getElementById('regEventSelect')?.value || "active";
+
+    if (!teamName || !captainName || !whatsapp) {
+      return alert("❌ Please complete Team Name, Captain Name, and WhatsApp number!");
+    }
+
+    try {
+      const { collection, addDoc, getDocs, query, where, updateDoc, doc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js");
+
+      // Validate Entry Key if event is paid or key is supplied
+      if (entryKey) {
+        const keyQuery = query(collection(db, "entry_keys"), where("key", "==", entryKey), where("used", "==", false));
+        const keySnap = await getDocs(keyQuery);
+        if (keySnap.empty) {
+          return alert("❌ Invalid or already used Entry Key!");
+        }
+        const keyDoc = keySnap.docs[0];
+        await updateDoc(doc(db, "entry_keys", keyDoc.id), { used: true });
+      }
+
+      await addDoc(collection(db, "registrations"), {
+        eventId,
+        teamName,
+        captainName,
+        whatsapp,
+        createdAt: serverTimestamp()
+      });
+
+      alert(`🎉 Team "${teamName}" registered successfully!`);
+      document.getElementById('registrationForm')?.reset();
+    } catch (err) {
+      console.error("Registration error:", err);
+      alert("❌ Registration failed: " + err.message);
+    }
+  };
+
+  // ==========================================
+  // 7. CAPTAIN VAULT UNLOCKER
+  // ==========================================
+  window.unlockCaptainVault = async function() {
+    const teamName = document.getElementById('vaultTeamInput')?.value.trim();
+    const credsDisplay = document.getElementById('vaultCredentialsDisplay');
+
+    if (!teamName) return alert("❌ Please enter your registered Team Name!");
+
+    try {
+      const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js");
+      const snap = await getDoc(doc(db, "room_credentials", "active"));
+
+      if (snap.exists()) {
+        const data = snap.data();
+        if (credsDisplay) credsDisplay.classList.remove('hidden');
+        
+        const roomIdEl = document.getElementById('vaultRoomId');
+        const roomPassEl = document.getElementById('vaultRoomPass');
+        
+        if (roomIdEl) roomIdEl.innerText = data.roomId || "Pending";
+        if (roomPassEl) roomPassEl.innerText = data.roomPass || "Pending";
+        
+        alert("🔓 Vault Unlocked! Room credentials retrieved successfully.");
+      } else {
+        alert("⏳ Room credentials have not been released by the Admin yet.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("❌ Unable to access Captain Vault.");
+    }
+  };
+
+  // ==========================================
+  // 8. REALTIME DROPDOWN & LEADERBOARD SYNC
+  // ==========================================
+  function initRealtimeSync() {
+    import("https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js").then(({ collection, onSnapshot }) => {
+      // Auto-populate active tournaments across all drop-down forms
+      onSnapshot(collection(db, "tournaments"), (snapshot) => {
+        const dropdowns = ['entryKeyTournamentSelect', 'roomEventSelect', 'regEventSelect', 'subAdminEventSelect'];
+        let options = '<option value="">-- Select Active Event --</option>';
+        
+        snapshot.docs.forEach(doc => {
+          const t = doc.data();
+          options += `<option value="${doc.id}">${t.title} (${t.format})</option>`;
+        });
+
+        dropdowns.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.innerHTML = options;
+        });
+      });
+    });
+  }
+
+  initRealtimeSync();
     
 
   // ==========================================
