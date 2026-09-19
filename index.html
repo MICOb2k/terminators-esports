@@ -454,6 +454,111 @@
     <div id="obsLeaderboardContent" class="max-w-2xl mx-auto w-full glass-card p-6 rounded-2xl border border-purple-500/30"></div>
     <div class="text-center text-xs text-slate-500">Press ESC to exit broadcast view</div>
   </div>
+  <!-- ========================================== -->
+<!-- 1. SPONSORSHIP & HOSTING PORTAL            -->
+<!-- ========================================== -->
+<section id="page-sponsorship" class="page-content hidden max-w-6xl mx-auto px-4 py-8">
+  <div class="text-center mb-10">
+    <span class="bg-amber-500/10 text-amber-400 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-amber-500/20">Partnerships & Hosting</span>
+    <h1 class="text-3xl md:text-5xl font-extrabold text-white mt-3">Sponsor or Host an Event</h1>
+    <p class="text-slate-400 mt-2 max-w-2xl mx-auto text-sm md:text-base">Power up TMT Esports tournaments or host your own custom Free Fire event directly on our official platform.</p>
+  </div>
+
+  <!-- Sponsor Tier Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+    <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 text-center hover:border-amber-500/50 transition">
+      <div class="text-3xl mb-2">🥉</div>
+      <h3 class="text-xl font-bold text-white">Match Sponsor</h3>
+      <p class="text-amber-400 font-bold text-lg my-2">Bronze Tier</p>
+      <ul class="text-slate-400 text-xs space-y-2 mb-6">
+        <li>• In-game Gloo Wall / Custom Room name banner</li>
+        <li>• Official WhatsApp broadcast mention</li>
+        <li>• Logo on live scoreboard overlays</li>
+      </ul>
+    </div>
+    
+    <div class="bg-gradient-to-b from-amber-500/10 to-slate-900 border border-amber-500/40 rounded-2xl p-6 text-center relative transform md:-translate-y-2">
+      <span class="bg-amber-500 text-slate-950 text-[10px] font-black uppercase px-2 py-0.5 rounded absolute -top-3 left-1/2 -translate-x-1/2">Most Popular</span>
+      <div class="text-3xl mb-2">🥈</div>
+      <h3 class="text-xl font-bold text-white">Title Sponsor</h3>
+      <p class="text-amber-400 font-bold text-lg my-2">Silver Tier</p>
+      <ul class="text-slate-300 text-xs space-y-2 mb-6">
+        <li>• Tournament titled under your brand name</li>
+        <li>• Dedicated OBS Stream banner & overlays</li>
+        <li>• Custom entry passcodes & prize pool hosting</li>
+      </ul>
+    </div>
+
+    <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 text-center hover:border-amber-500/50 transition">
+      <div class="text-3xl mb-2">🥇</div>
+      <h3 class="text-xl font-bold text-white">Community Host</h3>
+      <p class="text-amber-400 font-bold text-lg my-2">Gold Tier</p>
+      <ul class="text-slate-400 text-xs space-y-2 mb-6">
+        <li>• Full access to host custom 4v4 / Solo scrims</li>
+        <li>• Captain Vault credential management</li>
+        <li>• Dedicated sub-admin portal key</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Application Form -->
+  <div class="max-w-2xl mx-auto bg-slate-900/90 border border-slate-800 rounded-2xl p-6 md:p-8">
+    <h2 class="text-xl font-bold text-white mb-4 text-center">Submit Sponsorship / Hosting Application</h2>
+    <form onsubmit="window.handleSponsorshipSubmit(event)" class="space-y-4">
+      <div>
+        <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Your Name / Organization</label>
+        <input type="text" id="sponOrgName" required placeholder="e.g., Apex Gaming / Captain Shadow" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-amber-500">
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">WhatsApp Number</label>
+          <input type="text" id="sponWhatsapp" required placeholder="+234..." class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-amber-500">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Interest Category</label>
+          <select id="sponCategory" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-amber-500">
+            <option value="Match Sponsor">Match Sponsor (Bronze)</option>
+            <option value="Title Sponsor">Title Sponsor (Silver)</option>
+            <option value="Community Host">Custom Event Host (Gold)</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Proposal Details / Budget (Optional)</label>
+        <textarea id="sponDetails" rows="3" placeholder="Tell us about your sponsorship goals or custom tournament format..." class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-amber-500"></textarea>
+      </div>
+      <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-3 rounded-lg text-sm transition shadow-lg shadow-amber-500/20">Submit Application</button>
+    </form>
+  </div>
+</section>
+
+<!-- ========================================== -->
+<!-- 2. CELEBRITY & CREATOR SHOWCASE            -->
+<!-- ========================================== -->
+<section id="page-celebrities" class="page-content hidden max-w-6xl mx-auto px-4 py-8">
+  <div class="text-center mb-10">
+    <span class="bg-purple-500/10 text-purple-400 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-purple-500/20">Creators & Legends</span>
+    <h1 class="text-3xl md:text-5xl font-extrabold text-white mt-3">TMT Stars & Creators</h1>
+    <p class="text-slate-400 mt-2 max-w-2xl mx-auto text-sm md:text-base">Top Free Fire content creators, verified tournament MVPs, and guild legends representing TMT Esports.</p>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6" id="celebrityCardsGrid">
+    <!-- Star Card 1 -->
+    <div class="bg-slate-900 border border-purple-500/30 rounded-2xl p-5 text-center relative overflow-hidden group hover:border-purple-500 transition">
+      <div class="w-20 h-20 mx-auto rounded-full bg-gradient-to-tr from-purple-600 to-amber-500 p-1 mb-3">
+        <div class="w-full h-full rounded-full bg-slate-950 flex items-center justify-center font-black text-2xl text-amber-400">M</div>
+      </div>
+      <span class="bg-purple-500/20 text-purple-300 text-[10px] font-bold px-2 py-0.5 rounded border border-purple-500/30">Guild Founder & Captain</span>
+      <h3 class="text-lg font-extrabold text-white mt-2">M I C O</h3>
+      <p class="text-slate-400 text-xs mt-1">Master Rush & 360 Gloo Wall Specialist</p>
+      <div class="flex justify-center space-x-2 mt-4 text-xs">
+        <span class="bg-slate-800 text-slate-300 px-2 py-1 rounded">Tatsuya Main</span>
+        <span class="bg-slate-800 text-amber-300 px-2 py-1 rounded">Ink Art Skin</span>
+      </div>
+    </div>
+  </div>
+        </section>
+  
 
   <!-- Firebase v10 Engine & Application Logic Script -->
   <script type="module">
@@ -758,7 +863,123 @@
   }
 
   initRealtimeSync();
+      // ==========================================
+  // 9. SPONSORSHIP APPLICATION HANDLER
+  // ==========================================
+  window.handleSponsorshipSubmit = async function(event) {
+    if (event) event.preventDefault();
+    const orgName = document.getElementById('sponOrgName')?.value.trim();
+    const whatsapp = document.getElementById('sponWhatsapp')?.value.trim();
+    const category = document.getElementById('sponCategory')?.value;
+    const details = document.getElementById('sponDetails')?.value.trim();
+
+    if (!orgName || !whatsapp) return alert("❌ Please fill in your Name/Organization and WhatsApp number!");
+
+    try {
+      const { collection, addDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js");
+      await addDoc(collection(db, "sponsorship_applications"), {
+        orgName,
+        whatsapp,
+        category,
+        details: details || "N/A",
+        status: "pending",
+        createdAt: serverTimestamp()
+      });
+      alert("🚀 Sponsorship application submitted live! The TMT team will contact you on WhatsApp shortly.");
+      event.target.reset();
+    } catch (err) {
+      console.error(err);
+      alert("❌ Submission failed: " + err.message);
+    }
+  };
+
+  // ==========================================
+  // 10. SUB-ADMIN FIRESTORE AUTHENTICATION FIX
+  // ==========================================
+  // Override Sub-Admin code generator to persist in Firestore
+  const originalGenerateAdminPasscode = window.generateAdminPasscode;
+  window.generateAdminPasscode = async function() {
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    try {
+      const { collection, addDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js");
+      await addDoc(collection(db, "admin_codes"), {
+        code: code,
+        active: true,
+        createdAt: serverTimestamp()
+      });
+      const list = document.getElementById('activeAdminCodesList');
+      if (list) {
+        list.innerHTML = `<div class="text-purple-300 font-mono">Temp Code: <b>${code}</b> (Active & Persisted)</div>`;
+      }
+      alert(`🔐 Persistent Sub-Admin passcode created: ${code}`);
+    } catch (err) {
+      console.error(err);
+      alert("❌ Failed to save admin passcode: " + err.message);
+    }
+  };
+
+  // Override authenticateAdmin to check both Master Code & Firestore Temp Passcodes
+  window.authenticateAdmin = async function() {
+    const input = document.getElementById('adminPasscodeInput')?.value.trim();
+    const authBox = document.getElementById('adminAuthBox');
+    const dashboard = document.getElementById('adminDashboard');
+    const authMsg = document.getElementById('adminAuthMsg');
+
+    if (!input) return alert("❌ Please enter a passcode!");
+
+    // Master passcode check
+    if (input === '2060') {
+      if (authBox) authBox.classList.add('hidden');
+      if (dashboard) dashboard.classList.remove('hidden');
+      if (authMsg) authMsg.innerHTML = '';
+      return;
+    }
+
+    // Check Sub-Admin codes in Firestore
+    try {
+      const { collection, getDocs, query, where } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js");
+      const q = query(collection(db, "admin_codes"), where("code", "==", input), where("active", "==", true));
+      const snap = await getDocs(q);
+
+      if (!snap.empty) {
+        if (authBox) authBox.classList.add('hidden');
+        if (dashboard) dashboard.classList.remove('hidden');
+        if (authMsg) authMsg.innerHTML = '';
+        alert("🔓 Sub-Admin session authenticated!");
+      } else {
+        if (authMsg) authMsg.innerHTML = '<span class="text-red-400">❌ Invalid or Expired Passcode</span>';
+      }
+    } catch (err) {
+      console.error(err);
+      if (authMsg) authMsg.innerHTML = '<span class="text-red-400">❌ Auth Error</span>';
+    }
+  };
+
+  // ==========================================
+  // 11. AUTOMATED PWA APP INSTALL PROMPT
+  // ==========================================
+  let deferredPrompt;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
     
+    // Inject Install App button into header if not present
+    if (!document.getElementById('pwaInstallBtn')) {
+      const headerNav = document.querySelector('nav') || document.body;
+      const installBtn = document.createElement('button');
+      installBtn.id = 'pwaInstallBtn';
+      installBtn.className = 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs px-3 py-1.5 rounded-lg shadow-md transition ml-2 flex items-center gap-1';
+      installBtn.innerHTML = '📲 Install App';
+      installBtn.onclick = () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
+        }
+      };
+      headerNav.appendChild(installBtn);
+    }
+  });
+        
 
   // ==========================================
   // 2. SOCIAL LINKS SAVER (Header Sync)
