@@ -524,6 +524,125 @@
     const input = document.getElementById('adminPasscodeInput');
     if (input) input.value = '';
   };
+      // ==========================================
+  // 4. GLOBAL ADMIN ACTION HANDLERS
+  // ==========================================
+
+  // Entry type dropdown selector toggle
+  window.toggleEntryCodeConfig = function() {
+    const type = document.getElementById('pubType')?.value;
+    const prizeInput = document.getElementById('pubPrize');
+    if (prizeInput) prizeInput.style.display = type === 'paid' ? 'block' : 'none';
+  };
+
+  // 1. Publish Tournament Live
+  window.publishTournament = async function() {
+    const title = document.getElementById('pubTitle')?.value.trim();
+    const format = document.getElementById('pubFormat')?.value;
+    const type = document.getElementById('pubType')?.value;
+    const prize = document.getElementById('pubPrize')?.value.trim() || 'Bragging Rights';
+
+    if (!title) return alert("❌ Please enter a tournament title!");
+
+    try {
+      const { collection, addDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js");
+      await addDoc(collection(db, "tournaments"), {
+        title,
+        format,
+        type,
+        prize,
+        status: "active",
+        createdAt: serverTimestamp()
+      });
+      alert(`✅ Tournament "${title}" published live successfully!`);
+      if (document.getElementById('pubTitle')) document.getElementById('pubTitle').value = '';
+    } catch (err) {
+      console.error(err);
+      alert("❌ Failed to publish tournament: " + err.message);
+    }
+  };
+
+  // 2. Generate Paid Passcode Keys
+  window.generateKeys = async function() {
+    const tourneySelect = document.getElementById('entryKeyTournamentSelect');
+    const tourneyId = tourneySelect?.value;
+    const count = parseInt(document.getElementById('keyAmountInput')?.value || "1");
+    const listDisplay = document.getElementById('generatedKeysList');
+
+    if (!tourneyId || tourneyId.includes("Select")) {
+      return alert("❌ Please select a paid tournament first!");
+    }
+
+    const keys = [];
+    try {
+      const { collection, addDoc } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js");
+      for (let i = 0; i < count; i++) {
+        const key = Math.floor(100000 + Math.random() * 900000).toString();
+        keys.push(key);
+        await addDoc(collection(db, "entry_keys"), {
+          tournamentId: tourneyId,
+          key: key,
+          used: false
+        });
+      }
+
+      if (listDisplay) {
+        listDisplay.innerHTML = keys.map(k => `<span class="bg-amber-500/20 text-amber-300 px-2 py-1 rounded border border-amber-500/30">${k}</span>`).join(' ');
+      }
+      alert(`🔑 Generated ${count} entry key(s) successfully!`);
+    } catch (err) {
+      console.error(err);
+      alert("❌ Failed to generate keys: " + err.message);
+    }
+  };
+
+  // 3. Inject Custom Room ID & Passcode
+  window.pushRoomCredentials = async function() {
+    const eventId = document.getElementById('roomEventSelect')?.value || "active";
+    const roomId = document.getElementById('roomIdInput')?.value.trim();
+    const roomPass = document.getElementById('roomPassInput')?.value.trim();
+
+    if (!roomId || !roomPass) return alert("❌ Please enter both Room ID and Passcode!");
+
+    try {
+      const { doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js");
+      await setDoc(doc(db, "room_credentials", eventId), {
+        roomId,
+        roomPass,
+        updatedAt: new Date().toISOString()
+      }, { merge: true });
+      alert("📡 Room credentials pushed live to Captain Vault!");
+    } catch (err) {
+      console.error(err);
+      alert("❌ Failed to push room details: " + err.message);
+    }
+  };
+
+  // 4. Create Sub-Admin Passcode
+  window.generateAdminPasscode = function() {
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    const list = document.getElementById('activeAdminCodesList');
+    if (list) {
+      list.innerHTML = `<div class="text-purple-300 font-mono">Temp Code: <b>${code}</b> (Active)</div>`;
+    }
+    alert(`🔐 Temporary sub-admin code generated: ${code}`);
+  };
+
+  // 5. OBS Stream Overlay Toggle
+  window.toggleOBSOverlay = function() {
+    const overlay = document.getElementById('obsOverlayContainer');
+    if (overlay) {
+      overlay.classList.toggle('hidden');
+      alert("🎥 OBS Stream Overlay toggled!");
+    }
+  };
+
+  // 6. WhatsApp Broadcast Generator
+  window.generateWhatsAppBroadcast = function() {
+    const msg = "🚨 *TMT ESPORTS OFFICIAL BROADCAST* 🚨\nCaptains, check your Captain Vault on micob2k.github.io/terminators-esports/ for live Room ID & Password!";
+    navigator.clipboard.writeText(msg);
+    alert("📋 WhatsApp announcement copied to clipboard!");
+  };
     
 
   // ==========================================
