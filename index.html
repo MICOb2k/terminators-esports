@@ -1103,7 +1103,29 @@
       headerNav.appendChild(installBtn);
     }
   });
-        
+          // ==========================================
+  // 12. SUPREME NAVIGATION CONTROLLER
+  // ==========================================
+  const supremePages = {
+    sponsorship: document.getElementById('page-sponsorship'),
+    celebrities: document.getElementById('page-celebrities'),
+    brackets: document.getElementById('page-brackets'),
+    rulebook: document.getElementById('page-rulebook'),
+    watch: document.getElementById('page-watch')
+  };
+
+  window.switchSupremePage = function(pageKey) {
+    Object.keys(supremePages).forEach(key => {
+      if (supremePages[key]) {
+        if (key === pageKey) {
+          supremePages[key].classList.remove('hidden');
+        } else {
+          supremePages[key].classList.add('hidden');
+        }
+      }
+    });
+  };
+    
 
   // ==========================================
   // 2. SOCIAL LINKS SAVER (Header Sync)
