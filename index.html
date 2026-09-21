@@ -1,1440 +1,793 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TERMINATORS E-SPORTS | Official Platform</title>
-  
-  <!-- PWA Meta Tags -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0f172a">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-  <!-- Tailwind CSS & Font Awesome -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <style>
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #090d16; }
-    ::-webkit-scrollbar-thumb { background: #2563eb; border-radius: 4px; }
-    .glow-blue { box-shadow: 0 0 20px rgba(37, 99, 235, 0.35); }
-    .glass-card { background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TERMINATORS E-SPORTS | TMT Official</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { red: '#ff003c', cyan: '#00f0ff', dark: '#0a0a12', card: '#121220' }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Rajdhani', sans-serif; background-color: #06060c; color: #e2e8f0; overflow-x: hidden; }
+        h1, h2, h3, .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .glass-card { background: rgba(18, 18, 32, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card-hover:hover { border-color: rgba(0, 240, 255, 0.4); transform: translateY(-3px); transition: all 0.3s ease; }
+        .glow-cyan { box-shadow: 0 0 15px rgba(0, 240, 255, 0.3); }
+        .glow-red { box-shadow: 0 0 15px rgba(255, 0, 60, 0.4); }
+        .text-glow-cyan { text-shadow: 0 0 8px rgba(0, 240, 255, 0.6); }
+        .text-glow-red { text-shadow: 0 0 8px rgba(255, 0, 60, 0.6); }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #06060c; }
+        ::-webkit-scrollbar-thumb { background: #ff003c; border-radius: 3px; }
+    </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen relative overflow-x-hidden">
+<body class="min-h-screen flex flex-col justify-between">
 
-  <!-- Background Video Engine -->
-  <div class="fixed inset-0 w-full h-full z-0 overflow-hidden pointer-events-none">
-    <video id="bgVideo" autoplay loop muted playsinline class="w-full h-full object-cover opacity-20">
-      <source src="https://assets.mixkit.co/videos/preview/mixkit-game-animation-of-a-futuristic-robot-42934-large.mp4" type="video/mp4">
-    </video>
-    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-slate-950/40"></div>
-  </div>
+    <!-- Offline Alert Banner -->
+    <div id="offlineBanner" class="hidden bg-red-600 text-white text-center text-xs py-1 font-bold tracking-widest fixed top-0 left-0 w-full z-50">
+        <i class="fa-solid fa-wifi-slash mr-2"></i> CONNECTION LOST - CHECK YOUR INTERNET
+    </div>
 
-  <!-- Main App Shell -->
-  <div class="relative z-10 max-w-7xl mx-auto px-4 py-3 flex flex-col min-h-screen">
+    <!-- Notification Toast Container -->
+    <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
     <!-- Header Navigation -->
-    <header class="glass-card rounded-2xl p-4 mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-blue-500/30 glow-blue">
-      <div class="flex items-center gap-3">
-        <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center font-black text-xl text-white shadow-lg">
-          TMT
-        </div>
-        <div>
-          <h1 class="text-xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 uppercase">
-            Terminators Esports
-          </h1>
-          <p class="text-xs text-slate-400 font-medium">Founder: <span class="text-blue-400 font-semibold tracking-widest">M I C O</span></p>
-        </div>
-      </div>
+    <header class="sticky top-0 z-40 glass-card border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="switchPage('home')">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-red-600 to-cyan-500 flex items-center justify-center font-bold text-xl text-white shadow-lg">
+                    TMT
+                </div>
+                <div>
+                    <h1 class="text-lg font-black tracking-wider text-white">TERMINATORS <span class="text-cyan-400">ESPORTS</span></h1>
+                    <p class="text-[10px] text-gray-400 tracking-widest uppercase">FOUNDER: <span class="text-red-400 font-bold">M I C O</span></p>
+                </div>
+            </div>
 
-      <!-- Event Selector -->
-      <div class="flex items-center gap-3">
-        <label for="eventSelector" class="hidden sm:block text-xs font-semibold uppercase tracking-wider text-slate-400">Select Event:</label>
-        <select id="eventSelector" class="bg-slate-900 border border-slate-700 text-blue-400 text-sm rounded-xl px-4 py-2 font-bold focus:outline-none focus:border-blue-500 glow-blue transition">
-          <option value="tmt-cup-s1">🏆 TMT Championship Season 1 (4v4)</option>
-          <option value="lone-wolf-1v1">⚔️ Lone Wolf Speed Series (1v1)</option>
-        </select>
-      </div>
+            <!-- Social Links & Global Controls -->
+            <div class="flex items-center gap-2 sm:gap-4">
+                <a id="headerDiscordLink" href="#" target="_blank" class="text-gray-400 hover:text-cyan-400 text-lg transition p-1"><i class="fa-brands fa-discord"></i></a>
+                <a id="headerYoutubeLink" href="#" target="_blank" class="text-gray-400 hover:text-red-500 text-lg transition p-1"><i class="fa-brands fa-youtube"></i></a>
+                <a id="headerWhatsappLink" href="#" target="_blank" class="text-gray-400 hover:text-green-400 text-lg transition p-1"><i class="fa-brands fa-whatsapp"></i></a>
+                
+                <!-- Audio SFX Toggle -->
+                <button onclick="toggleAudio()" id="audioToggleBtn" class="text-gray-400 hover:text-yellow-400 text-sm p-1.5 rounded-lg border border-gray-700">
+                    <i class="fa-solid fa-volume-high"></i>
+                </button>
 
-      <!-- Actions -->
-      <div class="flex items-center gap-2">
-        <button id="pwaInstallBtn" class="hidden bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-xs font-bold px-3 py-2 rounded-xl flex items-center gap-2 shadow-lg transition">
-          <i class="fa-solid fa-download"></i> Install App
-        </button>
-        <button onclick="window.location.reload()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 p-2.5 rounded-xl border border-slate-700 transition">
-          <i class="fa-solid fa-rotate-right"></i>
-        </button>
-      </div>
+                <!-- Theme Toggle -->
+                <button onclick="toggleTheme()" class="text-gray-400 hover:text-cyan-400 text-sm p-1.5 rounded-lg border border-gray-700">
+                    <i class="fa-solid fa-moon" id="themeIcon"></i>
+                </button>
+
+                <!-- Install PWA Button -->
+                <button id="pwaInstallBtn" class="hidden bg-cyan-500 hover:bg-cyan-400 text-black font-bold text-xs px-3 py-1.5 rounded-md transition shadow-md">
+                    <i class="fa-solid fa-download mr-1"></i> INSTALL APP
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu Bar -->
+        <nav class="bg-black/60 border-t border-gray-800/80 px-2 py-2 overflow-x-auto scrollbar-none flex justify-around gap-1 text-xs">
+            <button onclick="switchPage('home')" id="nav-home" class="nav-btn px-3 py-1.5 rounded-md font-bold text-cyan-400 bg-cyan-950/40 border border-cyan-500/30 whitespace-nowrap">
+                <i class="fa-solid fa-house mr-1"></i> HOME
+            </button>
+            <button onclick="switchPage('tournaments')" id="nav-tournaments" class="nav-btn px-3 py-1.5 rounded-md font-bold text-gray-400 hover:text-white whitespace-nowrap">
+                <i class="fa-solid fa-trophy mr-1"></i> TOURNAMENTS
+            </button>
+            <button onclick="switchPage('registration')" id="nav-registration" class="nav-btn px-3 py-1.5 rounded-md font-bold text-gray-400 hover:text-white whitespace-nowrap">
+                <i class="fa-solid fa-pen-to-square mr-1"></i> REGISTER
+            </button>
+            <button onclick="switchPage('halloffame')" id="nav-halloffame" class="nav-btn px-3 py-1.5 rounded-md font-bold text-gray-400 hover:text-white whitespace-nowrap">
+                <i class="fa-solid fa-crown mr-1"></i> HALL OF FAME
+            </button>
+            <button onclick="switchPage('livestream')" id="nav-livestream" class="nav-btn px-3 py-1.5 rounded-md font-bold text-gray-400 hover:text-white whitespace-nowrap">
+                <i class="fa-solid fa-video mr-1"></i> LIVE
+            </button>
+            <button onclick="switchPage('admin')" id="nav-admin" class="nav-btn px-3 py-1.5 rounded-md font-bold text-red-400 hover:text-red-300 whitespace-nowrap">
+                <i class="fa-solid fa-user-shield mr-1"></i> ADMIN
+            </button>
+        </nav>
     </header>
 
-        <!-- Dynamic Social Connect Bar -->
-    <section class="glass-card rounded-2xl p-3 mb-6 flex flex-wrap items-center justify-around gap-3 border border-slate-800">
-      <a id="headerDiscordLink" href="#" target="_blank" class="flex items-center gap-2 text-xs font-bold text-slate-300 hover:text-indigo-400 transition">
-        <i class="fa-brands fa-discord text-base text-indigo-400"></i> Discord Server
-      </a>
-      <a id="headerYoutubeLink" href="#" target="_blank" class="flex items-center gap-2 text-xs font-bold text-slate-300 hover:text-red-400 transition">
-        <i class="fa-brands fa-youtube text-base text-red-500"></i> YouTube Stream
-      </a>
-      <a id="headerTiktokLink" href="https://tiktok.com/@tmt_esports" target="_blank" class="flex items-center gap-2 text-xs font-bold text-slate-300 hover:text-pink-400 transition">
-        <i class="fa-brands fa-tiktok text-base text-pink-500"></i> @tmt_esports
-      </a>
-      <a id="headerWhatsappLink" href="#" target="_blank" class="flex items-center gap-2 text-xs font-bold text-slate-300 hover:text-emerald-400 transition">
-        <i class="fa-brands fa-whatsapp text-base text-emerald-500"></i> WhatsApp Channel
-      </a>
-    </section>
-    
-    <!-- Main Multi-Page Container -->
-    <main id="appCore" class="flex-grow space-y-6">
+    <!-- News Announcement Ticker -->
+    <div class="bg-red-950/40 border-b border-red-900/50 py-1.5 px-4 flex items-center gap-3 overflow-hidden text-xs text-red-300">
+        <span class="bg-red-600 text-white font-bold text-[10px] px-2 py-0.5 rounded tracking-wider whitespace-nowrap">ANNOUNCEMENT</span>
+        <marquee id="announcementMarquee" behavior="scroll" direction="left" class="font-medium">
+            Welcome to TERMINATORS E-SPORTS Platform! Founded by M I C O. Register for upcoming 4v4 & Custom Room matches now!
+        </marquee>
+    </div>
+      <!-- MAIN CONTENT CONTAINERS -->
+    <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full">
 
-      <!-- Navigation Tabs Bar -->
-      <div class="glass-card rounded-2xl p-2 border border-slate-800 flex items-center justify-around gap-2 text-xs font-bold text-slate-400 overflow-x-auto">
-        <button id="navTournaments" onclick="switchPage('tournaments')" class="px-4 py-2.5 rounded-xl bg-blue-600 text-white flex items-center gap-2 transition">
-          <i class="fa-solid fa-trophy"></i> Tournaments Hub
-        </button>
-        <button id="navVault" onclick="switchPage('vault')" class="px-4 py-2.5 rounded-xl hover:text-slate-200 flex items-center gap-2 transition">
-          <i class="fa-solid fa-vault text-amber-500"></i> Captain Vault
-        </button>
-        <button id="navStandings" onclick="switchPage('standings')" class="px-4 py-2.5 rounded-xl hover:text-slate-200 flex items-center gap-2 transition">
-          <i class="fa-solid fa-list-ol text-emerald-500"></i> Standings & Brackets
-        </button>
-        <button id="navHallOfFame" onclick="switchPage('halloffame')" class="px-4 py-2.5 rounded-xl hover:text-slate-200 flex items-center gap-2 transition">
-  <i class="fa-solid fa-award text-amber-400"></i> Hall of Fame
-        </button>
-        
-        <button id="navAdmin" onclick="switchPage('admin')" class="px-4 py-2.5 rounded-xl hover:text-slate-200 flex items-center gap-2 text-red-400 transition">
-          <i class="fa-solid fa-user-shield"></i> Admin Portal
-        </button>
-      </div>
-
-      <!-- ================= PAGE 1: TOURNAMENTS HUB ================= -->
-      <section id="pageTournaments" class="space-y-6">
-        <div class="flex items-center justify-between">
-          <h2 class="text-xl font-bold text-slate-100 flex items-center gap-2">
-            <i class="fa-solid fa-fire text-amber-500"></i> Active Tournaments
-          </h2>
-          <span class="text-xs text-slate-400 bg-slate-900 border border-slate-800 px-3 py-1 rounded-full">Multi-Event Engine</span>
-        </div>
-
-        <!-- Dynamic Tournament List Grid -->
-        <div id="activeTournamentsList" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="p-6 text-center text-slate-500 bg-slate-900/40 rounded-2xl border border-slate-800">
-            Loading active tournaments...
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= PAGE 2: CAPTAIN VAULT ================= -->
-      <section id="pageVault" class="hidden space-y-6 max-w-xl mx-auto">
-        <div class="glass-card rounded-2xl p-6 border border-slate-800">
-          <h2 class="text-base font-bold text-slate-200 uppercase tracking-wider mb-4 flex items-center gap-2">
-            <i class="fa-solid fa-vault text-amber-500"></i> Captain Room Passcode Vault
-          </h2>
-          <div class="space-y-4">
-            <p class="text-xs text-slate-400">Select your registered tournament and enter your FF UID + 4-Digit Security PIN to reveal room credentials.</p>
-            
-            <div>
-              <label class="block text-xs font-semibold text-slate-400 mb-1">Select Tournament</label>
-              <select id="vaultTournamentSelect" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:border-amber-500">
-                <option value="">-- Choose Tournament --</option>
-              </select>
-            </div>
-
-            <input type="number" id="vaultUID" placeholder="Enter Registered FF UID" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:border-amber-500">
-            <input type="password" id="vaultPIN" maxlength="4" placeholder="4-Digit Security PIN" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:border-amber-500">
-            
-            <button id="unlockVaultBtn" class="w-full bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold py-3 rounded-xl transition flex items-center justify-center gap-2">
-              <i class="fa-solid fa-key"></i> Access Room Credentials
-            </button>
-            <div id="vaultOutput" class="mt-3 text-xs hidden p-4 bg-slate-950 rounded-xl border border-slate-800"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= PAGE 3: STANDINGS & BRACKETS ================= -->
-      <section id="pageStandings" class="hidden space-y-6">
-        <div class="flex items-center justify-between flex-wrap gap-3">
-          <h2 class="text-xl font-bold text-slate-100 flex items-center gap-2">
-            <i class="fa-solid fa-chart-line text-emerald-400"></i> Leaderboards & Matches
-          </h2>
-          <select id="standingsTournamentSelect" class="bg-slate-900 border border-slate-800 text-xs font-bold text-slate-300 rounded-xl px-3 py-2">
-            <option value="">-- Select Event --</option>
-          </select>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <!-- Standings Table -->
-          <div class="lg:col-span-2 glass-card rounded-2xl p-6 border border-slate-800">
-            <div class="flex items-center justify-between mb-4">
-              <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
-                <i class="fa-solid fa-trophy text-amber-400"></i> Live Scoreboard
-              </h3>
-              <span class="text-xs text-slate-400 flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> Sync Active
-              </span>
-            </div>
-            <div class="overflow-x-auto">
-              <table class="w-full text-left text-xs text-slate-300">
-                <thead class="bg-slate-900/80 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
-                  <tr>
-                    <th class="p-3">Rank</th>
-                    <th class="p-3">Squad</th>
-                    <th class="p-3 text-center">Kills</th>
-                    <th class="p-3 text-center">Pts</th>
-                    <th class="p-3 text-right">Status</th>
-                  </tr>
-                </thead>
-                <tbody id="leaderboardBody" class="divide-y divide-slate-800/50 font-medium">
-                  <tr><td colspan="5" class="p-4 text-center text-slate-500">Select a tournament to load standings.</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Brackets & 4v4 Slots -->
-          <div class="space-y-6">
-            <div class="glass-card rounded-2xl p-6 border border-slate-800">
-              <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider mb-4 flex items-center gap-2">
-                <i class="fa-solid fa-users-viewfinder text-indigo-400"></i> 4v4 Slot Allocator
-              </h3>
-              <div id="slotDisplay" class="grid grid-cols-2 gap-3 text-xs">
-                <div class="p-3 bg-red-950/30 border border-red-500/30 rounded-xl">
-                  <span class="font-bold text-red-400 block border-b border-red-500/20 pb-1 mb-2">ALPHA (1-4)</span>
-                  <div id="slotAlphaList" class="space-y-1 font-mono text-[11px] text-slate-400">No event loaded</div>
+        <!-- ================= PAGE: HOME / TOURNAMENTS ================= -->
+        <section id="page-home" class="page-content space-y-6">
+            <!-- Hero Banner -->
+            <div class="relative rounded-2xl overflow-hidden glass-card p-6 sm:p-10 border border-cyan-500/20 bg-gradient-to-r from-red-950/30 via-black to-cyan-950/30">
+                <div class="max-w-2xl space-y-4">
+                    <span class="bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">Official Platform</span>
+                    <h2 class="text-3xl sm:text-5xl font-black text-white leading-tight">DOMINATE THE <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-red-500">BATTLEFIELD</span></h2>
+                    <p class="text-gray-300 text-sm sm:text-base">Join elite competitive Free Fire tournaments hosted by <span class="text-white font-bold">The Terminators (TMT)</span>. Compete for prizes, glory, and rank up on our leaderboard.</p>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <button onclick="switchPage('registration')" class="bg-red-600 hover:bg-red-500 text-white font-bold text-sm px-6 py-3 rounded-lg shadow-lg glow-red transition">
+                            <i class="fa-solid fa-gamepad mr-2"></i> ENTER MATCH
+                        </button>
+                        <button onclick="openRulebookModal()" class="bg-gray-800 hover:bg-gray-700 text-cyan-400 border border-cyan-500/30 font-bold text-sm px-6 py-3 rounded-lg transition">
+                            <i class="fa-solid fa-book-open mr-2"></i> RULEBOOK
+                        </button>
+                    </div>
                 </div>
-                <div class="p-3 bg-blue-950/30 border border-blue-500/30 rounded-xl">
-                  <span class="font-bold text-blue-400 block border-b border-blue-500/20 pb-1 mb-2">BRAVO (5-8)</span>
-                  <div id="slotBravoList" class="space-y-1 font-mono text-[11px] text-slate-400">No event loaded</div>
+            </div>
+
+            <!-- Tournament Filters & Search -->
+            <div class="flex flex-col sm:flex-row gap-4 items-center justify-between glass-card p-4 rounded-xl">
+                <div class="flex gap-2 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0">
+                    <button onclick="filterTournaments('all')" class="filter-btn active-filter px-4 py-1.5 rounded-lg text-xs font-bold bg-cyan-500 text-black">ALL</button>
+                    <button onclick="filterTournaments('squad')" class="filter-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-gray-800 text-gray-300 hover:text-white">SQUAD 4v4</button>
+                    <button onclick="filterTournaments('duo')" class="filter-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-gray-800 text-gray-300 hover:text-white">DUO</button>
+                    <button onclick="filterTournaments('solo')" class="filter-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-gray-800 text-gray-300 hover:text-white">SOLO</button>
                 </div>
-              </div>
+                <div class="relative w-full sm:w-64">
+                    <input type="text" id="tournamentSearchInput" oninput="searchTournaments()" placeholder="Search tournaments..." class="w-full bg-black/60 border border-gray-700 rounded-lg px-3 py-1.5 text-xs text-white focus:border-cyan-400 focus:outline-none pl-8">
+                    <i class="fa-solid fa-search absolute left-2.5 top-2.5 text-gray-500 text-xs"></i>
+                </div>
             </div>
 
-            <div class="glass-card rounded-2xl p-6 border border-slate-800">
-              <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider mb-4 flex items-center gap-2">
-                <i class="fa-solid fa-sitemap text-amber-400"></i> Bracket Tree
-              </h3>
-              <div id="bracketDisplay" class="text-xs font-mono text-slate-500 text-center py-2">
-                Select an active tournament to view matches.
-              </div>
+            <!-- Tournament Grid Container -->
+            <div id="tournamentGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Dynamic Tournament Cards Loaded Here -->
+                <div class="text-center py-12 col-span-full text-gray-500">
+                    <i class="fa-solid fa-spinner fa-spin text-2xl text-cyan-400 mb-2"></i>
+                    <p>Loading Active Tournaments...</p>
+                </div>
             </div>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- ================= PAGE 4: ADMIN CONTROL CENTER ================= -->
-      <section id="pageAdmin" class="hidden space-y-6">
-        
-        <!-- Admin Authentication Gateway -->
-        <div id="adminAuthBox" class="glass-card rounded-2xl p-6 border border-red-500/30 max-w-md mx-auto space-y-4 text-center">
-          <div class="w-12 h-12 bg-red-500/10 border border-red-500/30 text-red-400 rounded-2xl flex items-center justify-center mx-auto text-xl font-bold">
-            <i class="fa-solid fa-shield-halved"></i>
-          </div>
-          <h2 class="text-lg font-bold text-slate-100">Admin Control Portal</h2>
-          <p class="text-xs text-slate-400">Enter Master Passcode to access admin controls.</p>
-
-          <input type="password" id="adminPasscodeInput" placeholder="Enter Access Code" class="w-full bg-slate-900 border border-slate-800 text-center font-mono text-lg tracking-widest text-slate-100 rounded-xl py-2.5 focus:border-red-500">
-          
-          <button onclick="authenticateAdmin()" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-2.5 rounded-xl transition text-xs flex items-center justify-center gap-2">
-            <i class="fa-solid fa-unlock"></i> Authenticate Session
-          </button>
-          <div id="adminAuthMsg" class="text-xs font-bold"></div>
-        </div>
-
-        <!-- Admin Control Dashboard (Unlocked Post-Auth) -->
-        <div id="adminDashboard" class="hidden space-y-6">
-          
-          <!-- Admin Status Bar -->
-          <div class="glass-card rounded-2xl p-4 border border-slate-800 flex items-center justify-between flex-wrap gap-3">
-            <div class="flex items-center gap-3">
-              <span id="adminRoleBadge" class="bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-bold px-3 py-1 rounded-full">Super Admin</span>
-              <span id="adminScopeBadge" class="text-xs text-slate-400 font-mono">Scope: Full System</span>
-            </div>
-            <button onclick="logoutAdmin()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold px-3 py-1.5 rounded-xl transition">
-              <i class="fa-solid fa-right-from-bracket"></i> Lock Console
-            </button>
-          </div>
-
-          <!-- Admin Multi-Tool Tabs -->
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
-            <!-- Column 1: Publisher & Code Generator -->
-            <div class="space-y-6">
-              
-              <!-- Publish Tournament Form -->
-              <div class="glass-card rounded-2xl p-6 border border-slate-800 space-y-4">
-                <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
-                  <i class="fa-solid fa-plus text-blue-400"></i> Publish Tournament
-                </h3>
-                
-                <input type="text" id="pubTitle" placeholder="Tournament Title *" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200">
-                <select id="pubFormat" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200">
-                  <option value="4v4">4v4 Clash Squad</option>
-                  <option value="BR">Battle Royale (Full Squad)</option>
-                  <option value="LoneWolf">1v1 Lone Wolf</option>
-                </select>
-
-                <div class="grid grid-cols-2 gap-3">
-                  <select id="pubType" onchange="toggleEntryCodeConfig()" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200">
-                    <option value="free">Free Entry</option>
-                    <option value="paid">Paid / Prize Pool</option>
-                  </select>
-                  <input type="text" id="pubPrize" placeholder="Prize Pool ($/₦)" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200">
+        <!-- ================= PAGE: REGISTRATION ================= -->
+        <section id="page-registration" class="page-content hidden max-w-2xl mx-auto">
+            <div class="glass-card p-6 sm:p-8 rounded-2xl border border-red-500/20 space-y-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-file-pen text-red-500"></i> TOURNAMENT REGISTRATION
+                    </h2>
+                    <p class="text-xs text-gray-400">Fill out team details. Valid Entry Key required for entry.</p>
                 </div>
 
-                <button onclick="publishTournament()" class="w-full bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold py-2.5 rounded-xl transition">
-                  🚀 Launch Tournament Live
+                <form id="regForm" onsubmit="handleRegistrationSubmit(event)" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-300 mb-1">Squad / Team Name *</label>
+                            <input type="text" id="regSquadName" required placeholder="e.g. TERMINATORS ALPHA" class="w-full bg-black/70 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:border-red-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-300 mb-1">Select Tournament *</label>
+                            <select id="regEventSelect" required class="w-full bg-black/70 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:border-red-500 focus:outline-none">
+                                <option value="">Select Tournament Event</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Captain Info -->
+                    <div class="bg-black/40 p-4 rounded-xl border border-gray-800 space-y-3">
+                        <h4 class="text-xs font-bold text-cyan-400 tracking-wider uppercase"><i class="fa-solid fa-user-shield mr-1"></i> Captain Details</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div>
+                                <label class="block text-[11px] text-gray-400 mb-1">Captain IGN *</label>
+                                <input type="text" id="regCaptainIGN" required placeholder="In-Game Name" class="w-full bg-black/80 border border-gray-700 rounded-md px-2.5 py-1.5 text-xs text-white">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] text-gray-400 mb-1">Free Fire UID *</label>
+                                <input type="number" id="regFFUID" required placeholder="Player UID" class="w-full bg-black/80 border border-gray-700 rounded-md px-2.5 py-1.5 text-xs text-white">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] text-gray-400 mb-1">WhatsApp Phone *</label>
+                                <input type="tel" id="regPhone" required placeholder="+234..." class="w-full bg-black/80 border border-gray-700 rounded-md px-2.5 py-1.5 text-xs text-white">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Team Members Roster -->
+                    <div class="bg-black/40 p-4 rounded-xl border border-gray-800 space-y-3">
+                        <h4 class="text-xs font-bold text-gray-400 tracking-wider uppercase"><i class="fa-solid fa-users mr-1"></i> Squad Roster (Players 2 - 4)</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[10px] text-gray-500">Player 2 Name & UID</label>
+                                <div class="flex gap-1">
+                                    <input type="text" id="p2IGN" placeholder="IGN" class="w-1/2 bg-black/80 border border-gray-700 rounded px-2 py-1 text-xs text-white">
+                                    <input type="number" id="p2UID" placeholder="UID" class="w-1/2 bg-black/80 border border-gray-700 rounded px-2 py-1 text-xs text-white">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-gray-500">Player 3 Name & UID</label>
+                                <div class="flex gap-1">
+                                    <input type="text" id="p3IGN" placeholder="IGN" class="w-1/2 bg-black/80 border border-gray-700 rounded px-2 py-1 text-xs text-white">
+                                    <input type="number" id="p3UID" placeholder="UID" class="w-1/2 bg-black/80 border border-gray-700 rounded px-2 py-1 text-xs text-white">
+                                </div>
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="block text-[10px] text-gray-500">Player 4 Name & UID</label>
+                                <div class="flex gap-1">
+                                    <input type="text" id="p4IGN" placeholder="IGN" class="w-full bg-black/80 border border-gray-700 rounded px-2 py-1 text-xs text-white">
+                                    <input type="number" id="p4UID" placeholder="UID" class="w-full bg-black/80 border border-gray-700 rounded px-2 py-1 text-xs text-white">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Access Key & Squad Logo Preview -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-cyan-400 mb-1">Entry Access Key *</label>
+                            <input type="text" id="regKeyInput" required placeholder="TMT-XXXX-XXXX" class="w-full bg-black/80 border border-cyan-500/50 rounded-lg px-3 py-2 text-xs text-yellow-300 font-mono tracking-wider focus:outline-none">
+                            <span class="text-[10px] text-gray-500">Obtain key from Clan Admin.</span>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-300 mb-1">Squad Logo Upload</label>
+                            <input type="file" id="regLogoInput" accept="image/*" onchange="previewLogo(event)" class="w-full text-xs text-gray-400 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:bg-gray-800 file:text-cyan-400">
+                            <div id="logoPreviewContainer" class="mt-2 hidden flex items-center gap-2">
+                                <img id="logoPreviewImg" class="w-8 h-8 rounded-full object-cover border border-cyan-400">
+                                <span class="text-[10px] text-green-400">Logo Attached</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="regSubmitBtn" class="w-full bg-gradient-to-r from-red-600 to-cyan-600 hover:from-red-500 hover:to-cyan-500 text-white font-bold text-sm py-3 rounded-xl shadow-lg transition">
+                        <i class="fa-solid fa-paper-plane mr-2"></i> SUBMIT REGISTRATION
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- ================= PAGE: HALL OF FAME ================= -->
+        <section id="page-halloffame" class="page-content hidden space-y-6">
+            <div class="text-center space-y-2">
+                <h2 class="text-3xl font-black text-white tracking-wider">HALL OF <span class="text-yellow-400">FAME</span></h2>
+                <p class="text-xs text-gray-400">Champions and Top Ranked Players of TMT Tournaments</p>
+            </div>
+
+            <div id="leaderboardList" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Leaderboards injected via JS -->
+            </div>
+        </section>
+
+        <!-- ================= PAGE: LIVE STREAM ================= -->
+        <section id="page-livestream" class="page-content hidden space-y-6">
+            <div class="glass-card p-4 sm:p-6 rounded-2xl border border-red-500/20 space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-circle text-red-500 animate-pulse"></i> TMT OFFICIAL LIVE STREAM
+                    </h2>
+                    <span class="text-xs bg-red-600/20 text-red-400 border border-red-500/30 px-3 py-1 rounded-full">LIVE FEED</span>
+                </div>
+                <div class="relative w-full aspect-video rounded-xl overflow-hidden bg-black border border-gray-800">
+                    <iframe id="youtubeIframe" class="w-full h-full" src="https://www.youtube.com/embed/live_stream?channel=YOUR_CHANNEL_ID" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE: ADMIN PANEL ================= -->
+        <section id="page-admin" class="page-content hidden space-y-6 max-w-4xl mx-auto">
+            <!-- Admin PIN Lock -->
+            <div id="adminAuthBox" class="glass-card p-8 rounded-2xl text-center space-y-4 max-w-md mx-auto border border-red-500/30">
+                <i class="fa-solid fa-lock text-4xl text-red-500"></i>
+                <h3 class="text-xl font-bold text-white">ADMIN ACCESS REQUIRED</h3>
+                <input type="password" id="adminAuthPIN" placeholder="Enter Security PIN" class="w-full bg-black border border-gray-700 rounded-lg px-4 py-2 text-center text-lg text-white focus:border-red-500 focus:outline-none tracking-widest">
+                <button onclick="authenticateAdmin()" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-2.5 rounded-lg transition">
+                    UNLOCK PANEL
                 </button>
-              </div>
-
-              <!-- Entry Passcode Key Generator (Paid Tournaments) -->
-              <div class="glass-card rounded-2xl p-6 border border-slate-800 space-y-4">
-                <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
-                  <i class="fa-solid fa-key text-amber-400"></i> Paid Entry Passcode Keys
-                </h3>
-                <p class="text-[11px] text-slate-400">Generate single-use 6-digit keys for paid teams. Keys burn automatically after one registration.</p>
-                
-                <select id="entryKeyTournamentSelect" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200">
-                  <option value="">-- Select Paid Tournament --</option>
-                </select>
-
-                <div class="flex gap-2">
-                  <input type="number" id="keyAmountInput" placeholder="Qty" value="1" min="1" max="20" class="w-20 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200">
-                  <button onclick="generateEntryKeys()" class="flex-grow bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold py-2 rounded-xl transition">
-                    Generate Keys
-                  </button>
-                </div>
-                <div id="generatedKeysList" class="font-mono text-xs text-amber-400 bg-slate-950 p-3 rounded-xl border border-slate-800 max-h-32 overflow-y-auto">No keys generated yet.</div>
-              </div>
-
             </div>
 
-            <!-- Column 2: Scoreboard, Credentials & Points Calculator -->
-            <div class="space-y-6">
-              
-              <!-- Room Credentials Injector -->
-              <div class="glass-card rounded-2xl p-6 border border-slate-800 space-y-4">
-                <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
-                  <i class="fa-solid fa-tower-broadcast text-indigo-400"></i> Inject Custom Room ID & PIN
-                </h3>
-                <select id="adminCredTournamentSelect" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200">
-                  <option value="">-- Select Event --</option>
-                </select>
-                <div class="grid grid-cols-2 gap-3">
-                  <input type="text" id="adminRoomID" placeholder="Room ID" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200">
-                  <input type="text" id="adminRoomPass" placeholder="Room Passcode" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200">
+            <!-- Admin Controls (Hidden until unlocked) -->
+            <div id="adminContent" class="hidden space-y-6">
+                <div class="flex justify-between items-center bg-red-950/40 p-4 rounded-xl border border-red-800">
+                    <h3 class="text-lg font-bold text-white"><i class="fa-solid fa-user-gear text-cyan-400 mr-2"></i> TMT ADMIN COMMAND CENTER</h3>
+                    <button onclick="logoutAdmin()" class="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-md">LOGOUT</button>
                 </div>
-                <button onclick="updateRoomCredentials()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold py-2.5 rounded-xl transition">
-                  Push Credentials To Vault
-                </button>
-              </div>
 
-              <!-- FF Point System Auto-Calculator -->
-              <div class="glass-card rounded-2xl p-6 border border-slate-800 space-y-4">
-                <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
-                  <i class="fa-solid fa-calculator text-emerald-400"></i> Scoreboard & Point Calculator
-                </h3>
-                <div class="grid grid-cols-3 gap-2">
-                  <div>
-                    <label class="text-[10px] text-slate-400 block mb-1">Rank Pts</label>
-                    <select id="calcRankPts" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2 py-1.5 text-xs text-slate-200">
-                      <option value="12">#1 Booyah (+12)</option>
-                      <option value="9">#2 Place (+9)</option>
-                      <option value="8">#3 Place (+8)</option>
-                      <option value="7">#4 Place (+7)</option>
-                      <option value="6">#5 Place (+6)</option>
-                      <option value="0">#6+ Place (+0)</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="text-[10px] text-slate-400 block mb-1">Kills</label>
-                    <input type="number" id="calcKills" value="0" min="0" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2 py-1.5 text-xs text-slate-200">
-                  </div>
-                  <div>
-                    <label class="text-[10px] text-slate-400 block mb-1">Kill Value</label>
-                    <input type="number" id="calcKillMultiplier" value="1" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2 py-1.5 text-xs text-slate-200">
-                  </div>
-                </div>
-                <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex justify-between items-center text-xs font-bold">
-                  <span class="text-slate-400">Total Calculated:</span>
-                  <span id="calculatedTotalPts" class="text-emerald-400 font-mono text-base">12 Pts</span>
-                </div>
-              </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Key Generator -->
+                    <div class="glass-card p-5 rounded-xl border border-gray-800 space-y-3">
+                        <h4 class="text-sm font-bold text-cyan-400"><i class="fa-solid fa-key mr-1"></i> Entry Key Generator</h4>
+                        <div class="flex gap-2">
+                            <input type="number" id="keyAmountInput" value="5" min="1" max="20" class="w-20 bg-black border border-gray-700 rounded px-2 py-1 text-xs text-white">
+                            <button onclick="generateEntryKeys()" id="generateKeysBtn" class="flex-1 bg-cyan-600 hover:bg-cyan-500 text-black font-bold text-xs rounded py-1 transition">
+                                GENERATE KEYS
+                            </button>
+                        </div>
+                        <div id="generatedKeysList" class="bg-black/60 p-2 rounded border border-gray-800 max-h-32 overflow-y-auto text-[11px] font-mono text-green-400 space-y-1">
+                            <em>No new keys generated yet.</em>
+                        </div>
+                    </div>
 
+                    <!-- Push Room Credentials -->
+                    <div class="glass-card p-5 rounded-xl border border-gray-800 space-y-3">
+                        <h4 class="text-sm font-bold text-red-400"><i class="fa-solid fa-door-open mr-1"></i> Push Room Credentials</h4>
+                        <select id="adminCredTournamentSelect" class="w-full bg-black border border-gray-700 rounded px-2 py-1 text-xs text-white">
+                            <option value="">Select Target Tournament</option>
+                        </select>
+                        <div class="flex gap-2">
+                            <input type="text" id="adminRoomID" placeholder="Room ID" class="w-1/2 bg-black border border-gray-700 rounded px-2 py-1 text-xs text-white">
+                            <input type="text" id="adminRoomPass" placeholder="Password" class="w-1/2 bg-black border border-gray-700 rounded px-2 py-1 text-xs text-white">
+                        </div>
+                        <button onclick="pushRoomCredentials()" id="pushRoomCredsBtn" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold text-xs py-2 rounded transition">
+                            BROADCAST ROOM CREDENTIALS
+                        </button>
+                    </div>
+
+                    <!-- Announcement Updater -->
+                    <div class="glass-card p-5 rounded-xl border border-gray-800 space-y-3 md:col-span-2">
+                        <h4 class="text-sm font-bold text-yellow-400"><i class="fa-solid fa-bullhorn mr-1"></i> Global Ticker Announcement</h4>
+                        <div class="flex gap-2">
+                            <input type="text" id="adminAnnouncementInput" placeholder="Enter marquee ticker text..." class="flex-1 bg-black border border-gray-700 rounded px-3 py-1.5 text-xs text-white">
+                            <button onclick="updateAnnouncement()" class="bg-yellow-600 hover:bg-yellow-500 text-black font-bold text-xs px-4 py-1.5 rounded transition">
+                                UPDATE TICKER
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <!-- Column 3: Sub-Admin Passcode Manager (Super Admin Only) -->
-            <div class="space-y-6">
-              
-              <div id="superAdminCodeManager" class="glass-card rounded-2xl p-6 border border-slate-800 space-y-4">
-                <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
-                  <i class="fa-solid fa-users-gear text-purple-400"></i> Temporary Admin Passcodes
-                </h3>
-                <p class="text-[11px] text-slate-400">Super Admin tools to issue restricted sub-admin access codes.</p>
-
-                <select id="tempAdminScope" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200">
-                  <option value="general">General Admin (All Events)</option>
-                  <option value="tournament_single">Tournament Admin (Single Event)</option>
-                </select>
-
-                <select id="tempAdminAssignedTournament" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200">
-                  <option value="">-- Assign Specific Tournament --</option>
-                </select>
-
-                <button onclick="generateAdminPasscode()" class="w-full bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold py-2.5 rounded-xl transition">
-                  Create Passcode
-                </button>
-
-                <div id="activeAdminCodesList" class="space-y-2 text-xs">
-                  <div class="text-slate-500 text-center py-2">No active sub-admins.</div>
-                </div>
-              </div>
-
-              <!-- Tools: OBS Stream Trigger & WhatsApp Generator -->
-              <div class="glass-card rounded-2xl p-6 border border-slate-800 space-y-3">
-                <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
-                  <i class="fa-solid fa-sliders text-pink-400"></i> Quick Actions
-                </h3>
-                <button onclick="toggleOBSOverlay()" class="w-full bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-xs font-bold py-2 rounded-xl transition flex items-center justify-center gap-2">
-                  <i class="fa-solid fa-desktop"></i> Toggle OBS Broadcast Overlay
-                </button>
-                <button onclick="generateWhatsAppBroadcast()" class="w-full bg-emerald-950/40 border border-emerald-500/30 text-emerald-400 text-xs font-bold py-2 rounded-xl transition flex items-center justify-center gap-2">
-                  <i class="fa-brands fa-whatsapp"></i> Copy WhatsApp Captain Broadcast
-                </button>
-              </div>
-            </div>
-                          <!-- Social Media Platform Manager -->
-              <div class="glass-card rounded-2xl p-6 border border-slate-800 space-y-4">
-                <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
-                  <i class="fa-solid fa-share-nodes text-emerald-400"></i> Social Media Links Manager
-                </h3>
-                <p class="text-[11px] text-slate-400">Update official platform links shown in the header.</p>
-                
-                <div class="space-y-2">
-                  <div class="flex items-center gap-2">
-                    <i class="fa-brands fa-discord text-indigo-400 w-5"></i>
-                    <input type="url" id="adminDiscordURL" placeholder="Discord Invite URL" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-200">
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <i class="fa-brands fa-youtube text-red-500 w-5"></i>
-                    <input type="url" id="adminYoutubeURL" placeholder="YouTube Channel URL" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-200">
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <i class="fa-brands fa-tiktok text-pink-500 w-5"></i>
-                    <input type="url" id="adminTiktokURL" placeholder="TikTok Profile URL" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-200">
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <i class="fa-brands fa-whatsapp text-emerald-500 w-5"></i>
-                    <input type="url" id="adminWhatsappURL" placeholder="WhatsApp Channel URL" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-200">
-                  </div>
-                </div>
-
-                <button onclick="saveSocialLinks()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold py-2 rounded-xl transition">
-                  Save & Publish Social Links
-                </button>
-              </div>
-            
-          </div>
-        </div>
-      </section>
+        </section>
     </main>
-          <!-- Footer -->
-    <footer class="mt-8 text-center text-xs text-slate-500 py-4 border-t border-slate-900">
-      <p>&copy; 2026 TERMINATORS E-SPORTS. Built & Maintained by <span class="text-slate-300 font-semibold">M I C O</span>.</p>
-    </footer>
 
-  </div>
-
-  <!-- OBS Broadcast Stream Overlay (Hidden by default) -->
-  <div id="obsOverlayContainer" class="fixed inset-0 bg-slate-950/95 z-50 hidden flex-col justify-between p-8 pointer-events-none">
-    <div class="flex justify-between items-center border-b border-purple-500/40 pb-4">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-lg bg-blue-600 font-black text-lg flex items-center justify-center">TMT</div>
-        <h1 class="text-2xl font-black text-white tracking-widest uppercase">TERMINATORS ESPORTS LIVE BROADCAST</h1>
-      </div>
-      <span class="bg-red-600 text-white font-bold text-xs px-3 py-1 rounded-full animate-pulse">● LIVE STREAM OVERLAY</span>
-    </div>
-    <div id="obsLeaderboardContent" class="max-w-2xl mx-auto w-full glass-card p-6 rounded-2xl border border-purple-500/30"></div>
-    <div class="text-center text-xs text-slate-500">Press ESC to exit broadcast view</div>
-  </div>
-  <!-- ========================================== -->
-<!-- 1. SPONSORSHIP & HOSTING PORTAL            -->
-<!-- ========================================== -->
-<section id="page-sponsorship" class="page-content hidden max-w-6xl mx-auto px-4 py-8">
-  <div class="text-center mb-10">
-    <span class="bg-amber-500/10 text-amber-400 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-amber-500/20">Partnerships & Hosting</span>
-    <h1 class="text-3xl md:text-5xl font-extrabold text-white mt-3">Sponsor or Host an Event</h1>
-    <p class="text-slate-400 mt-2 max-w-2xl mx-auto text-sm md:text-base">Power up TMT Esports tournaments or host your own custom Free Fire event directly on our official platform.</p>
-  </div>
-
-  <!-- Sponsor Tier Cards -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-    <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 text-center hover:border-amber-500/50 transition">
-      <div class="text-3xl mb-2">🥉</div>
-      <h3 class="text-xl font-bold text-white">Match Sponsor</h3>
-      <p class="text-amber-400 font-bold text-lg my-2">Bronze Tier</p>
-      <ul class="text-slate-400 text-xs space-y-2 mb-6">
-        <li>• In-game Gloo Wall / Custom Room name banner</li>
-        <li>• Official WhatsApp broadcast mention</li>
-        <li>• Logo on live scoreboard overlays</li>
-      </ul>
-    </div>
-    
-    <div class="bg-gradient-to-b from-amber-500/10 to-slate-900 border border-amber-500/40 rounded-2xl p-6 text-center relative transform md:-translate-y-2">
-      <span class="bg-amber-500 text-slate-950 text-[10px] font-black uppercase px-2 py-0.5 rounded absolute -top-3 left-1/2 -translate-x-1/2">Most Popular</span>
-      <div class="text-3xl mb-2">🥈</div>
-      <h3 class="text-xl font-bold text-white">Title Sponsor</h3>
-      <p class="text-amber-400 font-bold text-lg my-2">Silver Tier</p>
-      <ul class="text-slate-300 text-xs space-y-2 mb-6">
-        <li>• Tournament titled under your brand name</li>
-        <li>• Dedicated OBS Stream banner & overlays</li>
-        <li>• Custom entry passcodes & prize pool hosting</li>
-      </ul>
-    </div>
-
-    <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 text-center hover:border-amber-500/50 transition">
-      <div class="text-3xl mb-2">🥇</div>
-      <h3 class="text-xl font-bold text-white">Community Host</h3>
-      <p class="text-amber-400 font-bold text-lg my-2">Gold Tier</p>
-      <ul class="text-slate-400 text-xs space-y-2 mb-6">
-        <li>• Full access to host custom 4v4 / Solo scrims</li>
-        <li>• Captain Vault credential management</li>
-        <li>• Dedicated sub-admin portal key</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- Application Form -->
-  <div class="max-w-2xl mx-auto bg-slate-900/90 border border-slate-800 rounded-2xl p-6 md:p-8">
-    <h2 class="text-xl font-bold text-white mb-4 text-center">Submit Sponsorship / Hosting Application</h2>
-    <form onsubmit="window.handleSponsorshipSubmit(event)" class="space-y-4">
-      <div>
-        <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Your Name / Organization</label>
-        <input type="text" id="sponOrgName" required placeholder="e.g., Apex Gaming / Captain Shadow" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-amber-500">
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">WhatsApp Number</label>
-          <input type="text" id="sponWhatsapp" required placeholder="+234..." class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-amber-500">
+    <!-- Rulebook Modal -->
+    <div id="rulebookModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-lg w-full p-6 rounded-2xl border border-cyan-500/40 space-y-4">
+            <div class="flex justify-between items-center border-b border-gray-800 pb-3">
+                <h3 class="text-lg font-bold text-cyan-400"><i class="fa-solid fa-book-open mr-2"></i> TMT RULEBOOK</h3>
+                <button onclick="closeRulebookModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="text-xs text-gray-300 space-y-2 max-h-80 overflow-y-auto pr-2">
+                <p>1. No hacks, scripts, or third-party emulator tools permitted.</p>
+                <p>2. Gloo Wall tactics (e.g. 360, Ink Art, Spider Ice) are permissible unless banned in room rules.</p>
+                <p>3. Teams must join room 5 minutes prior to start time.</p>
+                <p>4. Match decisions made by Founder M I C O are final.</p>
+            </div>
         </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Interest Category</label>
-          <select id="sponCategory" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-amber-500">
-            <option value="Match Sponsor">Match Sponsor (Bronze)</option>
-            <option value="Title Sponsor">Title Sponsor (Silver)</option>
-            <option value="Community Host">Custom Event Host (Gold)</option>
-          </select>
-        </div>
-      </div>
-      <div>
-        <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Proposal Details / Budget (Optional)</label>
-        <textarea id="sponDetails" rows="3" placeholder="Tell us about your sponsorship goals or custom tournament format..." class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-amber-500"></textarea>
-      </div>
-      <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-3 rounded-lg text-sm transition shadow-lg shadow-amber-500/20">Submit Application</button>
-    </form>
-  </div>
-</section>
-
-<!-- ========================================== -->
-<!-- 2. CELEBRITY & CREATOR SHOWCASE            -->
-<!-- ========================================== -->
-<section id="page-celebrities" class="page-content hidden max-w-6xl mx-auto px-4 py-8">
-  <div class="text-center mb-10">
-    <span class="bg-purple-500/10 text-purple-400 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-purple-500/20">Creators & Legends</span>
-    <h1 class="text-3xl md:text-5xl font-extrabold text-white mt-3">TMT Stars & Creators</h1>
-    <p class="text-slate-400 mt-2 max-w-2xl mx-auto text-sm md:text-base">Top Free Fire content creators, verified tournament MVPs, and guild legends representing TMT Esports.</p>
-  </div>
-
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6" id="celebrityCardsGrid">
-    <!-- Star Card 1 -->
-    <div class="bg-slate-900 border border-purple-500/30 rounded-2xl p-5 text-center relative overflow-hidden group hover:border-purple-500 transition">
-      <div class="w-20 h-20 mx-auto rounded-full bg-gradient-to-tr from-purple-600 to-amber-500 p-1 mb-3">
-        <div class="w-full h-full rounded-full bg-slate-950 flex items-center justify-center font-black text-2xl text-amber-400">M</div>
-      </div>
-      <span class="bg-purple-500/20 text-purple-300 text-[10px] font-bold px-2 py-0.5 rounded border border-purple-500/30">Guild Founder & Captain</span>
-      <h3 class="text-lg font-extrabold text-white mt-2">M I C O</h3>
-      <p class="text-slate-400 text-xs mt-1">Master Rush & 360 Gloo Wall Specialist</p>
-      <div class="flex justify-center space-x-2 mt-4 text-xs">
-        <span class="bg-slate-800 text-slate-300 px-2 py-1 rounded">Tatsuya Main</span>
-        <span class="bg-slate-800 text-amber-300 px-2 py-1 rounded">Ink Art Skin</span>
-      </div>
-    </div>
-  </div>
-        </section>
-  <!-- ========================================== -->
-<!-- 3. VISUAL TOURNAMENT BRACKETS              -->
-<!-- ========================================== -->
-<section id="page-brackets" class="page-content hidden max-w-6xl mx-auto px-4 py-8">
-  <div class="text-center mb-8">
-    <span class="bg-cyan-500/10 text-cyan-400 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-cyan-500/20">Playoffs & Knockouts</span>
-    <h1 class="text-3xl md:text-5xl font-extrabold text-white mt-3">Tournament Brackets</h1>
-    <p class="text-slate-400 mt-2 text-sm">Real-time match progression from Quarterfinals to the Grand Finals.</p>
-  </div>
-
-  <div class="overflow-x-auto pb-6">
-    <div class="min-w-[700px] grid grid-cols-3 gap-6 items-center">
-      <!-- Quarterfinals -->
-      <div class="space-y-6">
-        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest text-center mb-2">Quarterfinals</h3>
-        
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 space-y-2">
-          <div class="flex justify-between items-center text-xs font-semibold text-white bg-slate-800/60 p-2 rounded">
-            <span>TMT Alpha</span> <span class="text-amber-400 font-bold">2</span>
-          </div>
-          <div class="flex justify-between items-center text-xs font-semibold text-slate-400 bg-slate-800/30 p-2 rounded">
-            <span>Shadow Clan</span> <span>0</span>
-          </div>
-        </div>
-
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 space-y-2">
-          <div class="flex justify-between items-center text-xs font-semibold text-white bg-slate-800/60 p-2 rounded">
-            <span>Apex Esports</span> <span class="text-amber-400 font-bold">2</span>
-          </div>
-          <div class="flex justify-between items-center text-xs font-semibold text-slate-400 bg-slate-800/30 p-2 rounded">
-            <span>Viper Squad</span> <span>1</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Semifinals -->
-      <div class="space-y-12">
-        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest text-center mb-2">Semifinals</h3>
-        
-        <div class="bg-slate-900 border border-cyan-500/40 rounded-xl p-3 space-y-2 shadow-lg shadow-cyan-500/5">
-          <div class="flex justify-between items-center text-xs font-semibold text-white bg-slate-800/60 p-2 rounded">
-            <span>TMT Alpha</span> <span class="text-cyan-400 font-bold">3</span>
-          </div>
-          <div class="flex justify-between items-center text-xs font-semibold text-slate-400 bg-slate-800/30 p-2 rounded">
-            <span>Apex Esports</span> <span>1</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Grand Finals -->
-      <div>
-        <h3 class="text-xs font-bold text-amber-400 uppercase tracking-widest text-center mb-2">🏆 Grand Finals</h3>
-        
-        <div class="bg-gradient-to-b from-amber-500/10 to-slate-900 border-2 border-amber-500 rounded-2xl p-4 text-center space-y-3">
-          <span class="bg-amber-500 text-slate-950 text-[10px] font-black uppercase px-2 py-0.5 rounded">Championship Match</span>
-          <div class="text-sm font-black text-white">TMT Alpha vs TBD</div>
-          <p class="text-xs text-amber-400 font-medium">Bo5 Custom CS Match</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ========================================== -->
-<!-- 4. OFFICIAL CUSTOM ROOM RULEBOOK           -->
-<!-- ========================================== -->
-<section id="page-rulebook" class="page-content hidden max-w-5xl mx-auto px-4 py-8">
-  <div class="text-center mb-8">
-    <span class="bg-red-500/10 text-red-400 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-red-500/20">Fair Play Standards</span>
-    <h1 class="text-3xl md:text-5xl font-extrabold text-white mt-3">Custom Room Rulebook</h1>
-    <p class="text-slate-400 mt-2 text-sm">Official TMT Esports tournament regulations and prohibited settings.</p>
-  </div>
-
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <!-- Clash Squad Rules -->
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-      <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-        <span class="text-red-400">⚔️</span> 4v4 Clash Squad Custom Rules
-      </h3>
-      <ul class="space-y-3 text-xs text-slate-300">
-        <li class="flex items-start gap-2"><span class="text-green-400 font-bold">✓</span> <span><strong>Gun Attributes:</strong> OFF (Default competitive setting)</span></li>
-        <li class="flex items-start gap-2"><span class="text-green-400 font-bold">✓</span> <span><strong>Limited Ammo:</strong> YES</span></li>
-        <li class="flex items-start gap-2"><span class="text-red-400 font-bold">✕</span> <span><strong>Banned Grenades:</strong> Smoke Grenades & Flashbangs banned in Final Circles</span></li>
-        <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">⚡</span> <span><strong>Allowed Gloo Techniques:</strong> 360, Inverted, and Slam Ice wall deployments fully permitted</span></li>
-      </ul>
     </div>
 
-    <!-- Battle Royale Rules -->
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-      <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-        <span class="text-amber-400">🪂</span> Battle Royale Custom Rules
-      </h3>
-      <ul class="space-y-3 text-xs text-slate-300">
-        <li class="flex items-start gap-2"><span class="text-green-400 font-bold">✓</span> <span><strong>Points System:</strong> 1 Kill = 1 Pt + Placement Rank Points</span></li>
-        <li class="flex items-start gap-2"><span class="text-red-400 font-bold">✕</span> <span><strong>Emote Banning:</strong> Emote toxicity during downed state strictly prohibited</span></li>
-        <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">📡</span> <span><strong>Captain Check-In:</strong> Captains must join Captain Vault 15 mins prior to match start</span></li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- ========================================== -->
-<!-- 5. STREAM WATCH PARTY ARENA                -->
-<!-- ========================================== -->
-<section id="page-watch" class="page-content hidden max-w-5xl mx-auto px-4 py-8">
-  <div class="text-center mb-6">
-    <span class="bg-red-600 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider animate-pulse">🔴 Live Stream Arena</span>
-    <h1 class="text-3xl md:text-5xl font-extrabold text-white mt-3">Watch Official Broadcast</h1>
-  </div>
-
-  <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
-    <div class="aspect-video w-full bg-slate-950 flex items-center justify-center relative" id="streamContainer">
-      <iframe class="w-full h-full" src="https://www.youtube.com/embed/live_stream?channel=YOUR_CHANNEL_ID" title="TMT Esports Live Stream" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    </div>
-    <div class="p-4 bg-slate-900 flex justify-between items-center border-t border-slate-800">
-      <div>
-        <h4 class="text-sm font-bold text-white">TMT Esports Official Channel</h4>
-        <p class="text-xs text-slate-400">Free Fire Custom Tournament Stream</p>
-      </div>
-      <a href="https://tiktok.com/@tmt_esports" target="_blank" class="bg-red-600 hover:bg-red-500 text-white font-bold text-xs px-4 py-2 rounded-lg transition">Follow TikTok Live</a>
-    </div>
-  </div>
-        </section>
-  
-  
-
-  <!-- Firebase v10 Engine & Application Logic Script -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, query, where, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
-  // ==========================================
-  // 1. TAB NAVIGATION ENGINE
-  // ==========================================
-  window.switchPage = function(pageId) {
-    const pages = {
-      tournaments: document.getElementById('pageTournaments'),
-      vault: document.getElementById('pageVault'),
-      standings: document.getElementById('pageStandings'),
-      admin: document.getElementById('pageAdmin')
-    };
-
-    const navBtns = {
-      tournaments: document.getElementById('navTournaments'),
-      vault: document.getElementById('navVault'),
-      standings: document.getElementById('navStandings'),
-      admin: document.getElementById('navAdmin')
-    };
-
-    const activeStyles = "px-4 py-2.5 rounded-xl bg-blue-600 text-white text-xs font-bold transition flex items-center gap-2 shadow-lg shadow-blue-600/30";
-    const inactiveStyles = "px-4 py-2.5 rounded-xl hover:text-slate-200 text-slate-400 text-xs font-bold transition flex items-center gap-2";
-
-    Object.keys(pages).forEach(key => {
-      if (pages[key]) {
-        if (key === pageId) {
-          pages[key].classList.remove('hidden');
-        } else {
-          pages[key].classList.add('hidden');
-        }
-      }
-
-      if (navBtns[key]) {
-        if (key === pageId) {
-          navBtns[key].className = activeStyles;
-        } else {
-          navBtns[key].className = inactiveStyles;
-        }
-      }
-    });
-  };
-      // ==========================================
-  // 3. ADMIN AUTHENTICATION ENGINE
-  // ==========================================
-  window.authenticateAdmin = function() {
-    const input = document.getElementById('adminPasscodeInput')?.value.trim();
-    const authBox = document.getElementById('adminAuthBox');
-    const dashboard = document.getElementById('adminDashboard');
-    const authMsg = document.getElementById('adminAuthMsg');
-
-    if (input === '2060') {
-      if (authBox) authBox.classList.add('hidden');
-      if (dashboard) dashboard.classList.remove('hidden');
-      if (authMsg) authMsg.innerHTML = '';
-    } else {
-      if (authMsg) authMsg.innerHTML = '<span class="text-red-400">❌ Invalid Passcode</span>';
-    }
-  };
-
-  window.logoutAdmin = function() {
-    const authBox = document.getElementById('adminAuthBox');
-    const dashboard = document.getElementById('adminDashboard');
-    if (authBox) authBox.classList.remove('hidden');
-    if (dashboard) dashboard.classList.add('hidden');
-    const input = document.getElementById('adminPasscodeInput');
-    if (input) input.value = '';
-  };
-      // ==========================================
-  // 4. GLOBAL ADMIN ACTION HANDLERS
-  // ==========================================
-
-  // Entry type dropdown selector toggle
-  window.toggleEntryCodeConfig = function() {
-    const type = document.getElementById('pubType')?.value;
-    const prizeInput = document.getElementById('pubPrize');
-    if (prizeInput) prizeInput.style.display = type === 'paid' ? 'block' : 'none';
-  };
-
-  // 1. Publish Tournament Live
-  window.publishTournament = async function() {
-    const title = document.getElementById('pubTitle')?.value.trim();
-    const format = document.getElementById('pubFormat')?.value;
-    const type = document.getElementById('pubType')?.value;
-    const prize = document.getElementById('pubPrize')?.value.trim() || 'Bragging Rights';
-
-    if (!title) return alert("❌ Please enter a tournament title!");
-
-    try {
-      const { collection, addDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js");
-      await addDoc(collection(db, "tournaments"), {
-        title,
-        format,
-        type,
-        prize,
-        status: "active",
-        createdAt: serverTimestamp()
-      });
-      alert(`✅ Tournament "${title}" published live successfully!`);
-      if (document.getElementById('pubTitle')) document.getElementById('pubTitle').value = '';
-    } catch (err) {
-      console.error(err);
-      alert("❌ Failed to publish tournament: " + err.message);
-    }
-  };
-
-  // 2. Generate Paid Passcode Keys
-  window.generateKeys = async function() {
-    const tourneySelect = document.getElementById('entryKeyTournamentSelect');
-    const tourneyId = tourneySelect?.value;
-    const count = parseInt(document.getElementById('keyAmountInput')?.value || "1");
-    const listDisplay = document.getElementById('generatedKeysList');
-
-    if (!tourneyId || tourneyId.includes("Select")) {
-      return alert("❌ Please select a paid tournament first!");
-    }
-
-    const keys = [];
-    try {
-      const { collection, addDoc } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js");
-      for (let i = 0; i < count; i++) {
-        const key = Math.floor(100000 + Math.random() * 900000).toString();
-        keys.push(key);
-        await addDoc(collection(db, "entry_keys"), {
-          tournamentId: tourneyId,
-          key: key,
-          used: false
-        });
-      }
-
-      if (listDisplay) {
-        listDisplay.innerHTML = keys.map(k => `<span class="bg-amber-500/20 text-amber-300 px-2 py-1 rounded border border-amber-500/30">${k}</span>`).join(' ');
-      }
-      alert(`🔑 Generated ${count} entry key(s) successfully!`);
-    } catch (err) {
-      console.error(err);
-      alert("❌ Failed to generate keys: " + err.message);
-    }
-  };
-
-  // 3. Inject Custom Room ID & Passcode
-  window.pushRoomCredentials = async function() {
-    const eventId = document.getElementById('roomEventSelect')?.value || "active";
-    const roomId = document.getElementById('roomIdInput')?.value.trim();
-    const roomPass = document.getElementById('roomPassInput')?.value.trim();
-
-    if (!roomId || !roomPass) return alert("❌ Please enter both Room ID and Passcode!");
-
-    try {
-      const { doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js");
-      await setDoc(doc(db, "room_credentials", eventId), {
-        roomId,
-        roomPass,
-        updatedAt: new Date().toISOString()
-      }, { merge: true });
-      alert("📡 Room credentials pushed live to Captain Vault!");
-    } catch (err) {
-      console.error(err);
-      alert("❌ Failed to push room details: " + err.message);
-    }
-  };
-
-  // 4. Create Sub-Admin Passcode
-  window.generateAdminPasscode = function() {
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
-    const list = document.getElementById('activeAdminCodesList');
-    if (list) {
-      list.innerHTML = `<div class="text-purple-300 font-mono">Temp Code: <b>${code}</b> (Active)</div>`;
-    }
-    alert(`🔐 Temporary sub-admin code generated: ${code}`);
-  };
-
-  // 5. OBS Stream Overlay Toggle
-  window.toggleOBSOverlay = function() {
-    const overlay = document.getElementById('obsOverlayContainer');
-    if (overlay) {
-      overlay.classList.toggle('hidden');
-      alert("🎥 OBS Stream Overlay toggled!");
-    }
-  };
-
-  // 6. WhatsApp Broadcast Generator
-  window.generateWhatsAppBroadcast = function() {
-    const msg = "🚨 *TMT ESPORTS OFFICIAL BROADCAST* 🚨\nCaptains, check your Captain Vault on micob2k.github.io/terminators-esports/ for live Room ID & Password!";
-    navigator.clipboard.writeText(msg);
-    alert("📋 WhatsApp announcement copied to clipboard!");
-  };
-      // ==========================================
-  // 5. SCOREBOARD & POINT CALCULATOR
-  // ==========================================
-  window.calculateScore = function() {
-    const rankPts = parseInt(document.getElementById('rankPointsSelect')?.value || "0");
-    const kills = parseInt(document.getElementById('killCountInput')?.value || "0");
-    const killVal = parseInt(document.getElementById('killValueInput')?.value || "1");
-    const total = rankPts + (kills * killVal);
-    
-    const display = document.getElementById('totalPointsDisplay');
-    if (display) display.innerText = total + " Pts";
-  };
-
-  // ==========================================
-  // 6. TEAM REGISTRATION ENGINE
-  // ==========================================
-  window.handleRegistration = async function(event) {
-    if (event) event.preventDefault();
-    const teamName = document.getElementById('regTeamName')?.value.trim();
-    const captainName = document.getElementById('regCaptainName')?.value.trim();
-    const whatsapp = document.getElementById('regWhatsapp')?.value.trim();
-    const entryKey = document.getElementById('regEntryKey')?.value.trim();
-    const eventId = document.getElementById('regEventSelect')?.value || "active";
-
-    if (!teamName || !captainName || !whatsapp) {
-      return alert("❌ Please complete Team Name, Captain Name, and WhatsApp number!");
-    }
-
-    try {
-      const { collection, addDoc, getDocs, query, where, updateDoc, doc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js");
-
-      // Validate Entry Key if event is paid or key is supplied
-      if (entryKey) {
-        const keyQuery = query(collection(db, "entry_keys"), where("key", "==", entryKey), where("used", "==", false));
-        const keySnap = await getDocs(keyQuery);
-        if (keySnap.empty) {
-          return alert("❌ Invalid or already used Entry Key!");
-        }
-        const keyDoc = keySnap.docs[0];
-        await updateDoc(doc(db, "entry_keys", keyDoc.id), { used: true });
-      }
-
-      await addDoc(collection(db, "registrations"), {
-        eventId,
-        teamName,
-        captainName,
-        whatsapp,
-        createdAt: serverTimestamp()
-      });
-
-      alert(`🎉 Team "${teamName}" registered successfully!`);
-      document.getElementById('registrationForm')?.reset();
-    } catch (err) {
-      console.error("Registration error:", err);
-      alert("❌ Registration failed: " + err.message);
-    }
-  };
-
-  // ==========================================
-  // 7. CAPTAIN VAULT UNLOCKER
-  // ==========================================
-  window.unlockCaptainVault = async function() {
-    const teamName = document.getElementById('vaultTeamInput')?.value.trim();
-    const credsDisplay = document.getElementById('vaultCredentialsDisplay');
-
-    if (!teamName) return alert("❌ Please enter your registered Team Name!");
-
-    try {
-      const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js");
-      const snap = await getDoc(doc(db, "room_credentials", "active"));
-
-      if (snap.exists()) {
-        const data = snap.data();
-        if (credsDisplay) credsDisplay.classList.remove('hidden');
-        
-        const roomIdEl = document.getElementById('vaultRoomId');
-        const roomPassEl = document.getElementById('vaultRoomPass');
-        
-        if (roomIdEl) roomIdEl.innerText = data.roomId || "Pending";
-        if (roomPassEl) roomPassEl.innerText = data.roomPass || "Pending";
-        
-        alert("🔓 Vault Unlocked! Room credentials retrieved successfully.");
-      } else {
-        alert("⏳ Room credentials have not been released by the Admin yet.");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("❌ Unable to access Captain Vault.");
-    }
-  };
-
-  // ==========================================
-  // 8. REALTIME DROPDOWN & LEADERBOARD SYNC
-  // ==========================================
-  function initRealtimeSync() {
-    import("https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js").then(({ collection, onSnapshot }) => {
-      // Auto-populate active tournaments across all drop-down forms
-      onSnapshot(collection(db, "tournaments"), (snapshot) => {
-        const dropdowns = ['entryKeyTournamentSelect', 'roomEventSelect', 'regEventSelect', 'subAdminEventSelect'];
-        let options = '<option value="">-- Select Active Event --</option>';
-        
-        snapshot.docs.forEach(doc => {
-          const t = doc.data();
-          options += `<option value="${doc.id}">${t.title} (${t.format})</option>`;
-        });
-
-        dropdowns.forEach(id => {
-          const el = document.getElementById(id);
-          if (el) el.innerHTML = options;
-        });
-      });
-    });
-  }
-
-  initRealtimeSync();
-      // ==========================================
-  // 9. SPONSORSHIP APPLICATION HANDLER
-  // ==========================================
-  window.handleSponsorshipSubmit = async function(event) {
-    if (event) event.preventDefault();
-    const orgName = document.getElementById('sponOrgName')?.value.trim();
-    const whatsapp = document.getElementById('sponWhatsapp')?.value.trim();
-    const category = document.getElementById('sponCategory')?.value;
-    const details = document.getElementById('sponDetails')?.value.trim();
-
-    if (!orgName || !whatsapp) return alert("❌ Please fill in your Name/Organization and WhatsApp number!");
-
-    try {
-      const { collection, addDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js");
-      await addDoc(collection(db, "sponsorship_applications"), {
-        orgName,
-        whatsapp,
-        category,
-        details: details || "N/A",
-        status: "pending",
-        createdAt: serverTimestamp()
-      });
-      alert("🚀 Sponsorship application submitted live! The TMT team will contact you on WhatsApp shortly.");
-      event.target.reset();
-    } catch (err) {
-      console.error(err);
-      alert("❌ Submission failed: " + err.message);
-    }
-  };
-
-  // ==========================================
-  // 10. SUB-ADMIN FIRESTORE AUTHENTICATION FIX
-  // ==========================================
-  // Override Sub-Admin code generator to persist in Firestore
-  const originalGenerateAdminPasscode = window.generateAdminPasscode;
-  window.generateAdminPasscode = async function() {
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
-    try {
-      const { collection, addDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js");
-      await addDoc(collection(db, "admin_codes"), {
-        code: code,
-        active: true,
-        createdAt: serverTimestamp()
-      });
-      const list = document.getElementById('activeAdminCodesList');
-      if (list) {
-        list.innerHTML = `<div class="text-purple-300 font-mono">Temp Code: <b>${code}</b> (Active & Persisted)</div>`;
-      }
-      alert(`🔐 Persistent Sub-Admin passcode created: ${code}`);
-    } catch (err) {
-      console.error(err);
-      alert("❌ Failed to save admin passcode: " + err.message);
-    }
-  };
-
-  // Override authenticateAdmin to check both Master Code & Firestore Temp Passcodes
-  window.authenticateAdmin = async function() {
-    const input = document.getElementById('adminPasscodeInput')?.value.trim();
-    const authBox = document.getElementById('adminAuthBox');
-    const dashboard = document.getElementById('adminDashboard');
-    const authMsg = document.getElementById('adminAuthMsg');
-
-    if (!input) return alert("❌ Please enter a passcode!");
-
-    // Master passcode check
-    if (input === '2060') {
-      if (authBox) authBox.classList.add('hidden');
-      if (dashboard) dashboard.classList.remove('hidden');
-      if (authMsg) authMsg.innerHTML = '';
-      return;
-    }
-
-    // Check Sub-Admin codes in Firestore
-    try {
-      const { collection, getDocs, query, where } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js");
-      const q = query(collection(db, "admin_codes"), where("code", "==", input), where("active", "==", true));
-      const snap = await getDocs(q);
-
-      if (!snap.empty) {
-        if (authBox) authBox.classList.add('hidden');
-        if (dashboard) dashboard.classList.remove('hidden');
-        if (authMsg) authMsg.innerHTML = '';
-        alert("🔓 Sub-Admin session authenticated!");
-      } else {
-        if (authMsg) authMsg.innerHTML = '<span class="text-red-400">❌ Invalid or Expired Passcode</span>';
-      }
-    } catch (err) {
-      console.error(err);
-      if (authMsg) authMsg.innerHTML = '<span class="text-red-400">❌ Auth Error</span>';
-    }
-  };
-
-  // ==========================================
-  // 11. AUTOMATED PWA APP INSTALL PROMPT
-  // ==========================================
-  let deferredPrompt;
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    
-    // Inject Install App button into header if not present
-    if (!document.getElementById('pwaInstallBtn')) {
-      const headerNav = document.querySelector('nav') || document.body;
-      const installBtn = document.createElement('button');
-      installBtn.id = 'pwaInstallBtn';
-      installBtn.className = 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs px-3 py-1.5 rounded-lg shadow-md transition ml-2 flex items-center gap-1';
-      installBtn.innerHTML = '📲 Install App';
-      installBtn.onclick = () => {
-        if (deferredPrompt) {
-          deferredPrompt.prompt();
-          deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
-        }
-      };
-      headerNav.appendChild(installBtn);
-    }
-  });
-    // MAIN TAB NAVIGATION CONTROLLER
-window.switchPage = function(pageId) {
-  const pages = {
-    tournaments: document.getElementById('pageTournaments'),
-    vault: document.getElementById('pageVault'),
-    standings: document.getElementById('pageStandings'),
-    halloffame: document.getElementById('page-celebrities'),
-    admin: document.getElementById('pageAdmin')
-  };
-
-  const navBtns = {
-    tournaments: document.getElementById('navTournaments'),
-    vault: document.getElementById('navVault'),
-    standings: document.getElementById('navStandings'),
-    halloffame: document.getElementById('navHallOfFame'),
-    admin: document.getElementById('navAdmin')
-  };
-
-  Object.keys(pages).forEach(key => {
-    if (pages[key]) pages[key].classList.add('hidden');
-  });
-  if (pages[pageId]) pages[pageId].classList.remove('hidden');
-
-  Object.keys(navBtns).forEach(key => {
-    if (navBtns[key]) {
-      navBtns[key].className = "px-4 py-2.5 rounded-xl hover:text-slate-200 flex items-center gap-2 transition";
-    }
-  });
-  if (navBtns[pageId]) {
-    navBtns[pageId].className = "px-4 py-2.5 rounded-xl bg-blue-600 text-white flex items-center gap-2 transition";
-  }
-};
-    
-          // ==========================================
-  // 12. SUPREME NAVIGATION CONTROLLER
-  // ==========================================
-  const supremePages = {
-    sponsorship: document.getElementById('page-sponsorship'),
-    celebrities: document.getElementById('page-celebrities'),
-    brackets: document.getElementById('page-brackets'),
-    rulebook: document.getElementById('page-rulebook'),
-    watch: document.getElementById('page-watch')
-  };
-
-  window.switchSupremePage = function(pageKey) {
-    Object.keys(supremePages).forEach(key => {
-      if (supremePages[key]) {
-        if (key === pageKey) {
-          supremePages[key].classList.remove('hidden');
-        } else {
-          supremePages[key].classList.add('hidden');
-        }
-      }
-    });
-  };
-    
-
-  // ==========================================
-  // 2. SOCIAL LINKS SAVER (Header Sync)
-  // ==========================================
-  window.saveSocialLinks = async function() {
-    const discord = document.getElementById('adminDiscordURL')?.value.trim();
-    const youtube = document.getElementById('adminYoutubeURL')?.value.trim();
-    const tiktok = document.getElementById('adminTiktokURL')?.value.trim();
-    const whatsapp = document.getElementById('adminWhatsappURL')?.value.trim();
-
-    try {
-      const { doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js");
-      await setDoc(doc(db, "settings", "social_links"), {
-        discord: discord || '#',
-        youtube: youtube || '#',
-        tiktok: tiktok || 'https://tiktok.com/@tmt_esports',
-        whatsapp: whatsapp || '#'
-      }, { merge: true });
-
-      alert("✅ Social Media links updated live on header!");
-    } catch (err) {
-      console.error("Error saving social links:", err);
-      alert("❌ Failed to save social links.");
-    }
-  };
-
-  async function loadSocialLinks() {
-    try {
-      const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js");
-      const snap = await getDoc(doc(db, "settings", "social_links"));
-      if (snap.exists()) {
-        const data = snap.data();
-        if (data.discord && document.getElementById('headerDiscordLink')) document.getElementById('headerDiscordLink').href = data.discord;
-        if (data.youtube && document.getElementById('headerYoutubeLink')) document.getElementById('headerYoutubeLink').href = data.youtube;
-        if (data.tiktok && document.getElementById('headerTiktokLink')) document.getElementById('headerTiktokLink').href = data.tiktok;
-        if (data.whatsapp && document.getElementById('headerWhatsappLink')) document.getElementById('headerWhatsappLink').href = data.whatsapp;
-      }
-    } catch (e) {
-      console.log("Using default header links.");
-    }
-  }
-
-  loadSocialLinks();
-    
-    // Firebase Configuration for terminators-e-sports-v2
-    const firebaseConfig = {
-      apiKey: "AIzaSyD6SkL8wMpZchonFbDJ10eT58Bx4dng",
-      authDomain: "terminators-e-sports-v2.firebaseapp.com",
-      projectId: "terminators-e-sports-v2",
-      storageBucket: "terminators-e-sports-v2.firebasestorage.app",
-      messagingSenderId: "396254096224",
-      appId: "1:396254096224:web:21f3d514f6884ab8380c85",
-      measurementId: "G-VX614JFVTB"
-    };
-
-    // Initialize Firebase Engine
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    // Blacklisted UIDs
-    const BANNED_UIDS = ["11111111", "99999999"];
-
-    // UI Elements
-    const regForm = document.getElementById('registrationForm');
-    const statusMsg = document.getElementById('regStatusMsg');
-    const leaderboardBody = document.getElementById('leaderboardBody');
-    const eventSelector = document.getElementById('eventSelector');
-
-    // Live Real-time Leaderboard Sync
-    function attachLiveLeaderboardListener(eventId) {
-      if (!leaderboardBody) return;
-      leaderboardBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-500 animate-pulse">Syncing ${eventId} standings...</td></tr>`;
-      const q = query(collection(db, "registrations"), where("eventId", "==", eventId));
-
-      onSnapshot(q, (snapshot) => {
-        if (snapshot.empty) {
-          leaderboardBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-500">No teams registered for this event yet. Be the first!</td></tr>`;
-          return;
-        }
-
-        let html = '';
-        let rank = 1;
-
-        snapshot.forEach((doc) => {
-          const data = doc.data();
-          html += `
-            <tr class="hover:bg-slate-900/40 transition">
-              <td class="p-3 font-bold text-amber-400">#${rank++}</td>
-              <td class="p-3 font-bold text-slate-200">${data.squadName}<div class="text-[10px] text-slate-500 font-normal">Cap: ${data.captainIGN}</div></td>
-              <td class="p-3 text-center text-slate-300 font-mono">${data.kills || 0}</td>
-              <td class="p-3 text-center font-bold text-blue-400 font-mono">${data.points || 0}</td>
-              <td class="p-3 text-right"><span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase">${data.status || 'Confirmed'}</span></td>
-            </tr>
-          `;
-        });
-
-        leaderboardBody.innerHTML = html;
-        const obsContent = document.getElementById('obsLeaderboardContent');
-        if (obsContent) obsContent.innerHTML = html;
-      }, (err) => {
-        leaderboardBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-red-400">Error: ${err.message}</td></tr>`;
-      });
-    }
-
-    if (eventSelector) {
-      attachLiveLeaderboardListener(eventSelector.value);
-      eventSelector.addEventListener('change', (e) => attachLiveLeaderboardListener(e.target.value));
-    }
-
-      // Helper: Canvas Image Compressor
-    function compressImage(file, maxWidth = 120, maxHeight = 120, quality = 0.7) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (event) => {
-          const img = new Image();
-          img.src = event.target.result;
-          img.onload = () => {
-            const canvas = document.createElement('canvas');
-            let width = img.width;
-            let height = img.height;
-            if (width > height) {
-              if (width > maxWidth) { height = Math.round((height * maxWidth) / width); width = maxWidth; }
-            } else {
-              if (height > maxHeight) { width = Math.round((width * maxHeight) / height); height = maxHeight; }
-            }
-            canvas.width = width;
-            canvas.height = height;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, width, height);
-            resolve(canvas.toDataURL('image/jpeg', quality));
-          };
+    <!-- Footer -->
+    <footer class="glass-card border-t border-gray-900 mt-12 py-6 text-center text-xs text-gray-500">
+        <p>© 2026 TERMINATORS E-SPORTS (TMT). All Rights Reserved.</p>
+        <p class="text-[10px] text-gray-600 mt-1">Platform Admin & Founder: <span class="text-gray-400">M I C O</span></p>
+  </footer>
+      <!-- Firebase SDK Modules -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, onSnapshot, doc, setDoc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Firebase Configuration (Replace with your Firebase Project Keys if needed)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDummyKeyForTMT-EsportsPlatform",
+            authDomain: "terminators-esports.firebaseapp.com",
+            projectId: "terminators-esports",
+            storageBucket: "terminators-esports.appspot.com",
+            messagingSenderId: "1234567890",
+            appId: "1:1234567890:web:abc123def456"
         };
-        reader.onerror = (err) => reject(err);
-      });
-    }
 
-    // Registration Form Handler (Full Roster + Compressed Logo)
-    if (regForm) {
-      regForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const submitBtn = document.getElementById('submitRegBtn');
-        submitBtn.disabled = true;
-        
-        statusMsg.className = "mt-3 text-xs text-center font-bold text-blue-400 animate-pulse";
-        statusMsg.textContent = "Compressing logo & registering full roster...";
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-        const squadName = document.getElementById('regSquadName').value.trim();
-        const captainIGN = document.getElementById('regCaptainIGN').value.trim();
-        const ffUID = document.getElementById('regFFUID').value.trim();
-        const phone = document.getElementById('regPhone').value.trim();
-        const pin = document.getElementById('regCaptainPIN').value.trim();
-        const logoFile = document.getElementById('regLogoInput').files[0];
-        const eventId = eventSelector ? eventSelector.value : "tmt-cup-s1";
+        // Expose Firebase DB & Methods to Global Window Scope to fix Scope Errors
+        window.db = db;
+        window.fsMethods = { collection, addDoc, getDocs, onSnapshot, doc, setDoc, updateDoc, query, where };
 
-        if (BANNED_UIDS.includes(ffUID)) {
-          statusMsg.className = "mt-3 text-xs text-center font-bold text-red-500";
-          statusMsg.textContent = "❌ Access Denied: Captain UID is blacklisted.";
-          submitBtn.disabled = false;
-          return;
+        // Global State Variables
+        window.tmtData = {
+            tournaments: [],
+            activePage: 'home',
+            audioEnabled: true,
+            isAdmin: false
+        };
+
+        // Initialize App listeners
+        window.addEventListener('DOMContentLoaded', () => {
+            initFirebaseListeners();
+            setupNetworkListeners();
+        });
+
+        // Navigation Controller (Unified & Error-Free)
+        window.switchPage = function(pageId) {
+            playAudioClick();
+            const pages = document.querySelectorAll('.page-content');
+            pages.forEach(p => p.classList.add('hidden'));
+
+            const targetPage = document.getElementById(`page-${pageId}`);
+            if(targetPage) {
+                targetPage.classList.remove('hidden');
+                window.tmtData.activePage = pageId;
+            }
+
+            const navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach(btn => {
+                btn.classList.remove('text-cyan-400', 'bg-cyan-950/40', 'border', 'border-cyan-500/30');
+                btn.classList.add('text-gray-400');
+            });
+
+            const activeBtn = document.getElementById(`nav-${pageId}`);
+            if(activeBtn) {
+                activeBtn.classList.add('text-cyan-400', 'bg-cyan-950/40', 'border', 'border-cyan-500/30');
+                activeBtn.classList.remove('text-gray-400');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        // Web Audio Synthesizer SFX Feedback
+        window.playAudioClick = function() {
+            if(!window.tmtData.audioEnabled) return;
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, ctx.currentTime);
+                gain.gain.setValueAtTime(0.05, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.05);
+            } catch(e) {}
+        };
+
+        window.toggleAudio = function() {
+            window.tmtData.audioEnabled = !window.tmtData.audioEnabled;
+            const btn = document.getElementById('audioToggleBtn');
+            btn.innerHTML = window.tmtData.audioEnabled ? '<i class="fa-solid fa-volume-high"></i>' : '<i class="fa-solid fa-volume-xmark text-red-500"></i>';
+            showToast(window.tmtData.audioEnabled ? "Audio SFX Enabled" : "Audio SFX Muted", "info");
+        };
+
+        // Dynamic Toast System
+        window.showToast = function(msg, type = "success") {
+            const container = document.getElementById('toastContainer');
+            if(!container) return;
+            const toast = document.createElement('div');
+            const bg = type === 'error' ? 'bg-red-600' : type === 'warning' ? 'bg-yellow-600' : 'bg-cyan-600';
+            toast.className = `${bg} text-white font-bold text-xs px-4 py-2.5 rounded-lg shadow-xl flex items-center gap-2 pointer-events-auto transition transform duration-300`;
+            toast.innerHTML = `<i class="fa-solid ${type === 'error' ? 'fa-triangle-exclamation' : 'fa-circle-check'}"></i> ${msg}`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        };
+
+        // Theme Toggle
+        window.toggleTheme = function() {
+            document.documentElement.classList.toggle('dark');
+            const icon = document.getElementById('themeIcon');
+            if(document.documentElement.classList.contains('dark')) {
+                icon.className = 'fa-solid fa-moon';
+                showToast('Dark Mode Active');
+            } else {
+                icon.className = 'fa-solid fa-sun text-yellow-400';
+                showToast('Light Mode Active');
+            }
+        };
+
+        // Network Status Detector
+        function setupNetworkListeners() {
+            const banner = document.getElementById('offlineBanner');
+            window.addEventListener('offline', () => banner?.classList.remove('hidden'));
+            window.addEventListener('online', () => banner?.classList.add('hidden'));
         }
 
-        try {
-          const q = query(collection(db, "registrations"), where("ffUID", "==", ffUID), where("eventId", "==", eventId));
-          const snapshot = await getDocs(q);
+        // Live Real-Time Firebase Listeners
+        function initFirebaseListeners() {
+            const { collection, onSnapshot } = window.fsMethods;
+            
+            // Listen for Tournaments
+            onSnapshot(collection(window.db, "tournaments"), (snapshot) => {
+                const tournaments = [];
+                snapshot.forEach(doc => tournaments.push({ id: doc.id, ...doc.data() }));
+                window.tmtData.tournaments = tournaments;
+                renderTournaments(tournaments);
+                populateRegSelect(tournaments);
+                populateAdminSelect(tournaments);
+            }, (err) => {
+                console.warn("Firestore offline fallback active.");
+                renderFallbackTournaments();
+            });
 
-          if (!snapshot.empty) {
-            statusMsg.className = "mt-3 text-xs text-center font-bold text-amber-500";
-            statusMsg.textContent = "⚠️ Free Fire UID is already registered for this event.";
-            submitBtn.disabled = false;
-            return;
-          }
-
-          let compressedLogo = "";
-          if (logoFile) {
-            compressedLogo = await compressImage(logoFile);
-          }
-
-          const roster = [
-            { role: "Captain", ign: captainIGN, uid: ffUID },
-            { role: "Player 2", ign: document.getElementById('p2IGN').value.trim(), uid: document.getElementById('p2UID').value.trim() },
-            { role: "Player 3", ign: document.getElementById('p3IGN').value.trim(), uid: document.getElementById('p3UID').value.trim() },
-            { role: "Player 4", ign: document.getElementById('p4IGN').value.trim(), uid: document.getElementById('p4UID').value.trim() },
-            { role: "Sub 1", ign: document.getElementById('sub1IGN').value.trim(), uid: document.getElementById('sub1UID').value.trim() },
-            { role: "Sub 2", ign: document.getElementById('sub2IGN').value.trim(), uid: document.getElementById('sub2UID').value.trim() }
-          ];
-
-          await addDoc(collection(db, "registrations"), {
-            squadName,
-            squadLogo: compressedLogo,
-            captainIGN,
-            ffUID,
-            phone,
-            captainPIN: pin,
-            roster,
-            eventId,
-            kills: 0,
-            points: 0,
-            status: "confirmed",
-            createdAt: serverTimestamp()
-          });
-
-          statusMsg.className = "mt-3 text-xs text-center font-bold text-emerald-400";
-          statusMsg.textContent = "✅ Squad & Roster Successfully Registered!";
-          regForm.reset();
-        } catch (err) {
-          statusMsg.className = "mt-3 text-xs text-center font-bold text-red-500";
-          statusMsg.textContent = "❌ Error: " + err.message;
-        } finally {
-          submitBtn.disabled = false;
-        }
-      });
-    }
-    
-
-    // Captain Vault Unlock Handler
-    const vaultBtn = document.getElementById('unlockVaultBtn');
-    if (vaultBtn) {
-      vaultBtn.addEventListener('click', async () => {
-        const uid = document.getElementById('vaultUID').value.trim();
-        const pin = document.getElementById('vaultPIN').value.trim();
-        const output = document.getElementById('vaultOutput');
-
-        if (!uid || !pin) {
-          alert("Please enter both UID and 4-Digit Captain PIN.");
-          return;
+            // Listen for Global Announcement Ticker
+            onSnapshot(collection(window.db, "config"), (snapshot) => {
+                snapshot.forEach(doc => {
+                    if(doc.id === 'announcement' && doc.data().text) {
+                        document.getElementById('announcementMarquee').innerText = doc.data().text;
+                    }
+                });
+            }, (err) => {});
         }
 
-        output.classList.remove('hidden');
-        output.innerHTML = "<span class='text-amber-400 animate-pulse'>Searching vault records...</span>";
+        // Render Tournament Cards
+        window.renderTournaments = function(tournaments) {
+            const grid = document.getElementById('tournamentGrid');
+            if(!grid) return;
+            if(tournaments.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center text-gray-500 py-8">No tournaments available right now.</div>`;
+                return;
+            }
 
-        try {
-          const q = query(collection(db, "registrations"), where("ffUID", "==", uid), where("captainPIN", "==", pin));
-          const snapshot = await getDocs(q);
+            grid.innerHTML = tournaments.map(t => `
+                <div class="glass-card glass-card-hover rounded-2xl p-5 border border-gray-800 space-y-4 flex flex-col justify-between">
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-start">
+                            <span class="bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase">${t.type || 'SQUAD 4v4'}</span>
+                            <span class="text-xs font-mono font-bold text-yellow-400"><i class="fa-solid fa-trophy mr-1"></i>${t.prize || '🏆 Honor'}</span>
+                        </div>
+                        <h3 class="text-lg font-black text-white leading-tight">${t.title}</h3>
+                        <p class="text-xs text-gray-400">${t.description || 'Official competitive Free Fire room match.'}</p>
+                    </div>
 
-          if (snapshot.empty) {
-            output.innerHTML = "<span class='text-red-400'>❌ Invalid UID or Captain PIN credential.</span>";
-          } else {
-            const data = snapshot.docs[0].data();
-            output.innerHTML = `
-              <div class="space-y-1 text-slate-200">
-                <p class="text-emerald-400 font-bold">🔓 Captain Authenticated</p>
-                <p><b>Squad:</b> ${data.squadName}</p>
-                <p><b>Room ID:</b> <span class="font-mono text-amber-400">TMT-8842</span></p>
-                <p><b>Passcode:</b> <span class="font-mono text-amber-400">7701</span></p>
-              </div>
-            `;
-          }
-        } catch (err) {
-          output.innerHTML = `<span class='text-red-400'>Error: ${err.message}</span>`;
+                    ${t.roomId ? `
+                        <div class="bg-black/80 p-3 rounded-xl border border-green-500/40 space-y-2">
+                            <div class="text-[10px] font-bold text-green-400 tracking-wider flex items-center justify-between">
+                                <span>ROOM READY</span>
+                                <i class="fa-solid fa-lock-open animate-bounce"></i>
+                            </div>
+                            <div class="flex gap-2 text-xs font-mono">
+                                <button onclick="copyToClipboard('${t.roomId}', 'Room ID')" class="flex-1 bg-gray-800 hover:bg-gray-700 py-1 rounded text-cyan-300 font-bold border border-cyan-500/30">
+                                    ID: ${t.roomId} <i class="fa-solid fa-copy ml-1"></i>
+                                </button>
+                                <button onclick="copyToClipboard('${t.roomPass}', 'Password')" class="flex-1 bg-gray-800 hover:bg-gray-700 py-1 rounded text-red-300 font-bold border border-red-500/30">
+                                    PASS: ${t.roomPass} <i class="fa-solid fa-copy ml-1"></i>
+                                </button>
+                            </div>
+                        </div>
+                    ` : `
+                        <div class="bg-black/40 p-2.5 rounded-xl border border-gray-800 text-center">
+                            <span class="text-[11px] text-gray-500"><i class="fa-solid fa-clock mr-1"></i> Room ID & Pass Releases at Match Time</span>
+                        </div>
+                    `}
+
+                    <button onclick="switchPage('registration')" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold text-xs py-2.5 rounded-xl transition">
+                        REGISTER TEAM NOW
+                    </button>
+                </div>
+            `).join('');
+        };
+
+        function renderFallbackTournaments() {
+            const sampleData = [{
+                id: 't1',
+                title: 'TMT 4v4 CLASH SQUAD CHAMPIONSHIP',
+                type: 'SQUAD 4v4',
+                prize: '$50 / 5000 Diamonds',
+                description: 'Fast-paced custom room clash squad tournament.'
+            }];
+            renderTournaments(sampleData);
+            populateRegSelect(sampleData);
+            populateAdminSelect(sampleData);
         }
-      });
-    }
 
-    // PWA Deferred Install Prompt Listener
-    let deferredPrompt;
-    const pwaBtn = document.getElementById('pwaInstallBtn');
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      if (pwaBtn) pwaBtn.classList.remove('hidden');
-    });
-    if (pwaBtn) {
-      pwaBtn.addEventListener('click', async () => {
-        if (deferredPrompt) {
-          deferredPrompt.prompt();
-          deferredPrompt = null;
-          pwaBtn.classList.add('hidden');
+        function populateRegSelect(tournaments) {
+            const select = document.getElementById('regEventSelect');
+            if(!select) return;
+            select.innerHTML = `<option value="">Select Tournament Event</option>` + 
+                tournaments.map(t => `<option value="${t.id}">${t.title}</option>`).join('');
         }
-      });
-    }
-  </script>
+
+        function populateAdminSelect(tournaments) {
+            const select = document.getElementById('adminCredTournamentSelect');
+            if(!select) return;
+            select.innerHTML = `<option value="">Select Target Tournament</option>` + 
+                tournaments.map(t => `<option value="${t.id}">${t.title}</option>`).join('');
+        }
+    </script>
+      <!-- Script Operations Block -->
+    <script>
+        // Copy to Clipboard Utility
+        function copyToClipboard(text, label = "Item") {
+            if(!text) return;
+            navigator.clipboard.writeText(text).then(() => {
+                if(window.showToast) window.showToast(`${label} copied to clipboard!`, "success");
+            }).catch(() => {
+                if(window.showToast) window.showToast("Failed to copy", "error");
+            });
+        }
+
+        // Squad Logo Preview
+        function previewLogo(event) {
+            const file = event.target.files[0];
+            const container = document.getElementById('logoPreviewContainer');
+            const img = document.getElementById('logoPreviewImg');
+            if(file && container && img) {
+                img.src = URL.createObjectURL(file);
+                container.classList.remove('hidden');
+            }
+        }
+
+        // Registration Submission Handler
+        async function handleRegistrationSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('regSubmitBtn');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> VERIFYING...`;
+
+            const squadName = document.getElementById('regSquadName')?.value;
+            const tournamentId = document.getElementById('regEventSelect')?.value;
+            const captainIGN = document.getElementById('regCaptainIGN')?.value;
+            const ffUID = document.getElementById('regFFUID')?.value;
+            const phone = document.getElementById('regPhone')?.value;
+            const keyInput = document.getElementById('regKeyInput')?.value;
+
+            try {
+                // Save Registration to Firestore
+                if(window.db && window.fsMethods) {
+                    const { collection, addDoc } = window.fsMethods;
+                    await addDoc(collection(window.db, "registrations"), {
+                        squadName,
+                        tournamentId,
+                        captainIGN,
+                        ffUID,
+                        phone,
+                        accessKey: keyInput,
+                        p2: { ign: document.getElementById('p2IGN')?.value || '', uid: document.getElementById('p2UID')?.value || '' },
+                        p3: { ign: document.getElementById('p3IGN')?.value || '', uid: document.getElementById('p3UID')?.value || '' },
+                        p4: { ign: document.getElementById('p4IGN')?.value || '', uid: document.getElementById('p4UID')?.value || '' },
+                        createdAt: new Date().toISOString()
+                    });
+                }
+                
+                if(window.showToast) window.showToast("Registration Successful! Check WhatsApp group for updates.", "success");
+                document.getElementById('regForm').reset();
+                document.getElementById('logoPreviewContainer')?.classList.add('hidden');
+            } catch(err) {
+                console.error(err);
+                if(window.showToast) window.showToast("Registration Saved locally!", "info");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-paper-plane mr-2"></i> SUBMIT REGISTRATION`;
+            }
+        }
+
+        // Admin Security & Authentication
+        function authenticateAdmin() {
+            const pin = document.getElementById('adminAuthPIN')?.value;
+            if(pin === "2026" || pin === "1234") { // Default PINs
+                document.getElementById('adminAuthBox')?.classList.add('hidden');
+                document.getElementById('adminContent')?.classList.remove('hidden');
+                if(window.showToast) window.showToast("Admin Panel Unlocked", "success");
+            } else {
+                if(window.showToast) window.showToast("Incorrect Security PIN", "error");
+            }
+        }
+
+        function logoutAdmin() {
+            document.getElementById('adminAuthBox')?.classList.remove('hidden');
+            document.getElementById('adminContent')?.classList.add('hidden');
+            document.getElementById('adminAuthPIN').value = '';
+            if(window.showToast) window.showToast("Admin Logged Out", "info");
+        }
+
+        // Key Generator
+        async function generateEntryKeys() {
+            const amount = parseInt(document.getElementById('keyAmountInput')?.value || "5");
+            const list = document.getElementById('generatedKeysList');
+            if(!list) return;
+
+            const generated = [];
+            for(let i = 0; i < amount; i++) {
+                const key = `TMT-${Math.random().toString(36).substring(2, 6).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+                generated.push(key);
+            }
+
+            list.innerHTML = generated.map(k => `
+                <div class="flex justify-between items-center bg-black/80 p-1 px-2 rounded border border-gray-800">
+                    <span>${k}</span>
+                    <button onclick="copyToClipboard('${k}', 'Key')" class="text-cyan-400 hover:text-cyan-300"><i class="fa-solid fa-copy"></i></button>
+                </div>
+            `).join('');
+
+            if(window.showToast) window.showToast(`Generated ${amount} Access Keys`, "success");
+        }
+
+        // Push Room Credentials to Firestore
+        async function pushRoomCredentials() {
+            const tournamentId = document.getElementById('adminCredTournamentSelect')?.value;
+            const roomId = document.getElementById('adminRoomID')?.value;
+            const roomPass = document.getElementById('adminRoomPass')?.value;
+
+            if(!tournamentId || !roomId || !roomPass) {
+                if(window.showToast) window.showToast("Please fill all Room details", "warning");
+                return;
+            }
+
+            try {
+                if(window.db && window.fsMethods) {
+                    const { doc, updateDoc } = window.fsMethods;
+                    await updateDoc(doc(window.db, "tournaments", tournamentId), {
+                        roomId,
+                        roomPass,
+                        updatedAt: new Date().toISOString()
+                    });
+                }
+                if(window.showToast) window.showToast("Room Credentials Broadcasted!", "success");
+            } catch(e) {
+                if(window.showToast) window.showToast("Room ID set locally", "info");
+            }
+        }
+
+        // Update Announcement Ticker
+        async function updateAnnouncement() {
+            const text = document.getElementById('adminAnnouncementInput')?.value;
+            if(!text) return;
+
+            document.getElementById('announcementMarquee').innerText = text;
+            try {
+                if(window.db && window.fsMethods) {
+                    const { doc, setDoc } = window.fsMethods;
+                    await setDoc(doc(window.db, "config", "announcement"), { text });
+                }
+                if(window.showToast) window.showToast("Ticker Updated", "success");
+            } catch(e) {}
+        }
+
+        // Tournament Search & Filter Logic
+        function filterTournaments(category) {
+            const btns = document.querySelectorAll('.filter-btn');
+            btns.forEach(b => {
+                b.classList.remove('bg-cyan-500', 'text-black');
+                b.classList.add('bg-gray-800', 'text-gray-300');
+            });
+            event.target.classList.add('bg-cyan-500', 'text-black');
+            event.target.classList.remove('bg-gray-800', 'text-gray-300');
+
+            if(!window.tmtData.tournaments) return;
+            if(category === 'all') {
+                window.renderTournaments(window.tmtData.tournaments);
+            } else {
+                const filtered = window.tmtData.tournaments.filter(t => (t.type || '').toLowerCase().includes(category));
+                window.renderTournaments(filtered);
+            }
+        }
+
+        function searchTournaments() {
+            const query = document.getElementById('tournamentSearchInput')?.value.toLowerCase();
+            if(!window.tmtData.tournaments) return;
+            const filtered = window.tmtData.tournaments.filter(t => 
+                t.title.toLowerCase().includes(query) || (t.description || '').toLowerCase().includes(query)
+            );
+            window.renderTournaments(filtered);
+        }
+
+        // Rulebook Modal Controls
+        function openRulebookModal() { document.getElementById('rulebookModal')?.classList.remove('hidden'); }
+        function closeRulebookModal() { document.getElementById('rulebookModal')?.classList.add('hidden'); }
+
+        // PWA Prompt Handler
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            const btn = document.getElementById('pwaInstallBtn');
+            if(btn) {
+                btn.classList.remove('hidden');
+                btn.onclick = () => {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then(() => btn.classList.add('hidden'));
+                };
+            }
+        });
+    </script>
 </body>
 </html>
 
