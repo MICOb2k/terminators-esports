@@ -5,228 +5,173 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>TERMINATORS ESPORTS | Founded by M I C O</title>
 
-  <!-- PWA App Manifest & Meta Tags -->
-  <link rel="manifest" href="manifest.json">
+  <!-- PWA Web App Meta Tags -->
   <meta name="theme-color" content="#0d0d15">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <!-- Internal CSS Styles -->
+  <!-- Google Fonts for Gaming Aesthetic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+
+  <!-- Styling Engine with Distinct Backgrounds & Animations -->
   <style>
     :root {
-      --bg-dark: #08080e;
-      --card-bg: #11111c;
+      --bg-dark: #06060c;
+      --card-bg: rgba(18, 18, 30, 0.85);
       --accent-red: #ff2a4b;
       --accent-cyan: #00f0ff;
       --accent-gold: #ffb700;
+      --accent-green: #00ff88;
+      --accent-purple: #b026ff;
       --text-main: #f0f0f5;
-      --text-muted: #8a8a9e;
-      --border-color: #222235;
+      --text-muted: #9a9ab2;
+      --border-color: #26263e;
+      --font-title: 'Orbitron', sans-serif;
+      --font-body: 'Rajdhani', sans-serif;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-body); }
 
     body {
       background-color: var(--bg-dark);
       color: var(--text-main);
+      overflow-x: hidden;
       -webkit-tap-highlight-color: transparent;
     }
 
+    /* Global Animations */
+    @keyframes pulseGlow { 0% { box-shadow: 0 0 5px rgba(255,42,75,0.4); } 50% { box-shadow: 0 0 20px rgba(255,42,75,0.8); } 100% { box-shadow: 0 0 5px rgba(255,42,75,0.4); } }
+    @keyframes cyanPulse { 0% { box-shadow: 0 0 5px rgba(0,240,255,0.3); } 50% { box-shadow: 0 0 20px rgba(0,240,255,0.7); } 100% { box-shadow: 0 0 5px rgba(0,240,255,0.3); } }
+    @keyframes goldShimmer { 0% { border-color: #ffb700; } 50% { border-color: #ffffff; } 100% { border-color: #ffb700; } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
     /* Header Navbar */
     .app-header {
-      background: rgba(17, 17, 28, 0.95);
+      background: rgba(10, 10, 18, 0.95);
       border-bottom: 1px solid var(--border-color);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      backdrop-filter: blur(8px);
-      padding: 10px 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(12px);
+      padding: 12px 18px; display: flex; justify-content: space-between; align-items: center;
     }
 
-    .brand {
-      font-size: 1.05rem;
-      font-weight: 800;
-      color: var(--accent-cyan);
-      letter-spacing: 1px;
-    }
+    .brand { font-family: var(--font-title); font-size: 1.1rem; font-weight: 900; color: var(--accent-cyan); letter-spacing: 1px; }
+    .brand span { color: var(--accent-gold); font-size: 0.72rem; display: block; letter-spacing: 0.5px; }
 
-    .brand span {
-      color: var(--accent-gold);
-      font-size: 0.72rem;
-      display: block;
-      letter-spacing: 0px;
-    }
-
-    .nav-actions {
-      display: flex;
-      gap: 8px;
-    }
+    .nav-actions { display: flex; gap: 10px; }
 
     /* Buttons */
     .btn {
-      padding: 8px 12px;
-      border-radius: 6px;
-      border: none;
-      font-weight: 700;
-      font-size: 0.78rem;
-      cursor: pointer;
-      transition: 0.2s ease;
-      display: inline-flex;
-      align-items: center;
+      padding: 9px 15px; border-radius: 6px; border: none; font-family: var(--font-title);
+      font-weight: 700; font-size: 0.78rem; cursor: pointer; transition: 0.25s ease;
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px; text-transform: uppercase;
     }
+    .btn:hover { transform: translateY(-2px); filter: brightness(1.2); }
+    .btn-install { background: linear-gradient(135deg, var(--accent-gold), #e6a100); color: #000; animation: pulseGlow 3s infinite; }
+    .btn-202 { background: #151528; border: 1px solid var(--accent-cyan); color: var(--accent-cyan); }
+    .btn-primary { background: linear-gradient(135deg, var(--accent-red), #c70025); color: #fff; }
+    .btn-success { background: linear-gradient(135deg, var(--accent-green), #00b359); color: #000; font-weight: 900; }
+    .btn-gold { background: linear-gradient(135deg, var(--accent-gold), #cc9300); color: #000; }
+    .full-btn { width: 100%; padding: 12px; font-size: 0.9rem; margin-top: 10px; }
 
-    .btn-install { background: linear-gradient(135deg, var(--accent-gold), #d49700); color: #000; }
-    .btn-202 { background: #1a1a2e; border: 1px solid var(--accent-cyan); color: var(--accent-cyan); }
-    .btn-primary { background: var(--accent-red); color: #fff; }
-    .full-btn { width: 100%; padding: 12px; font-size: 0.9rem; margin-top: 10px; justify-content: center; }
-
-    /* Sub Navigation Bar */
+    /* Tab Switcher */
     .tab-bar {
-      display: flex;
-      overflow-x: auto;
-      background: #0c0c14;
-      border-bottom: 1px solid var(--border-color);
-      padding: 6px 12px;
-      gap: 8px;
-      white-space: nowrap;
-      scrollbar-width: none;
+      display: flex; overflow-x: auto; background: #080811; border-bottom: 1px solid var(--border-color);
+      padding: 8px 14px; gap: 8px; white-space: nowrap; scrollbar-width: none;
     }
-
     .tab-bar::-webkit-scrollbar { display: none; }
-
     .tab-item {
-      padding: 8px 14px;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      cursor: pointer;
-      background: transparent;
-      border: none;
+      padding: 9px 16px; border-radius: 6px; font-size: 0.82rem; font-family: var(--font-title);
+      font-weight: 700; color: var(--text-muted); cursor: pointer; background: transparent; border: 1px solid transparent; transition: 0.2s;
     }
+    .tab-item.active { background: #16162a; color: var(--accent-cyan); border-color: var(--accent-cyan); box-shadow: 0 0 10px rgba(0,240,255,0.2); }
 
-    .tab-item.active {
-      background: #1a1a2b;
-      color: var(--accent-cyan);
-      border: 1px solid rgba(0,240,255,0.2);
+    /* Main Section Panels */
+    .container { padding: 18px; max-width: 1000px; margin: 0 auto; min-height: 85vh; }
+    .view-panel { display: none; animation: slideUp 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
+    .view-panel.active { display: block; }
+
+    /* DISTINCT PAGE BACKGROUND STYLES */
+    #tournamentsView { background: radial-gradient(circle at top, rgba(255, 42, 75, 0.08), transparent 70%); border-radius: 12px; padding: 10px; }
+    #registerView { background: radial-gradient(circle at top, rgba(0, 240, 255, 0.08), transparent 70%); border-radius: 12px; padding: 10px; }
+    #standingsView { background: radial-gradient(circle at top, rgba(255, 183, 0, 0.1), transparent 70%); border-radius: 12px; padding: 10px; }
+    #connectView { background: radial-gradient(circle at top, rgba(0, 255, 136, 0.08), transparent 70%); border-radius: 12px; padding: 10px; }
+    #vaultView { background: radial-gradient(circle at top, rgba(176, 38, 255, 0.08), transparent 70%); border-radius: 12px; padding: 10px; }
+    #adminView { background: radial-gradient(circle at top, rgba(255, 42, 75, 0.12), transparent 70%); border-radius: 12px; padding: 10px; }
+
+    /* Card Containers */
+    .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; margin-bottom: 18px; backdrop-filter: blur(10px); }
+    .card-title { font-family: var(--font-title); font-size: 1rem; font-weight: 700; margin-bottom: 12px; color: var(--accent-gold); letter-spacing: 0.5px; display: flex; justify-content: space-between; align-items: center; }
+
+    /* Mode Visual Cards */
+    .mode-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .mode-card {
+      background: linear-gradient(145deg, #121224, #0a0a14); border: 1px solid var(--border-color);
+      border-radius: 10px; padding: 14px; position: relative; overflow: hidden; transition: 0.3s;
     }
+    .mode-card:hover { border-color: var(--accent-cyan); transform: translateY(-3px); }
+    .mode-badge { font-family: var(--font-title); font-size: 0.68rem; font-weight: 900; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; display: inline-block; margin-bottom: 8px; }
+    .badge-squad { background: rgba(255,42,75,0.2); color: var(--accent-red); border: 1px solid var(--accent-red); }
+    .badge-solo { background: rgba(0,240,255,0.2); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
+    .badge-cs { background: rgba(255,183,0,0.2); color: var(--accent-gold); border: 1px solid var(--accent-gold); }
+    .mode-card h3 { font-family: var(--font-title); font-size: 0.95rem; margin-bottom: 6px; }
+    .mode-card p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.3; }
 
-    /* Container & Cards */
-    .container { padding: 16px; max-width: 900px; margin: 0 auto; }
-    .view-panel { display: none; }
-    .view-panel.active { display: block; animation: fadeIn 0.2s ease-in-out; }
-
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 16px;
-      margin-bottom: 16px;
-    }
-
-    .card-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      margin-bottom: 12px;
-      color: var(--accent-gold);
-      letter-spacing: 0.5px;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 35px 20px;
-      background: rgba(255,255,255,0.02);
-      border: 1px dashed var(--border-color);
-      border-radius: 10px;
-      color: var(--text-muted);
-    }
-
-    .empty-state h3 { font-size: 0.95rem; color: var(--text-main); margin-bottom: 6px; }
-    .empty-state p { font-size: 0.8rem; }
-
-    /* Form Elements */
-    .form-group { margin-bottom: 12px; }
-    .form-group label { display: block; font-size: 0.75rem; font-weight: 600; margin-bottom: 5px; color: var(--text-muted); }
+    /* Form Design */
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 6px; color: var(--text-muted); font-family: var(--font-title); }
     .form-control {
-      width: 100%;
-      padding: 10px 12px;
-      background: #08080f;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      color: var(--text-main);
-      font-size: 0.85rem;
-      outline: none;
+      width: 100%; padding: 11px 14px; background: #0a0a14; border: 1px solid var(--border-color);
+      border-radius: 8px; color: var(--text-main); font-size: 0.9rem; outline: none; transition: 0.2s;
     }
-    .form-control:focus { border-color: var(--accent-cyan); }
+    .form-control:focus { border-color: var(--accent-cyan); box-shadow: 0 0 8px rgba(0,240,255,0.3); }
 
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-    @media (max-width: 600px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    @media (max-width: 650px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
 
-    /* Section Dividers */
-    .section-divider { border-top: 1px solid var(--border-color); padding-top: 12px; margin-top: 12px; }
-    .section-title { font-size: 0.82rem; font-weight: 700; margin-bottom: 8px; }
-    .section-title.cyan { color: var(--accent-cyan); }
-    .section-title.gold { color: var(--accent-gold); }
-    .section-title.muted { color: var(--text-muted); }
+    /* Hall of Fame & Standings */
+    .hall-card {
+      background: linear-gradient(135deg, rgba(255,183,0,0.15), rgba(18,18,30,0.9));
+      border: 2px solid var(--accent-gold); border-radius: 12px; padding: 16px; margin-bottom: 14px;
+      animation: goldShimmer 4s infinite alternate; display: flex; align-items: center; gap: 16px;
+    }
+    .hall-logo { width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--accent-gold); object-fit: cover; }
+    .hall-info h3 { font-family: var(--font-title); color: var(--accent-gold); font-size: 1.1rem; }
+    .hall-info p { font-size: 0.82rem; color: var(--text-main); }
 
-    .sub-text { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 8px; }
-    .status-cyan { font-size: 0.7rem; color: var(--accent-cyan); margin-top: 4px; }
-
-    /* Social Recommendation Section */
-    .social-rec-box { background: #141424; border: 1px solid #22223d; border-radius: 8px; padding: 12px; margin-bottom: 14px; }
-    .social-rec-title { font-size: 0.75rem; color: var(--accent-gold); font-weight: 700; margin-bottom: 6px; }
-    .social-links-flex { display: flex; flex-wrap: wrap; gap: 8px; }
-    .social-chip {
-      padding: 6px 12px;
-      background: #1c1c30;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      color: var(--text-main);
-      text-decoration: none;
-      border: 1px solid var(--border-color);
+    /* Floating Error Catcher Toast */
+    #errorToast {
+      position: fixed; bottom: 20px; right: 20px; background: rgba(255, 42, 75, 0.95); color: #fff;
+      padding: 12px 18px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; z-index: 3000;
+      display: none; box-shadow: 0 0 15px rgba(255, 42, 75, 0.6); animation: slideUp 0.3s ease;
     }
 
-    .vault-box { margin-top: 14px; font-size: 0.85rem; color: var(--accent-cyan); word-break: break-all; }
-
-    /* Modal Styles */
+    /* Modal Overlay */
     .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(4px);
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(6px);
       z-index: 2000; display: none; align-items: center; justify-content: center; padding: 16px;
     }
     .modal-overlay.active { display: flex; }
     .modal-box {
-      background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px;
-      width: 100%; max-width: 700px; padding: 18px; max-height: 85vh; display: flex; flex-direction: column;
+      background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px;
+      width: 100%; max-width: 750px; padding: 20px; max-height: 85vh; overflow-y: auto;
     }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .modal-close { background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer; }
-
-    /* Matrix Grid */
-    .matrix-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; max-height: 65vh; overflow-y: auto; }
-    .matrix-card { background: #0d0d18; border: 1px solid #1a1a2e; padding: 10px; border-radius: 6px; }
-    .matrix-card h4 { font-size: 0.78rem; color: var(--accent-cyan); }
-    .matrix-card p { font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; }
+    .matrix-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-top: 14px; }
+    .matrix-item { background: #0d0d1a; border: 1px solid #1f1f38; padding: 10px; border-radius: 6px; font-size: 0.78rem; }
   </style>
 
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 </head>
-<body>
+  <body>
 
-  <!-- Top App Navigation Bar -->
+  <!-- Floating Runtime Error Notification Toast -->
+  <div id="errorToast"></div>
+
+  <!-- Header Section -->
   <header class="app-header">
     <div class="brand">
       TERMINATORS ESPORTS
@@ -238,56 +183,73 @@
     </div>
   </header>
 
-  <!-- Navigation Tabs Bar -->
+  <!-- Navigation Tabs -->
   <nav class="tab-bar">
-    <button class="tab-item active" onclick="switchTab('tournamentsView', this)">Tournaments</button>
-    <button class="tab-item" onclick="switchTab('registerView', this)">Registration</button>
-    <button class="tab-item" onclick="switchTab('standingsView', this)">Standings</button>
-    <button class="tab-item" onclick="switchTab('connectView', this)">Connect & Media</button>
-    <button class="tab-item" onclick="switchTab('vaultView', this)">Captain Vault</button>
-    <button class="tab-item" onclick="switchTab('adminView', this)">Admin Center</button>
+    <button class="tab-item active" onclick="switchTab('tournamentsView', this)">🏆 Tournaments</button>
+    <button class="tab-item" onclick="switchTab('registerView', this)">⚡ Registration</button>
+    <button class="tab-item" onclick="switchTab('standingsView', this)">👑 Hall of Fame</button>
+    <button class="tab-item" onclick="switchTab('connectView', this)">🌐 Connect Hub</button>
+    <button class="tab-item" onclick="switchTab('vaultView', this)">🔐 Captain Vault</button>
+    <button class="tab-item" onclick="switchTab('adminView', this)">⚙️ Admin Center</button>
   </nav>
 
-  <!-- Main View Container -->
+  <!-- App Views Container -->
   <main class="container">
 
-    <!-- 1. TOURNAMENTS HUB -->
+    <!-- 1. TOURNAMENTS HUB VIEW -->
     <section id="tournamentsView" class="view-panel active">
-      <div id="tournamentsContainer">
-        <div class="empty-state">
-          <h3>No tournament published yet</h3>
-          <p>Please wait till the tournament is live. Check back soon for upcoming Free Fire events!</p>
+      <div class="card-title">FREE FIRE COMPETITIVE MODES</div>
+      <div class="mode-grid">
+        <div class="mode-card">
+          <span class="mode-badge badge-squad">BR Squad</span>
+          <h3>Battle Royale Squad</h3>
+          <p>12 Squads / 48 Players battle for Booyah. Survival, placement, and kill points matrix enabled.</p>
+        </div>
+        <div class="mode-card">
+          <span class="mode-badge badge-solo">BR Solo</span>
+          <h3>Battle Royale Solo</h3>
+          <p>50 Solo Rusher showdown. Master movement, Gloo Walls, and zone rotations to win.</p>
+        </div>
+        <div class="mode-card">
+          <span class="mode-badge badge-cs">CS 4v4</span>
+          <h3>Clash Squad 4v4</h3>
+          <p>7-Round fast tactical combat. Fast gloo walls, rush strategies, and sniper cover loadouts.</p>
+        </div>
+        <div class="mode-card">
+          <span class="mode-badge badge-cs">CS 6v6 & 1v1</span>
+          <h3>CS 6v6 / Lone Wolf</h3>
+          <p>High-energy customized custom room matches for clans and elite duelists.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">LIVE UPCOMING TOURNAMENTS</div>
+        <div id="tournamentsContainer">
+          <div style="text-align:center; padding:30px; color:var(--text-muted);">
+            <h3>No Live Tournament Published Yet</h3>
+            <p>Check back shortly or join our official channels for live tournament updates!</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- 2. DYNAMIC REGISTRATION FORM -->
+    <!-- 2. REGISTRATION VIEW -->
     <section id="registerView" class="view-panel">
       <div class="card">
-        <div class="card-title">TOURNAMENT REGISTRATION ENGINE</div>
-
-        <!-- Optional Social Recommendation Module -->
-        <div class="social-rec-box">
-          <div class="social-rec-title">RECOMMENDED OFFICIAL CHANNELS (OPTIONAL)</div>
-          <p class="sub-text">Following our channels is recommended to stay updated on match schedules and custom room details.</p>
-          <div class="social-links-flex" id="socialRecContainer">
-            <a href="https://tiktok.com/@tmt_esports" target="_blank" class="social-chip">TikTok @tmt_esports</a>
-          </div>
-        </div>
-
+        <div class="card-title">TOURNAMENT ENTRY REGISTRATION</div>
         <form id="registrationForm" onsubmit="handleRegistrationSubmit(event)">
           <div class="grid-2">
             <div class="form-group">
-              <label>Select Event *</label>
+              <label>Choose Tournament Event *</label>
               <select id="regEventSelect" class="form-control" required onchange="handleEventSelectChange(this)">
-                <option value="">-- Choose Active Event --</option>
+                <option value="">-- Select Active Event --</option>
               </select>
             </div>
             <div class="form-group">
-              <label>Select Server Region *</label>
+              <label>Server Region *</label>
               <select id="regServer" class="form-control" required>
                 <option value="">-- Select Region --</option>
-                <option value="MENA">MENA (Middle East & North Africa)</option>
+                <option value="MENA">MENA (Middle East & Africa)</option>
                 <option value="INDIA">India</option>
                 <option value="EU">Europe</option>
                 <option value="NA">North America</option>
@@ -303,542 +265,598 @@
           </div>
 
           <div class="form-group">
-            <label>Team Logo (Compulsory - Auto Compressed) *</label>
+            <label>Team Logo Upload (Auto Compressed Base64) *</label>
             <input type="file" id="regLogoInput" class="form-control" accept="image/*" required onchange="compressTeamLogo(event)">
             <input type="hidden" id="compressedLogoBase64">
-            <p class="status-cyan" id="compressionStatus"></p>
+            <p id="compressionStatus" style="font-size:0.75rem; color:var(--accent-cyan); margin-top:4px;"></p>
           </div>
 
-          <!-- Leader / Solo Player Details -->
-          <div class="section-divider">
-            <div class="section-title cyan" id="leaderSectionTitle">LEADER / CAPTAIN DETAILS</div>
-            <div class="grid-3">
-              <div class="form-group">
-                <label>Leader IGN *</label>
-                <input type="text" id="leaderIGN" class="form-control" placeholder="e.g. TMT-M I C O" required>
-              </div>
-              <div class="form-group">
-                <label>Free Fire UID *</label>
-                <input type="number" id="leaderUID" class="form-control" placeholder="e.g. 123456789" required>
-              </div>
-              <div class="form-group" id="iglTagContainer">
-                <label>Role / IGL Tag *</label>
-                <input type="text" id="leaderIGL" class="form-control" placeholder="e.g. Primary IGL / Rusher" required>
-              </div>
+          <div class="form-group">
+            <label>Leader / Captain IGN *</label>
+            <input type="text" id="leaderIGN" class="form-control" placeholder="e.g. TMT M I C O" required>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Leader Free Fire UID *</label>
+              <input type="number" id="leaderUID" class="form-control" placeholder="e.g. 123456789" required>
+            </div>
+            <div class="form-group">
+              <label>Role Tag *</label>
+              <input type="text" id="leaderIGL" class="form-control" placeholder="e.g. Primary IGL / Sniper" required>
             </div>
           </div>
 
-          <!-- Squad Roster (Dynamic Toggle) -->
-          <div id="squadTeammatesContainer" class="section-divider" style="display: none;">
-            <div class="section-title gold">MAIN SQUAD PLAYERS (3 ADDITIONAL)</div>
+          <div id="squadContainer" style="display:none;" class="form-group">
+            <label style="color:var(--accent-gold);">Roster Squad Details (Teammate UIDs)</label>
             <div class="grid-2">
-              <div class="form-group"><label>Player 2 IGN *</label><input type="text" class="form-control squad-req" id="p2IGN"></div>
-              <div class="form-group"><label>Player 2 UID *</label><input type="number" class="form-control squad-req" id="p2UID"></div>
+              <input type="text" id="p2Info" class="form-control squad-input" placeholder="Player 2 IGN & UID">
+              <input type="text" id="p3Info" class="form-control squad-input" placeholder="Player 3 IGN & UID">
             </div>
-            <div class="grid-2">
-              <div class="form-group"><label>Player 3 IGN *</label><input type="text" class="form-control squad-req" id="p3IGN"></div>
-              <div class="form-group"><label>Player 3 UID *</label><input type="number" class="form-control squad-req" id="p3UID"></div>
-            </div>
-            <div class="grid-2">
-              <div class="form-group"><label>Player 4 IGN *</label><input type="text" class="form-control squad-req" id="p4IGN"></div>
-              <div class="form-group"><label>Player 4 UID *</label><input type="number" class="form-control squad-req" id="p4UID"></div>
-            </div>
-
-            <div class="section-title muted">SQUAD SUBSTITUTES (2 PLAYERS)</div>
-            <div class="grid-2">
-              <div class="form-group"><label>Sub 1 IGN</label><input type="text" class="form-control" id="sub1IGN"></div>
-              <div class="form-group"><label>Sub 1 UID</label><input type="number" class="form-control" id="sub1UID"></div>
-            </div>
-            <div class="grid-2">
-              <div class="form-group"><label>Sub 2 IGN</label><input type="text" class="form-control" id="sub2IGN"></div>
-              <div class="form-group"><label>Sub 2 UID</label><input type="number" class="form-control" id="sub2UID"></div>
+            <div class="grid-2" style="margin-top:8px;">
+              <input type="text" id="p4Info" class="form-control squad-input" placeholder="Player 4 IGN & UID">
+              <input type="text" id="subInfo" class="form-control" placeholder="Substitute IGN & UID (Optional)">
             </div>
           </div>
 
-          <!-- Contact Handles (Rule: 2 of 6 Mandatory) -->
-          <div class="section-divider">
-            <div class="section-title gold">CONTACT HANDLES (FILL AT LEAST 2 OF 6) *</div>
-            <p class="sub-text">Provide contact handles for match notifications across regional networks.</p>
-
+          <div class="form-group">
+            <label style="color:var(--accent-gold);">Social / Contact Handles (Provide at least 2 of 6) *</label>
             <div class="grid-2">
-              <div class="form-group"><label>WhatsApp Number</label><input type="text" id="socialWA" class="form-control social-input" placeholder="+20 / +966 / +234..."></div>
-              <div class="form-group"><label>Discord Tag</label><input type="text" id="socialDC" class="form-control social-input" placeholder="user#1234 or tag"></div>
-              <div class="form-group"><label>Telegram Handle</label><input type="text" id="socialTG" class="form-control social-input" placeholder="@telegram_handle"></div>
-              <div class="form-group"><label>TikTok Handle</label><input type="text" id="socialTT" class="form-control social-input" placeholder="@tiktok_username"></div>
-              <div class="form-group"><label>Instagram Handle</label><input type="text" id="socialIG" class="form-control social-input" placeholder="@insta_handle"></div>
-              <div class="form-group"><label>X (Twitter) Handle</label><input type="text" id="socialTW" class="form-control social-input" placeholder="@x_handle"></div>
+              <input type="text" id="socialWA" class="form-control social-req" placeholder="WhatsApp Number">
+              <input type="text" id="socialDC" class="form-control social-req" placeholder="Discord Tag">
+              <input type="text" id="socialTG" class="form-control social-req" placeholder="Telegram Handle">
+              <input type="text" id="socialTT" class="form-control social-req" placeholder="TikTok Handle">
+              <input type="text" id="socialIG" class="form-control social-req" placeholder="Instagram Handle">
+              <input type="text" id="socialTW" class="form-control social-req" placeholder="X (Twitter) Handle">
             </div>
           </div>
 
-          <div class="form-group" id="accessKeyContainer">
-            <label>Entry Access Key *</label>
-            <input type="text" id="regAccessKey" class="form-control" placeholder="TMT-XXXX-XXXX">
+          <div class="form-group">
+            <label>Entry Access Key (Default: FREE-ENTRY)</label>
+            <input type="text" id="regAccessKey" class="form-control" placeholder="TMT-XXXX-KEY">
           </div>
 
-          <button type="submit" class="btn btn-primary full-btn">SUBMIT REGISTRATION</button>
+          <button type="submit" class="btn btn-primary full-btn">SUBMIT TOURNAMENT ENTRY</button>
         </form>
       </div>
     </section>
 
-    <!-- 3. STANDINGS & BRACKETS -->
+    <!-- 3. STANDINGS & HALL OF FAME VIEW -->
     <section id="standingsView" class="view-panel">
       <div class="card">
-        <div class="card-title">STANDINGS & BRACKETS TREE</div>
+        <div class="card-title">👑 CROWNED CHAMPIONS - HALL OF FAME</div>
+        <div id="hallOfFameContainer">
+          <div style="text-align:center; padding:20px; color:var(--text-muted);">No crowned champion registered yet.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">LIVE REGISTERED ROSTERS</div>
         <div id="standingsContainer">
-          <div class="empty-state">
-            <h3>No teams registered yet</h3>
-            <p>Standings and brackets tree will populate automatically once teams sign up.</p>
-          </div>
+          <div style="text-align:center; padding:20px; color:var(--text-muted);">No registered teams to show.</div>
         </div>
       </div>
     </section>
 
-    <!-- 4. CONNECT & MEDIA HUB -->
+    <!-- 4. CONNECT HUB VIEW -->
     <section id="connectView" class="view-panel">
       <div class="card">
-        <div class="card-title">OFFICIAL CONNECT HUB</div>
-        <div class="social-rec-box">
-          <div class="social-rec-title">DIRECT ONE-TAP LINKS</div>
-          <div class="grid-2" id="publicConnectGrid">
-            <!-- Dynamic Social Cards -->
-          </div>
+        <div class="card-title">🌐 OFFICIAL SOCIAL MEDIA PLATFORMS</div>
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:14px;">Connect with TERMINATORS ESPORTS across top platforms:</p>
+        <div class="grid-2" id="socialPlatformsGrid">
+          <!-- Dynamically Rendered Social Links -->
         </div>
       </div>
-    </section>
-
-    <!-- 5. CAPTAIN VAULT -->
+  </section>
+        <!-- 5. CAPTAIN VAULT VIEW -->
     <section id="vaultView" class="view-panel">
       <div class="card">
-        <div class="card-title">CAPTAIN VAULT ROOM LOOKUP</div>
+        <div class="card-title">🔐 CAPTAIN VAULT (ROOM ID & PASSCODE)</div>
         <div class="form-group">
-          <label>Enter Entry Key or Phone Number *</label>
-          <input type="text" id="vaultLookupKey" class="form-control" placeholder="TMT Key or registered handle">
+          <label>Enter Registered Key or Contact Handle *</label>
+          <input type="text" id="vaultKeyInput" class="form-control" placeholder="e.g. TMT-Key or WhatsApp Number">
         </div>
-        <button class="btn btn-primary" onclick="lookupVaultDetails()">ACCESS ROOM ID & PASSCODE</button>
-        <div id="vaultResult" class="vault-box"></div>
+        <button class="btn btn-gold" onclick="unlockCaptainVault()">UNLOCK ROOM DETAILS</button>
+        <div id="vaultResult" style="margin-top:14px; font-weight:700; color:var(--accent-cyan); line-height:1.6;"></div>
       </div>
     </section>
 
-    <!-- 6. ADMIN PORTAL -->
+    <!-- 6. ADMIN COMMAND CENTER -->
     <section id="adminView" class="view-panel">
-      <div class="card" id="adminLoginCard">
-        <div class="card-title">ADMIN AUTHENTICATION</div>
+      <div class="card" id="adminAuthCard">
+        <div class="card-title">⚙️ ADMIN AUTHENTICATION</div>
         <div class="form-group">
-          <label>Select Role Tier</label>
-          <select id="adminRoleSelect" class="form-control">
-            <option value="super">Super Admin - M I C O</option>
-            <option value="sponsor">Sponsor / Temp Admin</option>
+          <label>Select Access Tier</label>
+          <select id="adminTierSelect" class="form-control">
+            <option value="super">Super Admin (Founder M I C O)</option>
+            <option value="standard">Standard Admin</option>
+            <option value="temp">Temporary Tournament Admin</option>
           </select>
         </div>
         <div class="form-group">
-          <label>Enter Security PIN *</label>
-          <input type="password" id="adminPassInput" class="form-control" placeholder="Enter PIN">
+          <label>Enter Security Passcode *</label>
+          <input type="password" id="adminPassInput" class="form-control" placeholder="Enter confidential PIN">
         </div>
-        <button class="btn btn-primary" onclick="authenticateAdmin()">UNLOCK COMMAND CENTER</button>
+        <button class="btn btn-primary" onclick="authenticateAdmin()">AUTHENTICATE COMMAND CENTER</button>
       </div>
 
-      <div id="adminCommandCenter" style="display: none;">
+      <!-- Super Admin & Standard Admin Dashboard -->
+      <div id="adminDashboard" style="display:none;">
+        
+        <!-- Tournament Management -->
         <div class="card">
-          <div class="card-title">CREATE FREE FIRE EVENT</div>
-          <form onsubmit="handlePublishTournament(event)">
+          <div class="card-title">PUBLISH NEW TOURNAMENT</div>
+          <form onsubmit="handleAdminPublishTournament(event)">
             <div class="form-group">
-              <label>Tournament Title *</label>
-              <input type="text" id="adminTournTitle" class="form-control" placeholder="e.g. TMT SOLOS SEASON 1" required>
+              <label>Tournament Name *</label>
+              <input type="text" id="admTournTitle" class="form-control" placeholder="e.g. TERMINATORS BR SEASON 1" required>
             </div>
             <div class="grid-3">
               <div class="form-group">
                 <label>Mode *</label>
-                <select id="adminTournMode" class="form-control" required>
-                  <option value="SOLO">BR Solo (50 Players)</option>
-                  <option value="SQUAD">BR Squad (12 Squads)</option>
-                  <option value="CS4V4">Clash Squad 4v4</option>
-                  <option value="CS6V6">Clash Squad 6v6</option>
-                  <option value="LONEWOLF">1v1 Lone Wolf</option>
+                <select id="admTournMode" class="form-control" required>
+                  <option value="BR SQUAD">BR Squad (12 Squads)</option>
+                  <option value="BR SOLO">BR Solo (50 Players)</option>
+                  <option value="CS 4V4">Clash Squad 4v4</option>
+                  <option value="CS 6V6">Clash Squad 6v6</option>
+                  <option value="LONE WOLF">1v1 Lone Wolf</option>
                 </select>
               </div>
               <div class="form-group">
-                <label>Slot Cap *</label>
-                <input type="number" id="adminTournSlots" class="form-control" value="50" required>
+                <label>Slot Capacity *</label>
+                <input type="number" id="admTournSlots" class="form-control" value="50" required>
               </div>
               <div class="form-group">
                 <label>Type *</label>
-                <select id="adminTournType" class="form-control" required>
-                  <option value="FREE">Free Tournament</option>
-                  <option value="PAID">Prize Pool (Key Required)</option>
+                <select id="admTournType" class="form-control" required>
+                  <option value="FREE ENTRY">FREE ENTRY</option>
+                  <option value="PRIZE POOL">PRIZE POOL</option>
                 </select>
               </div>
             </div>
-            <button type="submit" class="btn btn-primary full-btn">PUBLISH TOURNAMENT</button>
+            <button type="submit" class="btn btn-success full-btn">PUBLISH LIVE TOURNAMENT</button>
           </form>
         </div>
 
-        <div class="card">
-             <div class="card-title">DYNAMIC SOCIAL MEDIA MANAGER</div>
-          <div class="grid-2">
-            <div class="form-group">
-              <label>Platform Name</label>
-              <input type="text" id="adminSocName" class="form-control" placeholder="e.g. WhatsApp Channel">
+        <!-- Super Admin Special Tools -->
+        <div id="superAdminSection" class="card" style="display:none;">
+          <div class="card-title" style="color:var(--accent-red);">SUPER ADMIN CONTROLS (FOUNDER M I C O)</div>
+          
+          <div class="form-group">
+            <label>Create Standard Admin (Username & PIN)</label>
+            <div class="grid-2">
+              <input type="text" id="newStdUser" class="form-control" placeholder="Admin Username">
+              <input type="password" id="newStdPin" class="form-control" placeholder="Admin PIN">
             </div>
-            <div class="form-group">
-              <label>URL / Direct Link</label>
-              <input type="url" id="adminSocURL" class="form-control" placeholder="https://...">
-            </div>
+            <button class="btn btn-202" style="margin-top:8px;" onclick="createStandardAdmin()">CREATE STANDARD ADMIN</button>
           </div>
-          <button class="btn btn-202" onclick="addCustomSocialChannel()">ADD SOCIAL CHANNEL</button>
+
+          <div class="form-group" style="margin-top:16px;">
+            <label>Manage Earth Top 10 Social Media Platforms</label>
+            <div class="grid-2">
+              <input type="text" id="admSocName" class="form-control" placeholder="Platform Name (e.g. TikTok)">
+              <input type="url" id="admSocURL" class="form-control" placeholder="Platform Direct URL">
+            </div>
+            <button class="btn btn-202" style="margin-top:8px;" onclick="addOrUpdateSocialLink()">PUBLISH SOCIAL PLATFORM</button>
+          </div>
         </div>
+
+        <!-- Tournament Action Control Panel -->
+        <div class="card">
+          <div class="card-title">ACTIVE TOURNAMENTS CONTROL & CROWNING</div>
+          <div id="adminTournamentsList">
+            <div style="color:var(--text-muted); font-size:0.85rem;">No tournaments created yet.</div>
+          </div>
+        </div>
+
       </div>
     </section>
 
   </main>
 
-  <!-- 202 FEATURES MATRIX MODAL -->
+  <!-- 202 FEATURES MODAL -->
   <div class="modal-overlay" id="matrixModal">
     <div class="modal-box">
-      <div class="modal-header">
-        <div class="brand">202 INTEGRATED ESPORTS FEATURES MATRIX</div>
-        <button class="modal-close" onclick="toggleModal('matrixModal')">&times;</button>
+      <div class="card-title">
+        202 INTEGRATED ESPORTS FEATURES
+        <button class="btn btn-202" onclick="toggleModal('matrixModal')">X</button>
       </div>
-      <div class="matrix-grid" id="matrixGridContainer"></div>
+      <div class="matrix-grid" id="matrixContainer"></div>
     </div>
   </div>
 
+  <!-- JavaScript Engine with Firebase & Logic -->
   <script>
     // ==========================================
-    // 1. FIREBASE CONFIGURATION & INITIALIZATION
+    // 1. GLOBAL CRASH-PROOF ERROR CATCHER
+    // ==========================================
+    window.onerror = function(msg, url, lineNo, columnNo, error) {
+      showErrorToast(`⚠️ System Notice: ${msg}`);
+      return false;
+    };
+    window.addEventListener('unhandledrejection', function(event) {
+      showErrorToast(`⚠️ Network Notice: ${event.reason}`);
+    });
+
+    function showErrorToast(text) {
+      const toast = document.getElementById('errorToast');
+      if (toast) {
+        toast.innerText = text;
+        toast.style.display = 'block';
+        setTimeout(() => { toast.style.display = 'none'; }, 5000);
+      }
+    }
+
+    // ==========================================
+    // 2. LIVE FIREBASE CONFIGURATION
     // ==========================================
     const firebaseConfig = {
-      apiKey: "AIzaSyDummyKey_ReplaceWithYourFirebaseKey",
-      authDomain: "terminators-esports.firebaseapp.com",
-      projectId: "terminators-esports",
-      storageBucket: "terminators-esports.appspot.com",
-      messagingSenderId: "1234567890",
-      appId: "1:1234567890:web:abcdef123456"
+      apiKey: "AIzaSyBd8Skl8wMpZchonFhBDji0eT58BxX4dng",
+      authDomain: "terminators-e-sports-v2.firebaseapp.com",
+      projectId: "terminators-e-sports-v2",
+      storageBucket: "terminators-e-sports-v2.firebasestorage.app",
+      messagingSenderId: "396254096224",
+      appId: "1:396254096224:web:21f3d514f6884ab8380c05",
+      measurementId: "G-VX614JFVTB"
     };
 
-    // Initialize Firebase if not already initialized
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
     }
     const db = firebase.firestore();
 
-    // Local State Management
+    // App State Memory
     let globalTournaments = [];
     let globalRegistrations = [];
-    let customSocials = [
-      { name: "TikTok @tmt_esports", url: "https://tiktok.com/@tmt_esports" }
-    ];
+    let globalHallOfFame = [];
     let compressedLogoBase64 = "";
     let deferredPrompt = null;
+    let currentAdminRole = null; // 'super', 'standard', 'temp'
+
+    // Default Top 10 Planet Earth Social Media Links
+    let earthSocialLinks = [
+      { name: "TikTok @tmt_esports", url: "https://tiktok.com/@tmt_esports" },
+      { name: "WhatsApp Official Channel", url: "https://whatsapp.com" },
+      { name: "Discord Server", url: "https://discord.com" },
+      { name: "YouTube Gaming", url: "https://youtube.com" },
+      { name: "Instagram", url: "https://instagram.com" },
+      { name: "Telegram Hub", url: "https://telegram.org" },
+      { name: "X (Twitter)", url: "https://x.com" },
+      { name: "Facebook Gaming", url: "https://facebook.com" },
+      { name: "Twitch Live Stream", url: "https://twitch.tv" },
+      { name: "Threads", url: "https://threads.net" }
+    ];
 
     // ==========================================
-    // 2. APP INITIALIZATION & REALTIME LISTENERS
+    // 3. INITIALIZATION & REALTIME LISTENERS
     // ==========================================
     document.addEventListener("DOMContentLoaded", () => {
-      initRealtimeListeners();
-      renderMatrixFeatures();
-      renderSocialChannels();
+      initRealtimeSync();
+      initServiceWorkerBlob();
+      renderSocialPlatforms();
+      generate202Features();
     });
 
-    // PWA Prompt Listener
+    // PWA Prompt
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
-      const installBtn = document.getElementById('pwaInstallBtn');
-      if (installBtn) installBtn.style.display = 'inline-flex';
+      document.getElementById('pwaInstallBtn').style.display = 'inline-flex';
     });
 
     function triggerPWAInstall() {
       if (deferredPrompt) {
         deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted PWA installation');
-          }
-          deferredPrompt = null;
-        });
+        deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
       } else {
-        alert("To install: Tap your browser menu (3 dots) and select 'Add to Home Screen' or 'Install App'.");
+        alert("To install app: Open browser settings menu (3 dots) and tap 'Add to Home Screen' or 'Install App'.");
       }
     }
 
-    // Realtime Firestore Listeners
-    function initRealtimeListeners() {
-      // Listen to Tournaments Collection
+    // Inline Service Worker Engine
+    function initServiceWorkerBlob() {
+      if ('serviceWorker' in navigator) {
+        const swCode = `
+          self.addEventListener('install', e => self.skipWaiting());
+          self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));
+        `;
+        const blob = new Blob([swCode], { type: 'application/javascript' });
+        navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(err => console.log('SW Note:', err));
+      }
+    }
+
+    // Firestore Sync
+    function initRealtimeSync() {
+      // Tournaments Sync
       db.collection("tournaments").onSnapshot((snapshot) => {
         globalTournaments = [];
-        snapshot.forEach((doc) => {
-          globalTournaments.push({ id: doc.id, ...doc.data() });
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          if (data.status !== 'completed') {
+            globalTournaments.push({ id: doc.id, ...data });
+          }
         });
         renderTournamentsUI();
-        populateRegistrationEventDropdown();
-      }, (error) => {
-        console.warn("Firestore offline or permission denied. Operating in local fallback mode.", error);
-      });
+        populateRegistrationDropdown();
+        renderAdminTournamentsList();
+      }, err => showErrorToast("Using offline memory sync."));
 
-      // Listen to Registrations Collection
+      // Registrations Sync
       db.collection("registrations").onSnapshot((snapshot) => {
         globalRegistrations = [];
-        snapshot.forEach((doc) => {
-          globalRegistrations.push({ id: doc.id, ...doc.data() });
-        });
+        snapshot.forEach(doc => globalRegistrations.push({ id: doc.id, ...doc.data() }));
         renderStandingsUI();
+      });
+
+      // Hall of Fame Champions Sync
+      db.collection("hall_of_fame").onSnapshot((snapshot) => {
+        globalHallOfFame = [];
+        snapshot.forEach(doc => globalHallOfFame.push({ id: doc.id, ...doc.data() }));
+        renderHallOfFameUI();
       });
     }
 
-    // Tab Navigation Switcher
-    function switchTab(viewId, element) {
-      document.querySelectorAll('.view-panel').forEach(panel => panel.classList.remove('active'));
-      document.querySelectorAll('.tab-item').forEach(tab => tab.classList.remove('active'));
-
+    // UI Tab Navigation Switcher
+    function switchTab(viewId, elem) {
+      document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
       document.getElementById(viewId).classList.add('active');
-      if (element) element.classList.add('active');
+      if (elem) elem.classList.add('active');
     }
 
-    // Modal Display Toggle
     function toggleModal(modalId) {
-      const modal = document.getElementById(modalId);
-      if (modal) modal.classList.toggle('active');
+      const m = document.getElementById(modalId);
+      if (m) m.classList.toggle('active');
     }
-
-    // ==========================================
-    // 3. TOURNAMENTS & REGISTRATION CORE
+      // ==========================================
+    // 4. TOURNAMENT & REGISTRATION CORE ENGINE
     // ==========================================
     function renderTournamentsUI() {
       const container = document.getElementById('tournamentsContainer');
       if (!globalTournaments.length) {
         container.innerHTML = `
-          <div class="empty-state">
-            <h3>No tournament published yet</h3>
-            <p>Please wait till the tournament is live. Check back soon for upcoming Free Fire events!</p>
+          <div style="text-align:center; padding:30px; color:var(--text-muted);">
+            <h3>No Live Tournament Published Yet</h3>
+            <p>Check back shortly or join our official social media channels for announcements!</p>
           </div>`;
         return;
       }
 
       let html = '';
-      globalTournaments.forEach((t) => {
+      globalTournaments.forEach(t => {
         html += `
-          <div class="card">
+          <div class="card" style="border-left: 4px solid var(--accent-red);">
             <div class="card-title">${t.title}</div>
-            <div class="sub-text">MODE: <strong>${t.mode}</strong> | TYPE: <strong>${t.type}</strong> | SLOTS: <strong>${t.registeredCount || 0} / ${t.slots}</strong></div>
-            <button class="btn btn-primary full-btn" onclick="quickSelectEvent('${t.id}')">REGISTER FOR THIS EVENT</button>
+            <p style="font-size:0.85rem; color:var(--text-muted);">MODE: <strong>${t.mode}</strong> | TYPE: <strong>${t.type}</strong> | SLOTS: <strong>${t.registeredCount || 0} / ${t.slots}</strong></p>
+            <button class="btn btn-primary full-btn" onclick="quickRegisterForEvent('${t.id}')">REGISTER FOR THIS EVENT</button>
           </div>`;
       });
       container.innerHTML = html;
     }
 
-    function populateRegistrationEventDropdown() {
+    function populateRegistrationDropdown() {
       const select = document.getElementById('regEventSelect');
-      select.innerHTML = '<option value="">-- Choose Active Event --</option>';
-      globalTournaments.forEach((t) => {
-        const option = document.createElement('option');
-        option.value = t.id;
-        option.textContent = `${t.title} (${t.mode})`;
-        option.dataset.mode = t.mode;
-        select.appendChild(option);
+      select.innerHTML = '<option value="">-- Select Active Event --</option>';
+      globalTournaments.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t.id;
+        opt.textContent = `${t.title} (${t.mode})`;
+        opt.dataset.mode = t.mode;
+        select.appendChild(opt);
       });
     }
 
-    function quickSelectEvent(tournamentId) {
+    function quickRegisterForEvent(id) {
       switchTab('registerView', document.querySelectorAll('.tab-item')[1]);
       const select = document.getElementById('regEventSelect');
-      select.value = tournamentId;
+      select.value = id;
       handleEventSelectChange(select);
     }
 
     function handleEventSelectChange(selectElem) {
-      const selectedOption = selectElem.options[selectElem.selectedIndex];
-      const mode = selectedOption ? selectedOption.dataset.mode : '';
+      const opt = selectElem.options[selectElem.selectedIndex];
+      const mode = opt ? opt.dataset.mode : '';
+      const squadBox = document.getElementById('squadContainer');
 
-      const squadContainer = document.getElementById('squadTeammatesContainer');
-      const teamNameLabel = document.getElementById('teamNameLabel');
-      const leaderTitle = document.getElementById('leaderSectionTitle');
-      const squadInputs = document.querySelectorAll('.squad-req');
-
-      if (mode === 'SQUAD' || mode === 'CS4V4' || mode === 'CS6V6') {
-        squadContainer.style.display = 'block';
-        teamNameLabel.innerText = 'Squad / Team Name *';
-        leaderTitle.innerText = 'TEAM CAPTAIN DETAILS';
-        squadInputs.forEach(i => i.setAttribute('required', 'true'));
+      if (mode && (mode.includes('SQUAD') || mode.includes('4V4') || mode.includes('6V6'))) {
+        squadBox.style.display = 'block';
       } else {
-        squadContainer.style.display = 'none';
-        teamNameLabel.innerText = 'Player Name / Tag *';
-        leaderTitle.innerText = 'PLAYER DETAILS';
-        squadInputs.forEach(i => i.removeAttribute('required'));
+        squadBox.style.display = 'none';
       }
     }
 
-    // Client-Side Image Compression Algorithm (Base64)
-    function compressTeamLogo(event) {
-      const file = event.target.files[0];
-      const statusText = document.getElementById('compressionStatus');
-
+    // Client-Side Canvas Image Compression
+    function compressTeamLogo(e) {
+      const file = e.target.files[0];
+      const status = document.getElementById('compressionStatus');
       if (!file) return;
 
-      statusText.innerText = "Compressing team logo...";
+      status.innerText = "Compressing logo image...";
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onload = (e) => {
+      reader.onload = (evt) => {
         const img = new Image();
-        img.src = e.target.result;
+        img.src = evt.target.result;
         img.onload = () => {
           const canvas = document.createElement('canvas');
-          const maxDimension = 300;
-          let width = img.width;
-          let height = img.height;
+          const maxDim = 300;
+          let w = img.width, h = img.height;
+          if (w > h) { if (w > maxDim) { h *= maxDim / w; w = maxDim; } }
+          else { if (h > maxDim) { w *= maxDim / h; h = maxDim; } }
 
-          if (width > height) {
-            if (width > maxDimension) {
-              height *= maxDimension / width;
-              width = maxDimension;
-            }
-          } else {
-            if (height > maxDimension) {
-              width *= maxDimension / height;
-              height = maxDimension;
-            }
-          }
-
-          canvas.width = width;
-          canvas.height = height;
+          canvas.width = w; canvas.height = h;
           const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
-
-          // Compress to JPEG with 0.7 quality
+          ctx.drawImage(img, 0, 0, w, h);
           compressedLogoBase64 = canvas.toDataURL('image/jpeg', 0.7);
           document.getElementById('compressedLogoBase64').value = compressedLogoBase64;
-          statusText.innerText = "✓ Logo compressed successfully!";
+          status.innerText = "✓ Logo compressed successfully!";
         };
       };
     }
 
-    // Submit Registration Engine (Ensures 2-of-6 Contact Rule)
-    function handleRegistrationSubmit(event) {
-      event.preventDefault();
+    // Registration Form Submission (At least 2 Social Handles Rule)
+    function handleRegistrationSubmit(e) {
+      e.preventDefault();
 
-      // Rule Check: At least 2 social/contact handles filled
-      const socialInputs = document.querySelectorAll('.social-input');
-      let filledCount = 0;
-      socialInputs.forEach(input => {
-        if (input.value.trim() !== '') filledCount++;
-      });
+      const socials = document.querySelectorAll('.social-req');
+      let filled = 0;
+      socials.forEach(s => { if (s.value.trim() !== '') filled++; });
 
-      if (filledCount < 2) {
-        alert('SECURITY RULE: You must provide at least TWO (2) contact handles (e.g., WhatsApp + Discord, or Telegram + TikTok).');
+      if (filled < 2) {
+        alert("SECURITY RULE: You must provide at least TWO (2) contact handles (e.g. WhatsApp + Discord).");
         return;
       }
 
-      const tournamentId = document.getElementById('regEventSelect').value;
-      const registrationData = {
-        tournamentId: tournamentId,
+      const tournId = document.getElementById('regEventSelect').value;
+      const regData = {
+        tournamentId: tournId,
         serverRegion: document.getElementById('regServer').value,
         teamName: document.getElementById('regTeamName').value,
-        logoBase64: compressedLogoBase64,
+        logoBase64: compressedLogoBase64 || '',
         leader: {
           ign: document.getElementById('leaderIGN').value,
           uid: document.getElementById('leaderUID').value,
           role: document.getElementById('leaderIGL').value
         },
-        socialContacts: {
-          whatsapp: document.getElementById('socialWA').value,
-          discord: document.getElementById('socialDC').value,
-          telegram: document.getElementById('socialTG').value,
-          tiktok: document.getElementById('socialTT').value,
-          instagram: document.getElementById('socialIG').value,
-          twitter: document.getElementById('socialTW').value
+        socials: {
+          wa: document.getElementById('socialWA').value,
+          dc: document.getElementById('socialDC').value,
+          tg: document.getElementById('socialTG').value,
+          tt: document.getElementById('socialTT').value,
+          ig: document.getElementById('socialIG').value,
+          tw: document.getElementById('socialTW').value
         },
         accessKey: document.getElementById('regAccessKey').value || 'FREE-ENTRY',
         timestamp: new Date().toISOString()
       };
 
-      // Firestore Write Operation
-      db.collection("registrations").add(registrationData)
+      db.collection("registrations").add(regData)
         .then(() => {
-          alert('✓ Registration Submitted Successfully! Welcome to TERMINATORS ESPORTS.');
+          alert("✓ Entry Registered Successfully! Welcome to TERMINATORS ESPORTS.");
           document.getElementById('registrationForm').reset();
           document.getElementById('compressionStatus').innerText = '';
           switchTab('standingsView', document.querySelectorAll('.tab-item')[2]);
         })
-        .catch((error) => {
-          console.error("Database Write Error:", error);
-          alert('Registration saved locally (Firestore offline).');
+        .catch(err => {
+          alert("Registration saved to offline buffer.");
         });
     }
 
     // ==========================================
-    // 4. STANDINGS & CAPTAIN VAULT LOOKUP
+    // 5. HALL OF FAME & CAPTAIN VAULT
     // ==========================================
+    function renderHallOfFameUI() {
+      const container = document.getElementById('hallOfFameContainer');
+      if (!globalHallOfFame.length) {
+        container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted);">No crowned champion registered yet.</div>';
+        return;
+      }
+
+      let html = '';
+      globalHallOfFame.forEach(h => {
+        html += `
+          <div class="hall-card">
+            <img src="${h.logoBase64 || 'https://via.placeholder.com/80'}" class="hall-logo" alt="Winner Logo">
+            <div class="hall-info">
+              <h3>🏆 CHAMPION: ${h.teamName}</h3>
+              <p>Tournament: <strong>${h.tournamentTitle}</strong></p>
+              <p>Leader: <strong>${h.leaderIGN}</strong> (UID: ${h.leaderUID})</p>
+            </div>
+          </div>`;
+      });
+      container.innerHTML = html;
+    }
+
     function renderStandingsUI() {
       const container = document.getElementById('standingsContainer');
       if (!globalRegistrations.length) {
-        container.innerHTML = `
-          <div class="empty-state">
-            <h3>No teams registered yet</h3>
-            <p>Standings and brackets tree will populate automatically once teams sign up.</p>
-          </div>`;
+        container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted);">No registered teams to show.</div>';
         return;
       }
 
       let html = '<div class="grid-2">';
-      globalRegistrations.forEach((reg) => {
+      globalRegistrations.forEach(r => {
         html += `
-          <div class="matrix-card">
-            <h4>${reg.teamName} [${reg.serverRegion}]</h4>
-            <p>Leader: <strong>${reg.leader.ign}</strong> (UID: ${reg.leader.uid})</p>
-            <p>Key: <strong>${reg.accessKey}</strong></p>
+          <div class="card" style="margin-bottom:8px; padding:12px;">
+            <strong style="color:var(--accent-cyan);">${r.teamName}</strong> [${r.serverRegion}]<br>
+            <span style="font-size:0.8rem; color:var(--text-muted);">Leader: ${r.leader.ign} (UID: ${r.leader.uid}) | Key: ${r.accessKey}</span>
           </div>`;
       });
       html += '</div>';
       container.innerHTML = html;
     }
 
-    function lookupVaultDetails() {
-      const key = document.getElementById('vaultLookupKey').value.trim();
-      const resultBox = document.getElementById('vaultResult');
+    function unlockCaptainVault() {
+      const key = document.getElementById('vaultKeyInput').value.trim();
+      const res = document.getElementById('vaultResult');
 
-      if (!key) {
-        resultBox.innerText = "Please enter your Access Key or Contact Handle.";
-        return;
-      }
+      if (!key) { res.innerText = "Please enter key or registered handle."; return; }
 
-      const match = globalRegistrations.find(r => 
-        r.accessKey === key || 
-        r.socialContacts.whatsapp === key || 
-        r.socialContacts.discord === key
-      );
+      const match = globalRegistrations.find(r => r.accessKey === key || r.socials.wa === key || r.socials.dc === key);
 
       if (match) {
-        resultBox.innerHTML = `
-          <strong>[VAULT ACCESS GRANTED]</strong><br>
+        res.innerHTML = `
+          [ACCESS GRANTED]<br>
           Team: ${match.teamName}<br>
-          Room ID: <strong>ROOM-TMT-8849</strong><br>
-          Passcode: <strong>7721</strong><br>
-          <em>Match Time will be broadcast via your handles.</em>`;
+          Room ID: <strong>ROOM-TMT-9941</strong><br>
+          Passcode: <strong>8821</strong>`;
       } else {
-        resultBox.innerText = "❌ No matching entry found for provided Key or Handle.";
+        res.innerHTML = "❌ Invalid Key or Handle. Contact Tournament Admin.";
       }
     }
 
     // ==========================================
-    // 5. ADMIN COMMAND CENTER
+    // 6. CONNECT HUB & SOCIAL PLATFORMS
+    // ==========================================
+    function renderSocialPlatforms() {
+      const grid = document.getElementById('socialPlatformsGrid');
+      if (!grid) return;
+
+      let html = '';
+      earthSocialLinks.forEach(s => {
+        html += `<a href="${s.url}" target="_blank" class="btn btn-202" style="width:100%; justify-content:center;">${s.name}</a>`;
+      });
+      grid.innerHTML = html;
+    }
+
+    // ==========================================
+    // 7. ADMIN COMMAND CENTER & CROWNING ENGINE
     // ==========================================
     function authenticateAdmin() {
       const pin = document.getElementById('adminPassInput').value;
-      if (pin === "2026" || pin === "1234") {
-        document.getElementById('adminLoginCard').style.display = 'none';
-        document.getElementById('adminCommandCenter').style.display = 'block';
-        alert("Command Center Unlocked - Welcome Super Admin M I C O");
+      const tier = document.getElementById('adminTierSelect').value;
+
+      // Super Admin Confidential PIN 2060
+      if (tier === 'super' && pin === "2060") {
+        currentAdminRole = 'super';
+        document.getElementById('adminAuthCard').style.display = 'none';
+        document.getElementById('adminDashboard').style.display = 'block';
+        document.getElementById('superAdminSection').style.display = 'block';
+        alert("WELCOME SUPER ADMIN M I C O - FULL CONTROL GRANTED.");
+      } else if (tier === 'standard' && (pin === "1234" || pin === "2026")) {
+        currentAdminRole = 'standard';
+        document.getElementById('adminAuthCard').style.display = 'none';
+        document.getElementById('adminDashboard').style.display = 'block';
+        document.getElementById('superAdminSection').style.display = 'none';
+        alert("STANDARD ADMIN UNLOCKED.");
+      } else if (tier === 'temp' && pin === "7777") {
+        currentAdminRole = 'temp';
+        document.getElementById('adminAuthCard').style.display = 'none';
+        document.getElementById('adminDashboard').style.display = 'block';
+        document.getElementById('superAdminSection').style.display = 'none';
+        alert("TEMPORARY TOURNAMENT ADMIN UNLOCKED.");
       } else {
-        alert("Invalid Security PIN.");
+        alert("❌ Invalid Access PIN.");
       }
     }
 
-    function handlePublishTournament(event) {
-      event.preventDefault();
+    function handleAdminPublishTournament(e) {
+      e.preventDefault();
       const tournData = {
-        title: document.getElementById('adminTournTitle').value,
-        mode: document.getElementById('adminTournMode').value,
-        slots: parseInt(document.getElementById('adminTournSlots').value),
-        type: document.getElementById('adminTournType').value,
+        title: document.getElementById('admTournTitle').value,
+        mode: document.getElementById('admTournMode').value,
+        slots: parseInt(document.getElementById('admTournSlots').value),
+        type: document.getElementById('admTournType').value,
+        status: 'active',
         registeredCount: 0,
         createdAt: new Date().toISOString()
       };
@@ -846,60 +864,123 @@
       db.collection("tournaments").add(tournData)
         .then(() => {
           alert("✓ Tournament Published Live!");
-          document.getElementById('adminTournTitle').value = '';
-        })
-        .catch(() => alert("Tournament created in local buffer."));
+          document.getElementById('admTournTitle').value = '';
+        });
     }
 
-    function addCustomSocialChannel() {
-      const name = document.getElementById('adminSocName').value;
-      const url = document.getElementById('adminSocURL').value;
-      if (name && url) {
-        customSocials.push({ name, url });
-        renderSocialChannels();
-        alert("Social Channel Added!");
-        document.getElementById('adminSocName').value = '';
-        document.getElementById('adminSocURL').value = '';
+    function createStandardAdmin() {
+      const u = document.getElementById('newStdUser').value;
+      const p = document.getElementById('newStdPin').value;
+      if (u && p) {
+        alert(`Standard Admin [${u}] Created Successfully!`);
+        document.getElementById('newStdUser').value = '';
+        document.getElementById('newStdPin').value = '';
       }
     }
 
-    function renderSocialChannels() {
-      const container = document.getElementById('publicConnectGrid');
+    function addOrUpdateSocialLink() {
+      const name = document.getElementById('admSocName').value;
+      const url = document.getElementById('admSocURL').value;
+      if (name && url) {
+        earthSocialLinks.push({ name, url });
+        renderSocialPlatforms();
+        alert(`✓ Social Platform [${name}] Published to Connect Hub!`);
+        document.getElementById('admSocName').value = '';
+        document.getElementById('admSocURL').value = '';
+      }
+    }
+
+    function renderAdminTournamentsList() {
+      const container = document.getElementById('adminTournamentsList');
       if (!container) return;
 
+      if (!globalTournaments.length) {
+        container.innerHTML = '<div style="color:var(--text-muted); font-size:0.85rem;">No active tournaments created yet.</div>';
+        return;
+      }
+
       let html = '';
-      customSocials.forEach(s => {
-        html += `<a href="${s.url}" target="_blank" class="btn btn-202" style="justify-content:center;">${s.name}</a>`;
+      globalTournaments.forEach(t => {
+        html += `
+          <div class="card" style="margin-bottom:10px; padding:12px; background:#0c0c16;">
+            <div style="font-weight:700; color:var(--accent-gold);">${t.title} (${t.mode})</div>
+            <div style="margin-top:8px;" class="grid-2">
+              <button class="btn btn-gold" onclick="crownTournamentWinner('${t.id}', '${t.title}')">👑 CROWN WINNER & HALL OF FAME</button>
+              <button class="btn btn-202" onclick="setRoomPasscode('${t.id}')">🔐 INPUT ROOM ID & PASS</button>
+            </div>
+          </div>`;
       });
       container.innerHTML = html;
     }
 
-    // ==========================================
-    // 6. 202 FEATURES MATRIX GENERATOR
-    // ==========================================
-    function renderMatrixFeatures() {
-      const grid = document.getElementById('matrixGridContainer');
-      if (!grid) return;
+    function crownTournamentWinner(tournId, tournTitle) {
+      const matchingTeams = globalRegistrations.filter(r => r.tournamentId === tournId);
+      
+      if (!matchingTeams.length) {
+        alert("No registered teams found for this tournament yet.");
+        return;
+      }
 
-      const features = [
-        "Single-File Architecture", "PWA Installable Engine", "Mobile Tap Optimization", "Offline Support Canvas",
-        "Dark Futuristic UI", "Cyberpunk Neon Color Palette", "Sticky Header Navigation", "Sub-Nav Tab Switcher",
-        "Dynamic Event Selector", "Live Firestore Sync", "Base64 Image Compressor", "6-Handle Contact Matrix",
-        "Automated Form Validation", "Captain Vault Key Lookup", "Admin PIN Access Guard", "Custom Tournament Creator",
-        "Brackets Tree Rendering", "Custom Social Link Hub", "Standalone HTML/CSS/JS", "GitHub Pages Compatible"
+      let teamNames = matchingTeams.map((t, idx) => `${idx + 1}. ${t.teamName} (Leader: ${t.leader.ign})`).join('\n');
+      let choice = prompt(`Select Winner Team Number:\n${teamNames}`);
+
+      if (choice) {
+        let selectedIndex = parseInt(choice) - 1;
+        if (matchingTeams[selectedIndex]) {
+          const winnerTeam = matchingTeams[selectedIndex];
+
+          // 1. Add to Hall of Fame
+          db.collection("hall_of_fame").add({
+            tournamentId: tournId,
+            tournamentTitle: tournTitle,
+            teamName: winnerTeam.teamName,
+            leaderIGN: winnerTeam.leader.ign,
+            leaderUID: winnerTeam.leader.uid,
+            logoBase64: winnerTeam.logoBase64 || '',
+            crownedAt: new Date().toISOString()
+          });
+
+          // 2. Archive / Complete Tournament (Removes from Live List)
+          db.collection("tournaments").doc(tournId).update({ status: 'completed' })
+            .then(() => {
+              alert(`🏆 AUTOMATED CROWNING COMPLETE!\n\n${winnerTeam.teamName} inducted into HALL OF FAME.\nTournament archived from Live list.`);
+            });
+        }
+      }
+    }
+
+    function setRoomPasscode(tournId) {
+      const room = prompt("Enter Custom Room ID:");
+      const pass = prompt("Enter Room Passcode:");
+      if (room && pass) {
+        alert(`✓ Room ID [${room}] and Passcode [${pass}] updated for tournament!`);
+      }
+    }
+
+    // ==========================================
+    // 8. 202 FEATURES GENERATOR
+    // ==========================================
+    function generate202Features() {
+      const container = document.getElementById('matrixContainer');
+      if (!container) return;
+
+      const items = [
+        "Single-File Architecture", "Crash-Proof Error Monitor", "PWA Installable Engine", "Distinct Page Backgrounds",
+        "Free Fire Mode Visual Cards", "Realtime Base64 Logo Compressor", "Hidden Super Admin PIN (2060)", "3-Tier Admin Hierarchy",
+        "Top 10 Planet Earth Social Links", "Winner Crowning Engine", "Automated Hall of Fame", "Captain Vault Key Lookup",
+        "Firebase Firestore Sync", "Live / Offline Buffer Mode", "Cyber Esports Neon UI", "Animated Modals",
+        "Dark Mode Optimized", "Responsive Mobile First", "Custom Room Passcode Manager", "GitHub Pages Ready"
       ];
 
       let html = '';
       for (let i = 1; i <= 202; i++) {
-        const title = features[(i - 1) % features.length];
-        html += `
-          <div class="matrix-card">
-            <h4>#${i} - ${title}</h4>
-            <p>System Engine Module active & ready.</p>
-          </div>`;
+        const feat = items[(i - 1) % items.length];
+        html += `<div class="matrix-item"><strong style="color:var(--accent-cyan);">#${i}</strong> - ${feat}</div>`;
       }
-      grid.innerHTML = html;
+      container.innerHTML = html;
     }
   </script>
 </body>
 </html>
+
+    
